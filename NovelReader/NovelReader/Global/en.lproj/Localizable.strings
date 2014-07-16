@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  Nemo
+
+  Created by zhihui zhao on 13-10-12.
+  Copyright (c) 2013年 Kuyun Inc. All rights reserved.
+*/
+
+
+"LastUpdate" = "最后更新: ";
+"ReleaseToRefresh" = "松开即可刷新...";
+"PullDownToRefresh" = "下拉可以刷新...";
+"Loading" = "正在加载...";
+
