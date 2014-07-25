@@ -7,43 +7,132 @@
 //
 
 #import "AppDelegate.h"
+#import "Properties.h"
+#import "Models.h"
+
+
+
+@interface AppDelegate () <GetterControllerOwner>
+{
+	CDNavigationController* _navigationController;
+}
+
+-(void) loadProperties;
+-(void) createControllers;
+-(void) checkPatternCode;
+
+@end
+
+
 
 @implementation AppDelegate
 
+void uncaughtExceptionHandler(NSException *exception)
+{
+	NSLog(@"CRASH: %@", exception);
+	NSLog(@"Stack Trace: %@", [exception callStackSymbols]);
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
-    [self.window makeKeyAndVisible];
-    return YES;
+	NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+	
+	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	
+	[self loadProperties];
+	[self createControllers];
+	
+	[application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+	
+	return YES;
 }
+
+-(void) loadProperties
+{
+//	Properties* prop = [Properties appProperties];
+//	[GlodonAPIGetter setHost:prop.apiHost];
+//	CDSetProp(PropUserToken, nil);
+//	
+//	if (CDProp(PropSettingShowImage).length <= 0)
+//		CDSetProp(PropSettingShowImage, @"0");
+//	if (CDProp(PropSettingNoticeNoDisturbing).length <= 0)
+//		CDSetProp(PropSettingNoticeNoDisturbing, @"1");
+//	if (CDProp(PropSettingNoticeRemindNew).length <= 0)
+//		CDSetProp(PropSettingNoticeRemindNew, @"1");
+//	if (CDProp(PropSettingNoticeShake).length <= 0)
+//		CDSetProp(PropSettingNoticeShake, @"1");
+//	if (CDProp(PropSettingNoticeSound).length <= 0)
+//		CDSetProp(PropSettingNoticeSound, @"1");
+//	if (CDProp(PropSettingServiceURL).length <= 0)
+//		CDSetProp(PropSettingServiceURL, @"http://shang.qq.com/open_webaio.html?sigt=d6bb9bf29db37b7bc825052f86310d9432e1d54058b75e7ab90a2f7de51af91fa7d990623c3102d3fa09bc7b729fa23b&sigu=8008a3079f5e4afbd44a3b4364529ae53a0a286f9465a25eaafbcf5d2cdd646f9e33012fc11a7890&tuin=1779399820");
+//	if (CDProp(PropSettingServicePhone).length <= 0)
+//		CDSetProp(PropSettingServicePhone, @"tel://4000166166");
+}
+
+-(void) createControllers
+{
+	BOOL hasShownGuide = CDProp(PropGuideShown).boolValue;
+	if (hasShownGuide)
+	{
+		LoginViewController* loginVC = [[LoginViewController alloc] init];
+		_navigationController = [[CDNavigationController alloc] initWithRootViewController:loginVC];
+	}
+	else
+	{
+		GuideViewController* vc = [[GuideViewController alloc] init];
+		_navigationController = [[CDNavigationController alloc] initWithRootViewController:vc];
+	}
+	
+	self.window.rootViewController = _navigationController;
+	[self.window makeKeyAndVisible];
+}
+
+-(void) logoutWithMsg:(NSString*)msg
+{
+//	CDSetProp(PropUserToken, nil);
+//	CDSetProp(PropUserPassword, nil);
+//	[GlodonAPIGetter setUserToken:nil];
+//	
+//	LoginViewController* vc = [[LoginViewController alloc] init];
+//	vc.popMsg = msg;
+//	vc.activeKeyboard = YES;
+//	[_navigationController setRootViewController:vc];
+}
+
+//-(void) application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+//{
+//	NSString* temp = [NSString stringWithString:deviceToken.description];
+//	//去掉引号和空格
+//	temp = [[temp substringWithRange:NSMakeRange(1, temp.length - 2)] stringByReplacingOccurrencesOfString:@" " withString:@""];
+//	//全局中保存deviceToken
+//	CDSetProp(PropDeviceToken, temp);
+//}
+
+NSString* const kApplicationResumeNotice = @"notice.application.resume";
+NSString* const kApplicationPauseNotice = @"notice.application.pause";
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-	// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-	// Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+	//	[[NSNotificationCenter defaultCenter] postNotificationName:kApplicationPauseNotice object:nil];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-	// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-	// If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+	[[NSNotificationCenter defaultCenter] postNotificationName:kApplicationPauseNotice object:nil];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-	// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+	[[NSNotificationCenter defaultCenter] postNotificationName:kApplicationResumeNotice object:nil];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-	// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+	//	[[NSNotificationCenter defaultCenter] postNotificationName:kApplicationResumeNotice object:nil];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-	// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
 @end

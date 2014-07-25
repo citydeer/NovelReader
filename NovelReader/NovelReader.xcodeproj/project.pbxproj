@@ -348,6 +348,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F2D537F11976807A00A0FDDA /* Build configuration list for PBXNativeTarget "NovelReader" */;
 			buildPhases = (
+				54CC5D3919824A2700439363 /* ShellScript */,
 				F2D537C11976807A00A0FDDA /* Sources */,
 				F2D537C21976807A00A0FDDA /* Frameworks */,
 				F2D537C31976807A00A0FDDA /* Resources */,
@@ -406,6 +407,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		54CC5D3919824A2700439363 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\n_TARGET_BUILD_CONTENTS_PATH=$TARGET_BUILD_DIR/$CONTENTS_FOLDER_PATH\necho _TARGET_BUILD_CONTENTS_PATH: $_TARGET_BUILD_CONTENTS_PATH\necho PWD: $PWD\n\necho Cleaning $_TARGET_BUILD_CONTENTS_PATH/\n\nrm -fr $_TARGET_BUILD_CONTENTS_PATH/Images/*\n\nmkdir -p $_TARGET_BUILD_CONTENTS_PATH/Images/\n\ncp -RLp $PWD/NovelReader/Images/* $_TARGET_BUILD_CONTENTS_PATH/Images/\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F2D537C11976807A00A0FDDA /* Sources */ = {
@@ -579,6 +596,7 @@
 				F2D537F31976807A00A0FDDA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
