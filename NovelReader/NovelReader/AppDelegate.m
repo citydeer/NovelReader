@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "Properties.h"
+#import "CDNavigationController.h"
 #import "Models.h"
 
 
@@ -71,17 +72,8 @@ void uncaughtExceptionHandler(NSException *exception)
 
 -(void) createControllers
 {
-	BOOL hasShownGuide = CDProp(PropGuideShown).boolValue;
-	if (hasShownGuide)
-	{
-		LoginViewController* loginVC = [[LoginViewController alloc] init];
-		_navigationController = [[CDNavigationController alloc] initWithRootViewController:loginVC];
-	}
-	else
-	{
-		GuideViewController* vc = [[GuideViewController alloc] init];
-		_navigationController = [[CDNavigationController alloc] initWithRootViewController:vc];
-	}
+	UIViewController* vc = [[UIViewController alloc] init];
+	_navigationController = [[CDNavigationController alloc] initWithRootViewController:vc];
 	
 	self.window.rootViewController = _navigationController;
 	[self.window makeKeyAndVisible];
