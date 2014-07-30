@@ -8,19 +8,18 @@
 
 #import "AppDelegate.h"
 #import "Properties.h"
-#import "CDNavigationController.h"
+#import "MainTabViewController.h"
 #import "Models.h"
 
 
 
-@interface AppDelegate () <GetterControllerOwner>
+@interface AppDelegate ()
 {
 	CDNavigationController* _navigationController;
 }
 
 -(void) loadProperties;
 -(void) createControllers;
--(void) checkPatternCode;
 
 @end
 
@@ -72,7 +71,7 @@ void uncaughtExceptionHandler(NSException *exception)
 
 -(void) createControllers
 {
-	UIViewController* vc = [[UIViewController alloc] init];
+	MainTabViewController* vc = [[MainTabViewController alloc] init];
 	_navigationController = [[CDNavigationController alloc] initWithRootViewController:vc];
 	
 	self.window.rootViewController = _navigationController;
