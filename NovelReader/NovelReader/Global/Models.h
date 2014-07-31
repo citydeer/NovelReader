@@ -8,7 +8,6 @@
 
 #import "PKMappingObject.h"
 #import "GetterController.h"
-//#import "GlodonAPIGetter.h"
 
 
 

@@ -11,6 +11,7 @@
 		F22A8D7619896A2500DA082A /* BookShelfViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D7519896A2500DA082A /* BookShelfViewController.m */; };
 		F22A8D7919896B5100DA082A /* BookStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D7819896B5100DA082A /* BookStoreViewController.m */; };
 		F22A8D7C19896B5A00DA082A /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D7B19896B5A00DA082A /* UserViewController.m */; };
+		F250EAFC198AAFAB00DDECEF /* BookCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F250EAFB198AAFAB00DDECEF /* BookCell.m */; };
 		F2D537C91976807A00A0FDDA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537C81976807A00A0FDDA /* Foundation.framework */; };
 		F2D537CB1976807A00A0FDDA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537CA1976807A00A0FDDA /* CoreGraphics.framework */; };
 		F2D537CD1976807A00A0FDDA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537CC1976807A00A0FDDA /* UIKit.framework */; };
@@ -65,6 +66,8 @@
 		F22A8D7819896B5100DA082A /* BookStoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookStoreViewController.m; sourceTree = "<group>"; };
 		F22A8D7A19896B5A00DA082A /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		F22A8D7B19896B5A00DA082A /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
+		F250EAFA198AAFAB00DDECEF /* BookCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookCell.h; sourceTree = "<group>"; };
+		F250EAFB198AAFAB00DDECEF /* BookCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookCell.m; sourceTree = "<group>"; };
 		F2D537C51976807A00A0FDDA /* NovelReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NovelReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2D537C81976807A00A0FDDA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F2D537CA1976807A00A0FDDA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -165,6 +168,8 @@
 			children = (
 				F22A8D7419896A2500DA082A /* BookShelfViewController.h */,
 				F22A8D7519896A2500DA082A /* BookShelfViewController.m */,
+				F250EAFA198AAFAB00DDECEF /* BookCell.h */,
+				F250EAFB198AAFAB00DDECEF /* BookCell.m */,
 			);
 			path = BookShelf;
 			sourceTree = "<group>";
@@ -486,6 +491,7 @@
 				F2D5383D1976BAC100A0FDDA /* CDViewController.m in Sources */,
 				F22A8D7919896B5100DA082A /* BookStoreViewController.m in Sources */,
 				F2D5384E1976BAC100A0FDDA /* GraphicUtils.m in Sources */,
+				F250EAFC198AAFAB00DDECEF /* BookCell.m in Sources */,
 				F2D538471976BAC100A0FDDA /* Properties.m in Sources */,
 				F2D538401976BAC100A0FDDA /* GridView.m in Sources */,
 				F2D538461976BAC100A0FDDA /* Models.m in Sources */,
