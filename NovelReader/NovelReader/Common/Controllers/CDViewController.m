@@ -64,14 +64,14 @@ NSString* const kCDChangeSkinNotification = @"CDShouldChangeSkinNotice";
 	{
 		_naviBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, _naviBarHeight)];
 		_naviBarView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-		_naviBarView.layer.contents = (id)CDImage(@"navi_background").CGImage;
-		_naviBarView.backgroundColor = CDColor(nil, @"#efb252");
+//		_naviBarView.layer.contents = (id)CDImage(@"navi_background").CGImage;
+		_naviBarView.backgroundColor = CDColor(nil, @"#e44d08");
 		
-		CGFloat height = 2;
-		_naviBarShadowView = [[UIImageView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(_naviBarView.frame), CGRectGetWidth(_naviBarView.frame), height)];
-		_naviBarShadowView.image = CDImage(@"Home/home_cell_seperator");
-		_naviBarShadowView.hidden = NO;
-		[_naviBarView addSubview:_naviBarShadowView];
+//		CGFloat height = 2;
+//		_naviBarShadowView = [[UIImageView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(_naviBarView.frame), CGRectGetWidth(_naviBarView.frame), height)];
+//		_naviBarShadowView.image = CDImage(@"Home/home_cell_seperator");
+//		_naviBarShadowView.hidden = NO;
+//		[_naviBarView addSubview:_naviBarShadowView];
 		
 		[self.view addSubview:_naviBarView];
 		_naviBarView.hidden = _naviBarHidden;
@@ -273,7 +273,7 @@ NSString* const kCDChangeSkinNotification = @"CDShouldChangeSkinNotice";
 {
 }
 
-- (void)showRetryBtnOnMaskViewWithMsg:(NSString *)msg
+-(void) showRetryBtnOnMaskViewWithMsg:(NSString *)msg
 {
 	CGSize msgSize = [msg sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(180, CGFLOAT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
 	msgSize.height += 20;
@@ -308,7 +308,7 @@ NSString* const kCDChangeSkinNotification = @"CDShouldChangeSkinNotice";
 	} completion:^(BOOL finished) {}];
 }
 
-- (void)hideMaskView
+-(void) hideMaskView
 {
 	if (_retryMaskView)
 	{
@@ -319,7 +319,7 @@ NSString* const kCDChangeSkinNotification = @"CDShouldChangeSkinNotice";
 	}
 }
 
-- (void)_retryAction
+-(void) _retryAction
 {
 }
 

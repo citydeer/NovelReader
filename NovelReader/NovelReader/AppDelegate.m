@@ -104,7 +104,7 @@ NSString* const kApplicationPauseNotice = @"notice.application.pause";
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-	//	[[NSNotificationCenter defaultCenter] postNotificationName:kApplicationPauseNotice object:nil];
+//	[[NSNotificationCenter defaultCenter] postNotificationName:kApplicationPauseNotice object:nil];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -119,7 +119,7 @@ NSString* const kApplicationPauseNotice = @"notice.application.pause";
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-	//	[[NSNotificationCenter defaultCenter] postNotificationName:kApplicationResumeNotice object:nil];
+//	[[NSNotificationCenter defaultCenter] postNotificationName:kApplicationResumeNotice object:nil];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

@@ -6,10 +6,12 @@
 //  Copyright (c) 2014年 citydeer. All rights reserved.
 //
 
+#import "CDViewController.h"
+
 
 @class MainTabViewController;
 
-@interface BookStoreViewController : UIViewController
+@interface BookStoreViewController : CDViewController
 
 @property (nonatomic, weak) MainTabViewController* parent;
 

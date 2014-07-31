@@ -36,8 +36,8 @@ extern NSString* const kCDChangeSkinNotification;
 -(void) rightButtonAction:(id)sender;
 -(void) didChangeSkin;
 
-- (void)showRetryBtnOnMaskViewWithMsg:(NSString *)msg;
-- (void)hideMaskView;
-- (void)_retryAction;
+-(void) showRetryBtnOnMaskViewWithMsg:(NSString *)msg;
+-(void) hideMaskView;
+-(void) _retryAction;
 
 @end
