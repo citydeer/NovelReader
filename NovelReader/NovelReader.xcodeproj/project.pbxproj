@@ -12,6 +12,9 @@
 		F22A8D7919896B5100DA082A /* BookStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D7819896B5100DA082A /* BookStoreViewController.m */; };
 		F22A8D7C19896B5A00DA082A /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D7B19896B5A00DA082A /* UserViewController.m */; };
 		F250EAFC198AAFAB00DDECEF /* BookCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F250EAFB198AAFAB00DDECEF /* BookCell.m */; };
+		F2A45C2D198C139500A110F7 /* ReaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A45C2C198C139500A110F7 /* ReaderViewController.m */; };
+		F2A45C2F198D49BD00A110F7 /* Books in Resources */ = {isa = PBXBuildFile; fileRef = F2A45C2E198D49BD00A110F7 /* Books */; };
+		F2A45C32198E518000A110F7 /* ReaderPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A45C31198E518000A110F7 /* ReaderPageViewController.m */; };
 		F2D537C91976807A00A0FDDA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537C81976807A00A0FDDA /* Foundation.framework */; };
 		F2D537CB1976807A00A0FDDA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537CA1976807A00A0FDDA /* CoreGraphics.framework */; };
 		F2D537CD1976807A00A0FDDA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537CC1976807A00A0FDDA /* UIKit.framework */; };
@@ -68,6 +71,11 @@
 		F22A8D7B19896B5A00DA082A /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		F250EAFA198AAFAB00DDECEF /* BookCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookCell.h; sourceTree = "<group>"; };
 		F250EAFB198AAFAB00DDECEF /* BookCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookCell.m; sourceTree = "<group>"; };
+		F2A45C2B198C139500A110F7 /* ReaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReaderViewController.h; sourceTree = "<group>"; };
+		F2A45C2C198C139500A110F7 /* ReaderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReaderViewController.m; sourceTree = "<group>"; };
+		F2A45C2E198D49BD00A110F7 /* Books */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Books; sourceTree = "<group>"; };
+		F2A45C30198E518000A110F7 /* ReaderPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReaderPageViewController.h; sourceTree = "<group>"; };
+		F2A45C31198E518000A110F7 /* ReaderPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReaderPageViewController.m; sourceTree = "<group>"; };
 		F2D537C51976807A00A0FDDA /* NovelReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NovelReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2D537C81976807A00A0FDDA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F2D537CA1976807A00A0FDDA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -192,6 +200,17 @@
 			path = UserCenter;
 			sourceTree = "<group>";
 		};
+		F2A45C2A198C136A00A110F7 /* Reader */ = {
+			isa = PBXGroup;
+			children = (
+				F2A45C2B198C139500A110F7 /* ReaderViewController.h */,
+				F2A45C2C198C139500A110F7 /* ReaderViewController.m */,
+				F2A45C30198E518000A110F7 /* ReaderPageViewController.h */,
+				F2A45C31198E518000A110F7 /* ReaderPageViewController.m */,
+			);
+			path = Reader;
+			sourceTree = "<group>";
+		};
 		F2D537BC1976807A00A0FDDA = {
 			isa = PBXGroup;
 			children = (
@@ -235,6 +254,7 @@
 				F2D537D71976807A00A0FDDA /* AppDelegate.h */,
 				F2D537D81976807A00A0FDDA /* AppDelegate.m */,
 				F2D538521976BC8F00A0FDDA /* Images */,
+				F2A45C2E198D49BD00A110F7 /* Books */,
 				F2D537CF1976807A00A0FDDA /* Supporting Files */,
 			);
 			path = NovelReader;
@@ -340,6 +360,7 @@
 		F2D538221976BAC100A0FDDA /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				F2A45C2A198C136A00A110F7 /* Reader */,
 				F22A8D71198969F900DA082A /* BookShelf */,
 				F22A8D72198969F900DA082A /* BookStore */,
 				F22A8D73198969F900DA082A /* UserCenter */,
@@ -444,6 +465,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2D5385C1976BCFC00A0FDDA /* Default@2x.png in Resources */,
+				F2A45C2F198D49BD00A110F7 /* Books in Resources */,
 				F2D537D31976807A00A0FDDA /* InfoPlist.strings in Resources */,
 				F2D5385A1976BCFC00A0FDDA /* Default-568h@2x.png in Resources */,
 				F2D5385E1976BCFC00A0FDDA /* Icon-114.png in Resources */,
@@ -479,6 +501,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F22A8D7619896A2500DA082A /* BookShelfViewController.m in Sources */,
+				F2A45C2D198C139500A110F7 /* ReaderViewController.m in Sources */,
 				F2D5384B1976BAC100A0FDDA /* RegexKitLite.m in Sources */,
 				F22A8D701989690000DA082A /* MainTabViewController.m in Sources */,
 				F2D538681976C72C00A0FDDA /* SelectorView.m in Sources */,
@@ -490,6 +513,7 @@
 				F2D5383A1976BAC100A0FDDA /* HttpGetter.m in Sources */,
 				F2D5383D1976BAC100A0FDDA /* CDViewController.m in Sources */,
 				F22A8D7919896B5100DA082A /* BookStoreViewController.m in Sources */,
+				F2A45C32198E518000A110F7 /* ReaderPageViewController.m in Sources */,
 				F2D5384E1976BAC100A0FDDA /* GraphicUtils.m in Sources */,
 				F250EAFC198AAFAB00DDECEF /* BookCell.m in Sources */,
 				F2D538471976BAC100A0FDDA /* Properties.m in Sources */,

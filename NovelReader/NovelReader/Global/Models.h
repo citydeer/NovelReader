@@ -20,10 +20,13 @@
 
 
 
-@interface LoginModel : PKMappingObject
+@interface BookCoverModel : PKMappingObject
 
-@property (readonly) NSString* user_token;
+@property (readonly) NSString* bookID;
 @property (readonly) NSString* name;
+@property (readonly) NSString* image;
+@property (readonly) BOOL isNew;
+@property (readonly) BOOL isPreview;
 
 @end
 

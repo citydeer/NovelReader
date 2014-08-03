@@ -8,6 +8,7 @@
 
 #import "BookShelfViewController.h"
 #import "MainTabViewController.h"
+#import "ReaderViewController.h"
 #import "BookCell.h"
 
 
@@ -48,7 +49,7 @@
 	CGRect rect = self.view.bounds;
 	
 	UICollectionViewFlowLayout* cvf = [[UICollectionViewFlowLayout alloc] init];
-	cvf.itemSize = CGSizeMake(84, 119);
+	cvf.itemSize = CGSizeMake(84, 150);
 	cvf.sectionInset = UIEdgeInsetsMake(16, 17, 16, 17);
 	_gridView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, _naviBarHeight, rect.size.width, rect.size.height-_naviBarHeight) collectionViewLayout:cvf];
 	_gridView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
@@ -71,8 +72,13 @@
 -(UICollectionViewCell*) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
 	UICollectionViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"BookCell" forIndexPath:indexPath];
-	cell.contentView.backgroundColor = [UIColor yellowColor];
 	return cell;
+}
+
+-(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+	ReaderViewController* vc = [[ReaderViewController alloc] init];
+	[_parent.cdNavigationController pushViewController:vc];
 }
 
 @end

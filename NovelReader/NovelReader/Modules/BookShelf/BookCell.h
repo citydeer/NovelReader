@@ -10,4 +10,8 @@
 
 @interface BookCell : UICollectionViewCell
 
++(CGSize) measureModel:(id)model;
+-(void) applyModel:(id)model;
+
 @end
+

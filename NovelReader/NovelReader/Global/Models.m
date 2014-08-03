@@ -70,8 +70,8 @@
 
 
 
-@implementation LoginModel
-@dynamic name, user_token;
+@implementation BookCoverModel
+@dynamic bookID, image, isNew, isPreview, name;
 @end
 
 
