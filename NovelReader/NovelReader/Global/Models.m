@@ -70,8 +70,8 @@
 
 
 
-@implementation BookCoverModel
-@dynamic bookID, image, isNew, isPreview, name;
+@implementation BookModel
+@dynamic bookID, image, isNew, isPreview, name, path;
 @end
 
 

@@ -11,6 +11,7 @@
 #import "Models.h"
 #import "Properties.h"
 #import "ReaderPageViewController.h"
+#import "KYTipsView.h"
 
 
 
@@ -21,6 +22,9 @@
 	UIView* _tabbarView;
 	
 	BOOL _showToolbar;
+	
+	ReaderLayoutInfo* _layoutInfo;
+	TextRenderContext* _textContext;
 }
 
 -(void) directoryAction:(UIButton*)sender;
@@ -31,6 +35,8 @@
 -(void) tapAction:(UITapGestureRecognizer*)tgr;
 
 -(void) adjustButton:(UIButton*)button;
+
+-(void) loadBook;
 
 @end
 
@@ -43,6 +49,7 @@
 	self = [super init];
 	if (self)
 	{
+		_textContext = [[TextRenderContext alloc] init];
 	}
 	return self;
 }
@@ -55,19 +62,19 @@
 {
 	[super loadView];
 	
-	self.view.backgroundColor = [UIColor yellowColor];
-	
 	[self.leftButton setImage:CDImage(@"main/navi_back") forState:UIControlStateNormal];
 	self.leftButton.imageEdgeInsets = UIEdgeInsetsMake(0, -15.0f, 0, 0);
 	[self.rightButton setImage:CDImage(@"reader/navi_bookmark1") forState:UIControlStateNormal];
 	self.rightButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15.0f);
 	
-	self.titleLabel.text = @"绝世神王";
+	self.titleLabel.text = _bookModel.name;
 	
 	[UIHelper moveView:self.naviBarView toY:-_naviBarHeight];
 	
 	CGRect rect = self.view.bounds;
 	CGFloat tabbarHeight = 50.0f;
+	
+	_textContext.pageSize = CGSizeMake(rect.size.width, rect.size.height - 20);
 	
 	_containerView = [[UIView alloc] initWithFrame:rect];
 	_containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -76,8 +83,7 @@
 	[self.view addSubview:_containerView];
 	
 	_pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
-	_pageViewController.doubleSided = YES;
-	[_pageViewController setViewControllers:[NSArray arrayWithObject:[[ReaderPageViewController alloc] init]] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:NULL];
+	_pageViewController.doubleSided = NO;
 	_pageViewController.dataSource = self;
 	_pageViewController.delegate = self;
 	_pageViewController.view.frame = _containerView.bounds;
@@ -134,6 +140,8 @@
 	[_tabbarView addSubview:button];
 	
 	[self.view addSubview:_tabbarView];
+	
+	[self loadBook];
 }
 
 -(void) adjustButton:(UIButton*)button
@@ -186,12 +194,54 @@
 
 -(UIViewController*) pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
-	return [[ReaderPageViewController alloc] init];
+	NSUInteger index = ((ReaderPageViewController*)viewController).pageIndex;
+	if (index > 0)
+	{
+		ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
+		pvc.layoutInfo = _layoutInfo;
+		pvc.pageIndex = index - 1;
+		return pvc;
+	}
+	return nil;
 }
 
 -(UIViewController*) pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
-	return [[ReaderPageViewController alloc] init];
+	NSUInteger index = ((ReaderPageViewController*)viewController).pageIndex;
+	if (index + 1 < _layoutInfo.pages.count)
+	{
+		ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
+		pvc.layoutInfo = _layoutInfo;
+		pvc.pageIndex = index + 1;
+		return pvc;
+	}
+	return nil;
+}
+
+-(void) loadBook
+{
+	[self.view showPopTitle:@"" msg:@"正在加载..."];
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+	{
+		@autoreleasepool
+		{
+			NSStringEncoding enc;
+			NSError* error;
+			NSString* text = [NSString stringWithContentsOfFile:_bookModel.path usedEncoding:&enc error:&error];
+			_layoutInfo = [[ReaderLayoutInfo alloc] initWithText:text inContext:_textContext];
+			dispatch_async(dispatch_get_main_queue(), ^
+			{
+				[self.view dismissMsg];
+				if (_layoutInfo.pages.count > 0)
+				{
+					ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
+					pvc.layoutInfo = _layoutInfo;
+					pvc.pageIndex = 0;
+					[_pageViewController setViewControllers:[NSArray arrayWithObject:pvc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:NULL];
+				}
+			});
+		}
+	});
 }
 
 @end

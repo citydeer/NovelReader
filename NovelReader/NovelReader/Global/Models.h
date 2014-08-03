@@ -20,13 +20,14 @@
 
 
 
-@interface BookCoverModel : PKMappingObject
+@interface BookModel : PKMappingObject
 
-@property (readonly) NSString* bookID;
-@property (readonly) NSString* name;
-@property (readonly) NSString* image;
-@property (readonly) BOOL isNew;
-@property (readonly) BOOL isPreview;
+@property (readwrite) NSString* bookID;
+@property (readwrite) NSString* name;
+@property (readwrite) NSString* image;
+@property (readwrite) NSString* path;
+@property (readwrite) BOOL isNew;
+@property (readwrite) BOOL isPreview;
 
 @end
 

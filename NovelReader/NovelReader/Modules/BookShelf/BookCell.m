@@ -20,7 +20,7 @@
 	UIImageView* _newIcon;
 	UIImageView* _previewIcon;
 	
-	BookCoverModel* _model;
+	BookModel* _model;
 }
 
 @end
@@ -47,20 +47,19 @@
 		_coverImage.backgroundColor = CDColor(nil, @"c9c9c9");
 		_coverImage.contentMode = UIViewContentModeScaleAspectFill;
 		_coverImage.clipsToBounds = YES;
-		_coverImage.image = CDImage(@"launch");
 		[self addSubview:_coverImage];
 		
 		_newIcon = [[UIImageView alloc] initWithImage:CDImage(@"shelf/new_icon")];
-		[UIHelper moveView:_newIcon toX:frame.size.width-36 andY:-1];
+		[UIHelper moveView:_newIcon toX:frame.size.width-35.5 andY:-1];
 		_newIcon.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		[self addSubview:_newIcon];
 		
 		_previewIcon = [[UIImageView alloc] initWithImage:CDImage(@"shelf/preview_icon")];
-		[UIHelper moveView:_previewIcon toX:frame.size.width-36 andY:-1];
+		[UIHelper moveView:_previewIcon toX:frame.size.width-35.5 andY:-1];
 		_previewIcon.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		[self addSubview:_previewIcon];
 		
-		_titleLabel = [UIHelper label:@"电影女王" tc:CDColor(nil, @"282828") fs:12 b:NO al:NSTextAlignmentCenter frame:CGRectMake(0, frame.size.height-24, frame.size.width, 20)];
+		_titleLabel = [UIHelper label:nil tc:CDColor(nil, @"282828") fs:12 b:NO al:NSTextAlignmentCenter frame:CGRectMake(0, frame.size.height-24, frame.size.width, 20)];
 		_titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
 		[self addSubview:_titleLabel];
 	}
@@ -75,6 +74,11 @@
 -(void) applyModel:(id)model
 {
 	_model = model;
+	
+	_coverImage.image = [UIImage imageWithContentsOfFile:_model.image];
+	_newIcon.hidden = !_model.isNew;
+	_previewIcon.hidden = !_model.isPreview;
+	_titleLabel.text = _model.name;
 }
 
 @end

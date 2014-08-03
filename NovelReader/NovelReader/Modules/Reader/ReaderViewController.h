@@ -8,8 +8,11 @@
 
 #import "CDViewController.h"
 
+@class BookModel;
 
 @interface ReaderViewController : CDViewController
+
+@property (nonatomic, strong) BookModel* bookModel;
 
 @end
 

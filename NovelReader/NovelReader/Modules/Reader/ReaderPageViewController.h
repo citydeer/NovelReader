@@ -6,9 +6,13 @@
 //  Copyright (c) 2014年 citydeer. All rights reserved.
 //
 
+#import "ReaderLayoutInfo.h"
 
 
 @interface ReaderPageViewController : UIViewController
+
+@property (nonatomic, strong) ReaderLayoutInfo* layoutInfo;
+@property (nonatomic, assign) NSUInteger pageIndex;
 
 @end
 

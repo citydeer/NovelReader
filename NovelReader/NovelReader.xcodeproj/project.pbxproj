@@ -15,6 +15,7 @@
 		F2A45C2D198C139500A110F7 /* ReaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A45C2C198C139500A110F7 /* ReaderViewController.m */; };
 		F2A45C2F198D49BD00A110F7 /* Books in Resources */ = {isa = PBXBuildFile; fileRef = F2A45C2E198D49BD00A110F7 /* Books */; };
 		F2A45C32198E518000A110F7 /* ReaderPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A45C31198E518000A110F7 /* ReaderPageViewController.m */; };
+		F2A45C35198E80FD00A110F7 /* ReaderLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A45C34198E80FD00A110F7 /* ReaderLayoutInfo.m */; };
 		F2D537C91976807A00A0FDDA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537C81976807A00A0FDDA /* Foundation.framework */; };
 		F2D537CB1976807A00A0FDDA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537CA1976807A00A0FDDA /* CoreGraphics.framework */; };
 		F2D537CD1976807A00A0FDDA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537CC1976807A00A0FDDA /* UIKit.framework */; };
@@ -76,6 +77,8 @@
 		F2A45C2E198D49BD00A110F7 /* Books */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Books; sourceTree = "<group>"; };
 		F2A45C30198E518000A110F7 /* ReaderPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReaderPageViewController.h; sourceTree = "<group>"; };
 		F2A45C31198E518000A110F7 /* ReaderPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReaderPageViewController.m; sourceTree = "<group>"; };
+		F2A45C33198E80FD00A110F7 /* ReaderLayoutInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReaderLayoutInfo.h; sourceTree = "<group>"; };
+		F2A45C34198E80FD00A110F7 /* ReaderLayoutInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReaderLayoutInfo.m; sourceTree = "<group>"; };
 		F2D537C51976807A00A0FDDA /* NovelReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NovelReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2D537C81976807A00A0FDDA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F2D537CA1976807A00A0FDDA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -207,6 +210,8 @@
 				F2A45C2C198C139500A110F7 /* ReaderViewController.m */,
 				F2A45C30198E518000A110F7 /* ReaderPageViewController.h */,
 				F2A45C31198E518000A110F7 /* ReaderPageViewController.m */,
+				F2A45C33198E80FD00A110F7 /* ReaderLayoutInfo.h */,
+				F2A45C34198E80FD00A110F7 /* ReaderLayoutInfo.m */,
 			);
 			path = Reader;
 			sourceTree = "<group>";
@@ -530,6 +535,7 @@
 				F2D5384C1976BAC100A0FDDA /* AZImageCache.m in Sources */,
 				F2D5384A1976BAC100A0FDDA /* Reachability.m in Sources */,
 				F2D5383E1976BAC100A0FDDA /* PhotoBrowserController.m in Sources */,
+				F2A45C35198E80FD00A110F7 /* ReaderLayoutInfo.m in Sources */,
 				F2D538381976BAC100A0FDDA /* GetterController.m in Sources */,
 				F2D5383B1976BAC100A0FDDA /* KYAPIImageGetter.m in Sources */,
 				F2D538431976BAC100A0FDDA /* KYRemoteImageView.m in Sources */,
