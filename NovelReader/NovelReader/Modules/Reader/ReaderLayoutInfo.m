@@ -80,6 +80,8 @@
 	
 	c.textSize = context.textSize;
 	c.textFontName = context.textFontName;
+	c.pageSize = context.pageSize;
+	c.textColor = context.textColor;
 	
 	return c;
 }
@@ -141,7 +143,9 @@
 		
 		CTFontRef defaultFont = CTFontCreateWithName((CFStringRef)context.textFontName, context.textSize, NULL);
 		CFAttributedStringSetAttribute(attr, fullRange, kCTFontAttributeName, defaultFont);
-		CFAttributedStringSetAttribute(attr, fullRange, kCTForegroundColorAttributeName, CDColor(nil, @"562a16").CGColor);
+		UIColor* theColor = context.textColor;
+		if (theColor == nil) theColor = CDColor(nil, @"562a16");
+		CFAttributedStringSetAttribute(attr, fullRange, kCTForegroundColorAttributeName, theColor.CGColor);
 		
 		CFRelease(defaultFont);
 		
@@ -241,6 +245,19 @@
 			CFRelease(_typesetter);
 		_typesetter = typesetter;
 	}
+}
+
+-(NSInteger) findIndexForLocation:(CFIndex)location inRange:(NSRange)range
+{
+	NSUInteger i = range.location;
+	for (; i < range.location + range.length; ++i)
+	{
+		RenderLine* fl = ((NSArray*)[_pages objectAtIndex:i]).firstObject;
+		RenderLine* ll = ((NSArray*)[_pages objectAtIndex:i]).lastObject;
+		if (location >= fl.range.location && location < ll.range.location + ll.range.length)
+			break;
+	}
+	return i < range.location + range.length ? i : -1;
 }
 
 +(NSLock*) getLock

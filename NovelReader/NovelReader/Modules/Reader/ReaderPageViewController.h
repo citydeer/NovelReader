@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) ReaderLayoutInfo* layoutInfo;
 @property (nonatomic, assign) NSUInteger pageIndex;
+@property (nonatomic, strong) UIColor* bgColor;
 
 @end
 

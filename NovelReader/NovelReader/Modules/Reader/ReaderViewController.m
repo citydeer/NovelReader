@@ -18,11 +18,13 @@
 @interface ReaderViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 {
 	double _duration;
+	BOOL _loadingBook;
 	
 	UIPageViewController* _pageViewController;
 	UIView* _containerView;
 	UIView* _tapGestureView;
 	UIView* _tabbarView;
+	UIButton* _nightModeButton;
 	
 	ReaderLayoutInfo* _layoutInfo;
 	TextRenderContext* _textContext;
@@ -32,10 +34,14 @@
 	UIView* _brightnessView;
 	
 	UIView* _fontToolbar;
+	UIButton* _fontIncrease;
+	UIButton* _fontDecrease;
 	
 	UIView* _progressToolbar;
 	UISlider* _progressSlider;
 	UILabel* _progressLabel;
+	
+	UIColor* _pageBGColor;
 }
 
 @property (readonly) ReaderPageViewController* currentPageController;
@@ -48,6 +54,7 @@
 -(void) createFontToolbar;
 -(void) createProgressToolbar;
 
+-(void) updateNightModeViews;
 -(void) loadBook;
 
 @end
@@ -101,7 +108,6 @@
 	
 	_containerView = [[UIView alloc] initWithFrame:rect];
 	_containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	_containerView.backgroundColor = CDColor(nil, @"f6e6cd");
 	[_containerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toolbarAction:)]];
 	[self.view addSubview:_containerView];
 	
@@ -135,7 +141,43 @@
 	_brightnessView.backgroundColor = [UIColor colorWithWhite:0 alpha:1.0f-CDProp(PropReaderBrightness).floatValue];
 	[self.view addSubview:_brightnessView];
 	
+	[self updateNightModeViews];
+	
 	[self loadBook];
+}
+
+-(void) adjustButton:(UIButton*)button
+{
+	[button setTitleColor:CDColor(nil, @"5e5e5e") forState:UIControlStateNormal];
+	[button setTitleColor:CDColor(nil, @"ec6400") forState:UIControlStateHighlighted];
+	button.titleLabel.font = [UIFont systemFontOfSize:12.0f];
+	
+	CGSize sz = button.imageView.frame.size;
+	button.titleEdgeInsets = UIEdgeInsetsMake(0, -sz.width, -sz.height-17, 0);
+	sz = button.titleLabel.frame.size;
+	button.imageEdgeInsets = UIEdgeInsetsMake(-sz.height+4, 0, 0, -sz.width);
+}
+
+-(void) updateNightModeViews
+{
+	if (CDProp(PropReaderNightMode).boolValue)
+	{
+		_pageBGColor = CDColor(nil, @"000000");
+		_textContext.textColor = CDColor(nil, @"282828");
+		[_nightModeButton setImage:CDImage(@"reader/tabbar_day1") forState:UIControlStateNormal];
+		[_nightModeButton setImage:CDImage(@"reader/tabbar_day2") forState:UIControlStateHighlighted];
+		[_nightModeButton setTitle:@"白天" forState:UIControlStateNormal];
+	}
+	else
+	{
+		_pageBGColor = CDColor(nil, @"f6e6cd");
+		_textContext.textColor = CDColor(nil, @"562a16");
+		[_nightModeButton setImage:CDImage(@"reader/tabbar_night1") forState:UIControlStateNormal];
+		[_nightModeButton setImage:CDImage(@"reader/tabbar_night2") forState:UIControlStateHighlighted];
+		[_nightModeButton setTitle:@"夜间" forState:UIControlStateNormal];
+	}
+	[self adjustButton:_nightModeButton];
+	_containerView.backgroundColor = _pageBGColor;
 }
 
 -(void) createToolbar
@@ -183,13 +225,10 @@
 	[self adjustButton:button];
 	[_tabbarView addSubview:button];
 	
-	button = [[UIButton alloc] initWithFrame:CGRectMake(320.0f/5.0f*4, 0, 320.0f/5.0f, tabbarHeight)];
-	[button addTarget:self action:@selector(nightModeAction:) forControlEvents:UIControlEventTouchUpInside];
-	[button setImage:CDImage(@"reader/tabbar_night1") forState:UIControlStateNormal];
-	[button setImage:CDImage(@"reader/tabbar_night2") forState:UIControlStateHighlighted];
-	[button setTitle:@"夜间" forState:UIControlStateNormal];
-	[self adjustButton:button];
-	[_tabbarView addSubview:button];
+	_nightModeButton = [[UIButton alloc] initWithFrame:CGRectMake(320.0f/5.0f*4, 0, 320.0f/5.0f, tabbarHeight)];
+	[_nightModeButton addTarget:self action:@selector(nightModeAction:) forControlEvents:UIControlEventTouchUpInside];
+	[self adjustButton:_nightModeButton];
+	[_tabbarView addSubview:_nightModeButton];
 	
 	[self.view addSubview:_tabbarView];
 }
@@ -224,6 +263,27 @@
 
 -(void) createFontToolbar
 {
+	CGRect rect = self.view.bounds;
+	_fontToolbar = [[UIView alloc] initWithFrame:CGRectMake(0, rect.size.height, rect.size.width, 75)];
+	_fontToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+	_fontToolbar.backgroundColor = CDColor(nil, @"e5ffffff");
+	
+	UIView* av = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, 0.5f)];
+	av.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	av.backgroundColor = CDColor(nil, @"a5a5a5");
+	[_fontToolbar addSubview:av];
+	
+	_fontDecrease = [[UIButton alloc] initWithFrame:CGRectMake(30, 0, 100, 75)];
+	[_fontDecrease addTarget:self action:@selector(fontChanged:) forControlEvents:UIControlEventTouchUpInside];
+	[_fontDecrease setImage:CDImage(@"reader/fontdecrease") forState:UIControlStateNormal];
+	[_fontToolbar addSubview:_fontDecrease];
+	
+	_fontIncrease = [[UIButton alloc] initWithFrame:CGRectMake(rect.size.width-30-100, 0, 100, 75)];
+	[_fontIncrease addTarget:self action:@selector(fontChanged:) forControlEvents:UIControlEventTouchUpInside];
+	[_fontIncrease setImage:CDImage(@"reader/fontincrease") forState:UIControlStateNormal];
+	[_fontToolbar addSubview:_fontIncrease];
+	
+	[self.view addSubview:_fontToolbar];
 }
 
 -(void) createProgressToolbar
@@ -251,18 +311,6 @@
 	[_progressToolbar addSubview:_progressLabel];
 	
 	[self.view addSubview:_progressToolbar];
-}
-
--(void) adjustButton:(UIButton*)button
-{
-	[button setTitleColor:CDColor(nil, @"5e5e5e") forState:UIControlStateNormal];
-	[button setTitleColor:CDColor(nil, @"ec6400") forState:UIControlStateHighlighted];
-	button.titleLabel.font = [UIFont systemFontOfSize:12.0f];
-	
-	CGSize sz = button.imageView.frame.size;
-	button.titleEdgeInsets = UIEdgeInsetsMake(0, -sz.width, -sz.height-17, 0);
-	sz = button.titleLabel.frame.size;
-	button.imageEdgeInsets = UIEdgeInsetsMake(-sz.height+4, 0, 0, -sz.width);
 }
 
 -(void) toolbarAction:(UITapGestureRecognizer*)tgr
@@ -328,6 +376,7 @@
 	ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
 	pvc.layoutInfo = _layoutInfo;
 	pvc.pageIndex = newIndex;
+	pvc.bgColor = _pageBGColor;
 	[_pageViewController setViewControllers:[NSArray arrayWithObject:pvc] direction:d animated:YES completion:NULL];
 }
 
@@ -336,6 +385,17 @@
 }
 
 -(void) fontAction:(UIButton*)sender
+{
+//	_brightnessSlider.value = CDProp(PropReaderBrightness).floatValue;
+	CGRect rect = self.view.bounds;
+	[UIView animateWithDuration:_duration animations:^
+	 {
+		 [UIHelper moveView:_fontToolbar toY:rect.size.height-_fontToolbar.frame.size.height];
+		 [UIHelper moveView:_tabbarView toY:rect.size.height];
+	 }];
+}
+
+-(void) fontChanged:(UIButton*)sender
 {
 }
 
@@ -364,6 +424,13 @@
 
 -(void) nightModeAction:(UIButton*)sender
 {
+	if (_loadingBook)
+		return;
+	
+	BOOL isNight = CDProp(PropReaderNightMode).boolValue;
+	CDSetProp(PropReaderNightMode, (isNight ? @"0" : @"1"));
+	[self updateNightModeViews];
+	[self loadBook];
 }
 
 -(UIViewController*) pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
@@ -374,6 +441,7 @@
 		ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
 		pvc.layoutInfo = _layoutInfo;
 		pvc.pageIndex = index - 1;
+		pvc.bgColor = _pageBGColor;
 		return pvc;
 	}
 	return nil;
@@ -387,6 +455,7 @@
 		ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
 		pvc.layoutInfo = _layoutInfo;
 		pvc.pageIndex = index + 1;
+		pvc.bgColor = _pageBGColor;
 		return pvc;
 	}
 	return nil;
@@ -401,22 +470,45 @@
 
 -(void) loadBook
 {
+	if (_loadingBook)
+		return;
+	_loadingBook = YES;
+	
 	[self.view showColorIndicatorFreezeUI:NO];
+	
+	CFIndex currentLocation = 0;
+	NSUInteger currentIndex = self.currentPageController.pageIndex;
+	if (_layoutInfo.pages.count > 0 && currentIndex > 0)
+	{
+		RenderLine* line = [[_layoutInfo.pages objectAtIndex:currentIndex] firstObject];
+		if (line)
+			currentLocation = line.range.location;
+	}
+	
+	TextRenderContext* tctx = [TextRenderContext contextWithContext:_textContext];
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 		@autoreleasepool {
-			NSStringEncoding enc;
-			NSError* error;
-			NSString* text = [NSString stringWithContentsOfFile:_bookModel.path usedEncoding:&enc error:&error];
-			_layoutInfo = [[ReaderLayoutInfo alloc] initWithText:text inContext:_textContext];
+			NSString* text = [NSString stringWithContentsOfFile:_bookModel.path usedEncoding:NULL error:NULL];
+			_layoutInfo = [[ReaderLayoutInfo alloc] initWithText:text inContext:tctx];
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[self.view dismiss];
 				if (_layoutInfo.pages.count > 0)
 				{
+					NSUInteger toIndex = 0;
+					if (currentLocation > 0)
+					{
+						NSInteger theIndex = [_layoutInfo findIndexForLocation:currentLocation inRange:NSMakeRange(0, _layoutInfo.pages.count)];
+						if (theIndex > 0)
+							toIndex = theIndex;
+					}
+					
 					ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
 					pvc.layoutInfo = _layoutInfo;
-					pvc.pageIndex = 0;
+					pvc.pageIndex = toIndex;
+					pvc.bgColor = _pageBGColor;
 					[_pageViewController setViewControllers:[NSArray arrayWithObject:pvc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:NULL];
 				}
+				_loadingBook = NO;
 			});
 		}
 	});

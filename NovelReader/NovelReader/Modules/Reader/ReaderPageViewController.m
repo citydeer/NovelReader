@@ -93,7 +93,7 @@
 -(void) loadView
 {
 	ReaderPageView* pv = [[ReaderPageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	pv.backgroundColor = CDColor(nil, @"f6e6cd");
+	pv.backgroundColor = _bgColor;
 	[pv applyInfo:_layoutInfo lines:[_layoutInfo.pages objectAtIndex:_pageIndex]];
 	self.view = pv;
 }

@@ -19,7 +19,9 @@
 
 @property (nonatomic, assign) CGFloat textSize;				//文字字号
 @property (nonatomic, copy) NSString* textFontName;			//文字字体
+
 @property (nonatomic, assign) CGSize pageSize;				//页面大小
+@property (nonatomic, strong) UIColor* textColor;
 
 +(id) contextWithContext:(TextRenderContext*)context;
 
@@ -37,6 +39,8 @@
 @property (nonatomic) CFTypeRef typesetter;
 
 -(id) initWithText:(NSString*)text inContext:(TextRenderContext*)context;
+
+-(NSInteger) findIndexForLocation:(CFIndex)location inRange:(NSRange)range;
 
 +(NSLock*) getLock;
 
