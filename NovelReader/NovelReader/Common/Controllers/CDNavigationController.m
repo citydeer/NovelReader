@@ -8,7 +8,7 @@
 
 #import "CDNavigationController.h"
 #import <objc/runtime.h>
-#import "CDViewController.h"
+
 
 
 NSString* const CDNavigationWillPushNotification = @"CDNavigationWillPushNotification";
@@ -100,21 +100,20 @@ CDNavigationController* getNaviController(void)
 
 - (void)loadView
 {
-	CGRect frame = [UIScreen mainScreen].applicationFrame;
-    frame.size.height += iOS7 ? 20:0;
-    frame.origin.y = 0;
-	if ([self.currentController isKindOfClass:[CDViewController class]])
-	{
-		frame = ((CDViewController *)self.currentController).viewFrame;
-	}
-	self.view = [[UIView alloc] initWithFrame:frame];
+	self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
 	self.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	
 	self.view.multipleTouchEnabled = YES;
-	self.view.clipsToBounds = YES;
-		
+	
 	UIViewController* cvc = self.currentController;
-	cvc.view.frame = self.view.bounds;
+	CGRect rect = self.view.bounds;
+	if (!cvc.wantsFullScreenLayout)
+	{
+		CGFloat barHeight = iOS7 ? 0 : [UIApplication sharedApplication].statusBarFrame.size.height;
+		rect.origin.y += barHeight;
+		rect.size.height -= barHeight;
+	}
+	cvc.view.frame = rect;
 	cvc.view.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview:cvc.view];
 	cvc.cdNavigationController = self;
@@ -203,61 +202,69 @@ CDNavigationController* getNaviController(void)
 	toView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	
 	CGRect rect = containerView.bounds;
+	CGRect toRect = rect;
+	CGRect fromRect = fromView.frame;
+	if (!toController.wantsFullScreenLayout)
+	{
+		CGFloat barHeight = iOS7 ? 0 : [UIApplication sharedApplication].statusBarFrame.size.height;
+		toRect.origin.y += barHeight;
+		toRect.size.height -= barHeight;
+	}
 	
 	// Prepare for animation
 	switch (toStyle & 0xff)
 	{
 		case ASNone:
 		{
-			toView.frame = rect;
+			toView.frame = toRect;
 			toView.alpha = 1.0f;
 			break;
 		}
 		case ASFadeIn:
 		{
-			toView.frame = rect;
+			toView.frame = toRect;
 			toView.alpha = 0.0f;
 			break;
 		}
 		case ASFadeOut:
 		{
-			toView.frame = rect;
+			toView.frame = toRect;
 			toView.alpha = 1.0f;
 			break;
 		}
 		case ASTranslationToLeft:
 		{
-			toView.frame = CGRectMake(rect.size.width, 0, rect.size.width, rect.size.height);
+			toView.frame = CGRectMake(rect.size.width, toRect.origin.y, toRect.size.width, toRect.size.height);
 			toView.alpha = 1.0f;
 			break;
 		}
 		case ASTranslationToRight:
 		{
-			toView.frame = CGRectMake(-rect.size.width, 0, rect.size.width, rect.size.height);
+			toView.frame = CGRectMake(-rect.size.width, toRect.origin.y, toRect.size.width, toRect.size.height);
 			toView.alpha = 1.0f;
 			break;
 		}
 		case ASTranslationUp:
 		{
-			toView.frame = CGRectMake(0, rect.size.height, rect.size.width, rect.size.height);
+			toView.frame = CGRectMake(toRect.origin.x, rect.size.height, toRect.size.width, toRect.size.height);
 			toView.alpha = 1.0f;
 			break;
 		}
 		case ASTranslationDown:
 		{
-			toView.frame = CGRectMake(0, -rect.size.height, rect.size.width, rect.size.height);
+			toView.frame = CGRectMake(toRect.origin.x, -toRect.size.height, toRect.size.width, toRect.size.height);
 			toView.alpha = 1.0f;
 			break;
 		}
 		case ASFallBehind:
 		{
-			toView.frame = rect;
+			toView.frame = toRect;
 			toView.alpha = 1.0f;
 			break;
 		}
 		case ASLiftForward:
 		{
-			toView.frame = rect;
+			toView.frame = toRect;
 			toView.alpha = 1.0f;
 			break;
 		}
@@ -295,27 +302,27 @@ CDNavigationController* getNaviController(void)
 			}
 			case ASTranslationToLeft:
 			{
-				fromView.frame = CGRectMake(-rect.size.width, 0, rect.size.width, rect.size.height);;
+				fromView.frame = CGRectMake(-fromRect.size.width, fromRect.origin.y, fromRect.size.width, fromRect.size.height);;
 				break;
 			}
 			case ASTranslationToRight:
 			{
-				fromView.frame = CGRectMake(rect.size.width, 0, rect.size.width, rect.size.height);
+				fromView.frame = CGRectMake(rect.size.width, fromRect.origin.y, fromRect.size.width, fromRect.size.height);
 				break;
 			}
 			case ASTranslationUp:
 			{
-				fromView.frame = CGRectMake(0, -rect.size.height, rect.size.width, rect.size.height);
+				fromView.frame = CGRectMake(fromRect.origin.x, -fromRect.size.height, fromRect.size.width, fromRect.size.height);
 				break;
 			}
 			case ASTranslationDown:
 			{
-				fromView.frame = CGRectMake(0, rect.size.height, rect.size.width, rect.size.height);
+				fromView.frame = CGRectMake(fromRect.origin.x, rect.size.height, fromRect.size.width, fromRect.size.height);
 				break;
 			}
 			case ASFallBehind:
 			{
-				fromView.frame = CGRectMake(0, -rect.size.height, rect.size.width, rect.size.height);
+				fromView.frame = CGRectMake(fromRect.origin.x, -fromRect.size.height, fromRect.size.width, fromRect.size.height);
 //				CATransform3D trans = CATransform3DMakeRotation(M_PI/4.0, 1.0f, 0, 0);
 //				fromView.layer.transform = trans;
 				break;
@@ -326,7 +333,7 @@ CDNavigationController* getNaviController(void)
 			}
 		}
 		
-		CGRect newRect = containerView.bounds;
+		CGRect newRect = toRect;
 		
 		switch (toStyle & 0xff)
 		{

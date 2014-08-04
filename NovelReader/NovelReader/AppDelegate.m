@@ -76,6 +76,8 @@ void uncaughtExceptionHandler(NSException *exception)
 	
 	self.window.rootViewController = _navigationController;
 	[self.window makeKeyAndVisible];
+	
+	_navigationController.view.frame = self.window.bounds;
 }
 
 -(void) logoutWithMsg:(NSString*)msg

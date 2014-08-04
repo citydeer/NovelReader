@@ -19,9 +19,8 @@
 {
 	UIPageViewController* _pageViewController;
 	UIView* _containerView;
+	UIView* _tapGestureView;
 	UIView* _tabbarView;
-	
-	BOOL _showToolbar;
 	
 	ReaderLayoutInfo* _layoutInfo;
 	TextRenderContext* _textContext;
@@ -32,11 +31,19 @@
 -(void) fontAction:(UIButton*)sender;
 -(void) brightnessAction:(UIButton*)sender;
 -(void) nightModeAction:(UIButton*)sender;
--(void) tapAction:(UITapGestureRecognizer*)tgr;
+-(void) toolbarAction:(UITapGestureRecognizer*)tgr;
 
 -(void) adjustButton:(UIButton*)button;
 
 -(void) loadBook;
+
+@end
+
+
+
+@interface _TouchCancelView : UIView
+
+@property (nonatomic, unsafe_unretained) id parent;
 
 @end
 
@@ -50,6 +57,7 @@
 	if (self)
 	{
 		_textContext = [[TextRenderContext alloc] init];
+		self.wantsFullScreenLayout = YES;
 	}
 	return self;
 }
@@ -61,6 +69,8 @@
 -(void) loadView
 {
 	[super loadView];
+	
+	[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
 	
 	[self.leftButton setImage:CDImage(@"main/navi_back") forState:UIControlStateNormal];
 	self.leftButton.imageEdgeInsets = UIEdgeInsetsMake(0, -15.0f, 0, 0);
@@ -79,7 +89,7 @@
 	_containerView = [[UIView alloc] initWithFrame:rect];
 	_containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_containerView.backgroundColor = CDColor(nil, @"f6e6cd");
-	[_containerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)]];
+	[_containerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(toolbarAction:)]];
 	[self.view addSubview:_containerView];
 	
 	_pageViewController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
@@ -89,6 +99,12 @@
 	_pageViewController.view.frame = _containerView.bounds;
 	_pageViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[_containerView addSubview:_pageViewController.view];
+	
+	_tapGestureView = [[_TouchCancelView alloc] initWithFrame:rect];
+	_tapGestureView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+	((_TouchCancelView*)_tapGestureView).parent = self;
+	[self.view addSubview:_tapGestureView];
+	_tapGestureView.hidden = YES;
 	
 	_tabbarView = [[UIView alloc] initWithFrame:CGRectMake(0, rect.size.height, rect.size.width, tabbarHeight)];
 	_tabbarView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
@@ -156,15 +172,17 @@
 	button.imageEdgeInsets = UIEdgeInsetsMake(-sz.height+4, 0, 0, -sz.width);
 }
 
--(void) tapAction:(UITapGestureRecognizer*)tgr
+-(void) toolbarAction:(UITapGestureRecognizer*)tgr
 {
-	_showToolbar = !_showToolbar;
-	double d = 0.2;
+	BOOL showToolbar = (tgr != nil);
+	_tapGestureView.hidden = !showToolbar;
+	double d = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
+	[[UIApplication sharedApplication] setStatusBarHidden:!showToolbar withAnimation:UIStatusBarAnimationFade];
 	CGRect rect = self.view.bounds;
 	[UIView animateWithDuration:d animations:^
 	{
-		[UIHelper moveView:self.naviBarView toY:(_showToolbar ? 0 : -_naviBarHeight)];
-		[UIHelper moveView:_tabbarView toY:rect.size.height-(_showToolbar ? 50.0f : 0)];
+		[UIHelper moveView:self.naviBarView toY:(showToolbar ? (iOS7 ? 0 : 20) : -_naviBarHeight)];
+		[UIHelper moveView:_tabbarView toY:rect.size.height-(showToolbar ? 50.0f : 0)];
 	}];
 }
 
@@ -245,4 +263,23 @@
 }
 
 @end
+
+
+
+
+@implementation _TouchCancelView
+
+-(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	[_parent toolbarAction:nil];
+}
+
+-(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	[_parent toolbarAction:nil];
+}
+
+@end
+
+
 
