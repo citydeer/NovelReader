@@ -36,6 +36,17 @@
 	return self;
 }
 
+-(void) applyTextSize:(CGFloat)size
+{
+	CGFloat space = roundf(size*0.6)+5;
+	if (space < 12.0f) space = 12.0f;
+	self.ParagraphOffset = size * 2.0f;
+	self.ParagraphSpace = space;
+	self.TextLineHeight = size;
+	self.TextLineSpace = space;
+	self.textSize = size;
+}
+
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
 	self = [super init];

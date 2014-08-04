@@ -55,6 +55,7 @@
 -(void) createProgressToolbar;
 
 -(void) updateNightModeViews;
+-(void) updateFontViews;
 -(void) loadBook;
 
 @end
@@ -141,8 +142,8 @@
 	_brightnessView.backgroundColor = [UIColor colorWithWhite:0 alpha:1.0f-CDProp(PropReaderBrightness).floatValue];
 	[self.view addSubview:_brightnessView];
 	
+	[self updateFontViews];
 	[self updateNightModeViews];
-	
 	[self loadBook];
 }
 
@@ -178,6 +179,14 @@
 	}
 	[self adjustButton:_nightModeButton];
 	_containerView.backgroundColor = _pageBGColor;
+}
+
+-(void) updateFontViews
+{
+	float fz = CDProp(PropReaderFontSize).floatValue;
+	_fontDecrease.enabled = (fz > 12.0f);
+	_fontIncrease.enabled = (fz < 23.0f);
+	[_textContext applyTextSize:fz];
 }
 
 -(void) createToolbar
@@ -245,7 +254,7 @@
 	av.backgroundColor = CDColor(nil, @"a5a5a5");
 	[_brightnessToolbar addSubview:av];
 	
-	_brightnessSlider = [[UISlider alloc] initWithFrame:CGRectMake(35, 0, 250, 10)];
+	_brightnessSlider = [[UISlider alloc] initWithFrame:CGRectMake(35, 0, 250, 4)];
 	_brightnessSlider.center = CGPointMake(160, 37.5f);
 	[_brightnessSlider setThumbImage:CDImage(@"reader/progressbar_thumb") forState:UIControlStateNormal];
 	[_brightnessSlider setMinimumValueImage:CDImage(@"reader/brightdown")];
@@ -298,7 +307,7 @@
 	av.backgroundColor = CDColor(nil, @"a5a5a5");
 	[_progressToolbar addSubview:av];
 	
-	_progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(35, 0, 250, 10)];
+	_progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(35, 0, 250, 4)];
 	_progressSlider.center = CGPointMake(160, 37.5f);
 	[_progressSlider setThumbImage:CDImage(@"reader/progressbar_thumb") forState:UIControlStateNormal];
 	[_progressSlider setMinimumTrackTintColor:CDColor(nil, @"ec6400")];
@@ -386,7 +395,6 @@
 
 -(void) fontAction:(UIButton*)sender
 {
-//	_brightnessSlider.value = CDProp(PropReaderBrightness).floatValue;
 	CGRect rect = self.view.bounds;
 	[UIView animateWithDuration:_duration animations:^
 	 {
@@ -397,6 +405,16 @@
 
 -(void) fontChanged:(UIButton*)sender
 {
+	float fz = CDProp(PropReaderFontSize).floatValue;
+	if (sender == _fontIncrease)
+		fz += (fz == 14.0f ? 1.0f : 2.0f);
+	else
+		fz -= (fz == 15.0f ? 1.0f : 2.0f);
+	
+	NSString* fzStr = [NSString stringWithFormat:@"%f", fz];
+	CDSetProp(PropReaderFontSize, fzStr);
+	[self updateFontViews];
+	[self loadBook];
 }
 
 -(void) brightnessAction:(UIButton*)sender

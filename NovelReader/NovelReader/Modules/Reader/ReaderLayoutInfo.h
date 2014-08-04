@@ -24,6 +24,7 @@
 @property (nonatomic, strong) UIColor* textColor;
 
 +(id) contextWithContext:(TextRenderContext*)context;
+-(void) applyTextSize:(CGFloat)size;
 
 @end
 
