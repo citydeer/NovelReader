@@ -17,6 +17,8 @@
 
 @interface ReaderViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 {
+	double _duration;
+	
 	UIPageViewController* _pageViewController;
 	UIView* _containerView;
 	UIView* _tapGestureView;
@@ -24,16 +26,27 @@
 	
 	ReaderLayoutInfo* _layoutInfo;
 	TextRenderContext* _textContext;
+	
+	UIView* _brightnessToolbar;
+	UISlider* _brightnessSlider;
+	UIView* _brightnessView;
+	
+	UIView* _fontToolbar;
+	
+	UIView* _progressToolbar;
+	UISlider* _progressSlider;
+	UILabel* _progressLabel;
 }
 
--(void) directoryAction:(UIButton*)sender;
--(void) progressAction:(UIButton*)sender;
--(void) fontAction:(UIButton*)sender;
--(void) brightnessAction:(UIButton*)sender;
--(void) nightModeAction:(UIButton*)sender;
+@property (readonly) ReaderPageViewController* currentPageController;
+
 -(void) toolbarAction:(UITapGestureRecognizer*)tgr;
 
 -(void) adjustButton:(UIButton*)button;
+-(void) createToolbar;
+-(void) createBrightnessToolbar;
+-(void) createFontToolbar;
+-(void) createProgressToolbar;
 
 -(void) loadBook;
 
@@ -57,6 +70,7 @@
 	if (self)
 	{
 		_textContext = [[TextRenderContext alloc] init];
+		_duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
 		self.wantsFullScreenLayout = YES;
 	}
 	return self;
@@ -82,7 +96,6 @@
 	[UIHelper moveView:self.naviBarView toY:-_naviBarHeight];
 	
 	CGRect rect = self.view.bounds;
-	CGFloat tabbarHeight = 50.0f;
 	
 	_textContext.pageSize = CGSizeMake(rect.size.width, rect.size.height - 20);
 	
@@ -106,9 +119,32 @@
 	[self.view addSubview:_tapGestureView];
 	_tapGestureView.hidden = YES;
 	
+	[self createToolbar];
+	[self createProgressToolbar];
+	[self createBrightnessToolbar];
+	[self createFontToolbar];
+}
+
+-(void) viewDidLoad
+{
+	[super viewDidLoad];
+	
+	_brightnessView = [[UIView alloc] initWithFrame:self.view.bounds];
+	_brightnessView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	_brightnessView.userInteractionEnabled = NO;
+	_brightnessView.backgroundColor = [UIColor colorWithWhite:0 alpha:1.0f-CDProp(PropReaderBrightness).floatValue];
+	[self.view addSubview:_brightnessView];
+	
+	[self loadBook];
+}
+
+-(void) createToolbar
+{
+	CGRect rect = self.view.bounds;
+	CGFloat tabbarHeight = 50.0f;
 	_tabbarView = [[UIView alloc] initWithFrame:CGRectMake(0, rect.size.height, rect.size.width, tabbarHeight)];
 	_tabbarView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-	_tabbarView.backgroundColor = CDColor(nil, @"ffffffe5");
+	_tabbarView.backgroundColor = CDColor(nil, @"e5ffffff");
 	
 	UIView* av = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, 0.5f)];
 	av.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -156,8 +192,65 @@
 	[_tabbarView addSubview:button];
 	
 	[self.view addSubview:_tabbarView];
+}
+
+-(void) createBrightnessToolbar
+{
+	CGRect rect = self.view.bounds;
+	_brightnessToolbar = [[UIView alloc] initWithFrame:CGRectMake(0, rect.size.height, rect.size.width, 75)];
+	_brightnessToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+	_brightnessToolbar.backgroundColor = CDColor(nil, @"e5ffffff");
 	
-	[self loadBook];
+	UIView* av = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, 0.5f)];
+	av.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	av.backgroundColor = CDColor(nil, @"a5a5a5");
+	[_brightnessToolbar addSubview:av];
+	
+	_brightnessSlider = [[UISlider alloc] initWithFrame:CGRectMake(35, 0, 250, 10)];
+	_brightnessSlider.center = CGPointMake(160, 37.5f);
+	[_brightnessSlider setThumbImage:CDImage(@"reader/progressbar_thumb") forState:UIControlStateNormal];
+	[_brightnessSlider setMinimumValueImage:CDImage(@"reader/brightdown")];
+	[_brightnessSlider setMaximumValueImage:CDImage(@"reader/brightrise")];
+	[_brightnessSlider setMinimumTrackTintColor:CDColor(nil, @"ec6400")];
+	[_brightnessSlider setMaximumTrackTintColor:CDColor(nil, @"757575")];
+	[_brightnessSlider addTarget:self action:@selector(onBrightnessChanged:) forControlEvents:UIControlEventValueChanged];
+	[_brightnessSlider addTarget:self action:@selector(onBrightnessEnd:) forControlEvents:UIControlEventTouchUpInside];
+	_brightnessSlider.maximumValue = 1.0f;
+	_brightnessSlider.minimumValue = 0.3f;
+	[_brightnessToolbar addSubview:_brightnessSlider];
+	
+	[self.view addSubview:_brightnessToolbar];
+}
+
+-(void) createFontToolbar
+{
+}
+
+-(void) createProgressToolbar
+{
+	CGRect rect = self.view.bounds;
+	_progressToolbar = [[UIView alloc] initWithFrame:CGRectMake(0, rect.size.height, rect.size.width, 75)];
+	_progressToolbar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+	_progressToolbar.backgroundColor = CDColor(nil, @"e5ffffff");
+	
+	UIView* av = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, 0.5f)];
+	av.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+	av.backgroundColor = CDColor(nil, @"a5a5a5");
+	[_progressToolbar addSubview:av];
+	
+	_progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(35, 0, 250, 10)];
+	_progressSlider.center = CGPointMake(160, 37.5f);
+	[_progressSlider setThumbImage:CDImage(@"reader/progressbar_thumb") forState:UIControlStateNormal];
+	[_progressSlider setMinimumTrackTintColor:CDColor(nil, @"ec6400")];
+	[_progressSlider setMaximumTrackTintColor:CDColor(nil, @"757575")];
+	[_progressSlider addTarget:self action:@selector(onProgressChanged:) forControlEvents:UIControlEventValueChanged];
+	[_progressSlider addTarget:self action:@selector(onProgressEnd:) forControlEvents:UIControlEventTouchUpInside];
+	[_progressToolbar addSubview:_progressSlider];
+	
+	_progressLabel = [UIHelper label:nil tc:CDColor(nil, @"757575") fs:12 b:NO al:NSTextAlignmentCenter frame:CGRectMake(0, 0, rect.size.width, 28)];
+	[_progressToolbar addSubview:_progressLabel];
+	
+	[self.view addSubview:_progressToolbar];
 }
 
 -(void) adjustButton:(UIButton*)button
@@ -176,13 +269,23 @@
 {
 	BOOL showToolbar = (tgr != nil);
 	_tapGestureView.hidden = !showToolbar;
-	double d = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
 	[[UIApplication sharedApplication] setStatusBarHidden:!showToolbar withAnimation:UIStatusBarAnimationFade];
 	CGRect rect = self.view.bounds;
-	[UIView animateWithDuration:d animations:^
+	[UIView animateWithDuration:_duration animations:^
 	{
-		[UIHelper moveView:self.naviBarView toY:(showToolbar ? (iOS7 ? 0 : 20) : -_naviBarHeight)];
-		[UIHelper moveView:_tabbarView toY:rect.size.height-(showToolbar ? 50.0f : 0)];
+		if (showToolbar)
+		{
+			[UIHelper moveView:self.naviBarView toY:(iOS7 ? 0 : 20)];
+			[UIHelper moveView:_tabbarView toY:rect.size.height-_tabbarView.frame.size.height];
+		}
+		else
+		{
+			[UIHelper moveView:self.naviBarView toY:-_naviBarHeight];
+			[UIHelper moveView:_tabbarView toY:rect.size.height];
+			[UIHelper moveView:_brightnessToolbar toY:rect.size.height];
+			[UIHelper moveView:_fontToolbar toY:rect.size.height];
+			[UIHelper moveView:_progressToolbar toY:rect.size.height];
+		}
 	}];
 }
 
@@ -196,6 +299,40 @@
 
 -(void) progressAction:(UIButton*)sender
 {
+	NSUInteger currentIndex = self.currentPageController.pageIndex;
+	NSUInteger allPage = _layoutInfo.pages.count;
+	_progressLabel.text = [NSString stringWithFormat:@"%d/%d", currentIndex+1, allPage];
+	_progressSlider.value = (allPage <= 1 ? 1.0f : ((float)currentIndex / (float)(allPage - 1)));
+	CGRect rect = self.view.bounds;
+	[UIView animateWithDuration:_duration animations:^
+	 {
+		 [UIHelper moveView:_progressToolbar toY:rect.size.height-_progressToolbar.frame.size.height];
+		 [UIHelper moveView:_tabbarView toY:rect.size.height];
+	 }];
+}
+
+-(void) onProgressChanged:(UISlider*)sender
+{
+	NSUInteger allPage = _layoutInfo.pages.count;
+	if (allPage <= 1)
+		return;
+	
+	NSUInteger currentIndex = self.currentPageController.pageIndex;
+	NSUInteger newIndex = roundf((allPage - 1) * sender.value);
+	if (currentIndex == newIndex)
+		return;
+	
+	_progressLabel.text = [NSString stringWithFormat:@"%d/%d", newIndex+1, allPage];
+	
+	UIPageViewControllerNavigationDirection d = currentIndex < newIndex ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
+	ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
+	pvc.layoutInfo = _layoutInfo;
+	pvc.pageIndex = newIndex;
+	[_pageViewController setViewControllers:[NSArray arrayWithObject:pvc] direction:d animated:YES completion:NULL];
+}
+
+-(void) onProgressEnd:(UISlider*)sender
+{
 }
 
 -(void) fontAction:(UIButton*)sender
@@ -204,6 +341,25 @@
 
 -(void) brightnessAction:(UIButton*)sender
 {
+	_brightnessSlider.value = CDProp(PropReaderBrightness).floatValue;
+	CGRect rect = self.view.bounds;
+	[UIView animateWithDuration:_duration animations:^
+	{
+		[UIHelper moveView:_brightnessToolbar toY:rect.size.height-_brightnessToolbar.frame.size.height];
+		[UIHelper moveView:_tabbarView toY:rect.size.height];
+	}];
+}
+
+-(void) onBrightnessChanged:(UISlider*)sender
+{
+	_brightnessView.backgroundColor = [UIColor colorWithWhite:0 alpha:1.0f-sender.value];
+}
+
+-(void) onBrightnessEnd:(UISlider*)sender
+{
+	_brightnessView.backgroundColor = [UIColor colorWithWhite:0 alpha:1.0f-sender.value];
+	NSString* v = [NSString stringWithFormat:@"%f", sender.value];
+	CDSetProp(PropReaderBrightness, v);
 }
 
 -(void) nightModeAction:(UIButton*)sender
@@ -236,20 +392,24 @@
 	return nil;
 }
 
+-(ReaderPageViewController*) currentPageController
+{
+	if (_pageViewController.viewControllers.count > 0)
+		return [_pageViewController.viewControllers objectAtIndex:0];
+	return nil;
+}
+
 -(void) loadBook
 {
-	[self.view showPopTitle:@"" msg:@"正在加载..."];
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
-	{
-		@autoreleasepool
-		{
+	[self.view showColorIndicatorFreezeUI:NO];
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		@autoreleasepool {
 			NSStringEncoding enc;
 			NSError* error;
 			NSString* text = [NSString stringWithContentsOfFile:_bookModel.path usedEncoding:&enc error:&error];
 			_layoutInfo = [[ReaderLayoutInfo alloc] initWithText:text inContext:_textContext];
-			dispatch_async(dispatch_get_main_queue(), ^
-			{
-				[self.view dismissMsg];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[self.view dismiss];
 				if (_layoutInfo.pages.count > 0)
 				{
 					ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];

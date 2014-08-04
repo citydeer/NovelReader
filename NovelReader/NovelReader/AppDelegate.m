@@ -52,21 +52,13 @@ void uncaughtExceptionHandler(NSException *exception)
 //	Properties* prop = [Properties appProperties];
 //	[GlodonAPIGetter setHost:prop.apiHost];
 //	CDSetProp(PropUserToken, nil);
-//	
-//	if (CDProp(PropSettingShowImage).length <= 0)
-//		CDSetProp(PropSettingShowImage, @"0");
-//	if (CDProp(PropSettingNoticeNoDisturbing).length <= 0)
-//		CDSetProp(PropSettingNoticeNoDisturbing, @"1");
-//	if (CDProp(PropSettingNoticeRemindNew).length <= 0)
-//		CDSetProp(PropSettingNoticeRemindNew, @"1");
-//	if (CDProp(PropSettingNoticeShake).length <= 0)
-//		CDSetProp(PropSettingNoticeShake, @"1");
-//	if (CDProp(PropSettingNoticeSound).length <= 0)
-//		CDSetProp(PropSettingNoticeSound, @"1");
-//	if (CDProp(PropSettingServiceURL).length <= 0)
-//		CDSetProp(PropSettingServiceURL, @"http://shang.qq.com/open_webaio.html?sigt=d6bb9bf29db37b7bc825052f86310d9432e1d54058b75e7ab90a2f7de51af91fa7d990623c3102d3fa09bc7b729fa23b&sigu=8008a3079f5e4afbd44a3b4364529ae53a0a286f9465a25eaafbcf5d2cdd646f9e33012fc11a7890&tuin=1779399820");
-//	if (CDProp(PropSettingServicePhone).length <= 0)
-//		CDSetProp(PropSettingServicePhone, @"tel://4000166166");
+	
+	if (CDProp(PropReaderNightMode).length <= 0)
+		CDSetProp(PropReaderNightMode, @"0");
+	if (CDProp(PropReaderFontSize).length <= 0)
+		CDSetProp(PropReaderFontSize, @"15");
+	if (CDProp(PropReaderBrightness).length <= 0)
+		CDSetProp(PropReaderBrightness, @"1.0");
 }
 
 -(void) createControllers

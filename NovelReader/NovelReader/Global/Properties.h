@@ -18,16 +18,12 @@
 #define PropUserPassword @"user.password"
 
 #define PropSettingServiceURL @"setting.service.url"
-#define PropSettingServicePhone @"setting.service.phone"
-#define PropSettingNoticeNoDisturbing @"setting.notice.nodisturbing"
-#define PropSettingNoticeRemindNew @"setting.notice.remindnew"
-#define PropSettingNoticeShake @"setting.notice.shake"
-#define PropSettingNoticeSound @"setting.notice.sound"
-#define PropSettingShowImage @"setting.showimage"
-#define PropSettingFeedbackDraft @"setting.feedback.draft"
-#define PropSettingPatternPassword @"setting.pattern.password"
 
 #define PropDeviceToken @"device.token"
+
+#define PropReaderBrightness @"reader.brightness"
+#define PropReaderFontSize @"reader.font.size"
+#define PropReaderNightMode @"reader.nightmode"
 
 
 @interface Properties : NSObject

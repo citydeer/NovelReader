@@ -61,7 +61,7 @@
 	
 	UIView* tabbarView = [[UIView alloc] initWithFrame:CGRectMake(0, rect.size.height - tabbarHeight, rect.size.width, tabbarHeight)];
 	tabbarView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-	tabbarView.backgroundColor = CDColor(nil, @"ffffffe5");
+	tabbarView.backgroundColor = CDColor(nil, @"e5ffffff");
 	
 	UIView* av = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, 0.5f)];
 	av.autoresizingMask = UIViewAutoresizingFlexibleWidth;

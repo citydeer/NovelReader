@@ -73,6 +73,11 @@
 
 
 
+@interface ReaderPageViewController ()
+
+@end
+
+
 
 @implementation ReaderPageViewController
 

@@ -69,7 +69,7 @@
 
 -(void) searchBooks
 {
-	[self.view showPopTitle:@"" msg:@"正在搜索..."];
+	[self.view showColorIndicatorFreezeUI:NO];
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 		@autoreleasepool {
 			NSString* searchHome = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Books"];
@@ -93,7 +93,7 @@
 			_books = [NSArray arrayWithArray:arr];
 			
 			dispatch_async(dispatch_get_main_queue(), ^{
-				[self.view dismissMsg];
+				[self.view dismiss];
 				[_gridView reloadData];
 			});
 		}
