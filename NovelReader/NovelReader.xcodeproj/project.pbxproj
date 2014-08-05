@@ -642,10 +642,12 @@
 		F2D537F21976807A00A0FDDA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: BeiJing QingCe Culture Communication Co.,Ltd (KXYS2HWMW9)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NovelReader/NovelReader-Prefix.pch";
 				INFOPLIST_FILE = "NovelReader/NovelReader-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "8DCAA58D-100F-4A03-B09C-7F669DE873D5";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
@@ -654,10 +656,12 @@
 		F2D537F31976807A00A0FDDA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: BeiJing QingCe Culture Communication Co.,Ltd (KXYS2HWMW9)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NovelReader/NovelReader-Prefix.pch";
 				INFOPLIST_FILE = "NovelReader/NovelReader-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "8DCAA58D-100F-4A03-B09C-7F669DE873D5";
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};

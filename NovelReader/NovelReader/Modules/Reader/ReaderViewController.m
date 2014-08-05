@@ -254,7 +254,7 @@
 	av.backgroundColor = CDColor(nil, @"a5a5a5");
 	[_brightnessToolbar addSubview:av];
 	
-	_brightnessSlider = [[UISlider alloc] initWithFrame:CGRectMake(35, 0, 250, 4)];
+	_brightnessSlider = [[UISlider alloc] initWithFrame:CGRectMake(35, 0, 250, 44)];
 	_brightnessSlider.center = CGPointMake(160, 37.5f);
 	[_brightnessSlider setThumbImage:CDImage(@"reader/progressbar_thumb") forState:UIControlStateNormal];
 	[_brightnessSlider setMinimumValueImage:CDImage(@"reader/brightdown")];
@@ -307,7 +307,7 @@
 	av.backgroundColor = CDColor(nil, @"a5a5a5");
 	[_progressToolbar addSubview:av];
 	
-	_progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(35, 0, 250, 4)];
+	_progressSlider = [[UISlider alloc] initWithFrame:CGRectMake(35, 0, 250, 44)];
 	_progressSlider.center = CGPointMake(160, 37.5f);
 	[_progressSlider setThumbImage:CDImage(@"reader/progressbar_thumb") forState:UIControlStateNormal];
 	[_progressSlider setMinimumTrackTintColor:CDColor(nil, @"ec6400")];
