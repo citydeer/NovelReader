@@ -37,7 +37,7 @@
 		UIView* v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height-31)];
 		v.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 		v.backgroundColor = [UIColor whiteColor];
-		UIImageView* iv = [[UIImageView alloc] initWithFrame:CGRectMake(-4, 0, v.bounds.size.width+8, v.bounds.size.height+10)];
+		UIImageView* iv = [[UIImageView alloc] initWithFrame:CGRectMake(-4, -1, v.bounds.size.width+8, v.bounds.size.height+8)];
 		iv.image = [CDImage(@"shelf/shadow_border") resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 30, 10)];
 		[v addSubview:iv];
 		[self addSubview:v];
