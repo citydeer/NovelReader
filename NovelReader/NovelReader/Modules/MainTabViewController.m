@@ -22,6 +22,10 @@
 	UIButton* _shelfButton;
 	UIButton* _storeButton;
 	UIButton* _userButton;
+	
+	BookShelfViewController* _shelfVC;
+	BookStoreViewController* _storeVC;
+	UserViewController* _userVC;
 }
 
 -(void) switchAction:(id)sender;
@@ -39,6 +43,13 @@
 	if (self)
 	{
 		_naviBarHeight = 0;
+		
+		_shelfVC = [[BookShelfViewController alloc] init];
+		_shelfVC.parent = self;
+		_storeVC = [[BookStoreViewController alloc] init];
+		_storeVC.parent = self;
+		_userVC = [[UserViewController alloc] init];
+		_userVC.parent = self;
 	}
 	return self;
 }
@@ -123,23 +134,17 @@
 
 -(void) switchAction:(id)sender
 {
-	if (sender == _shelfButton && ![_currentVC isKindOfClass:[BookShelfViewController class]])
+	if (sender == _shelfButton)
 	{
-		BookShelfViewController* vc = [[BookShelfViewController alloc] init];
-		vc.parent = self;
-		[self switchToController:vc];
+		[self switchToController:_shelfVC];
 	}
-	else if (sender == _storeButton && ![_currentVC isKindOfClass:[BookStoreViewController class]])
+	else if (sender == _storeButton)
 	{
-		BookStoreViewController* vc = [[BookStoreViewController alloc] init];
-		vc.parent = self;
-		[self switchToController:vc];
+		[self switchToController:_storeVC];
 	}
-	else if (sender == _userButton && ![_currentVC isKindOfClass:[UserViewController class]])
+	else if (sender == _userButton)
 	{
-		UserViewController* vc = [[UserViewController alloc] init];
-		vc.parent = self;
-		[self switchToController:vc];
+		[self switchToController:_userVC];
 	}
 }
 

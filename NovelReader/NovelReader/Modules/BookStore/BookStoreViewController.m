@@ -37,6 +37,8 @@
 -(void) loadView
 {
 	[super loadView];
+	
+	self.titleLabel.text = @"书城";
 }
 
 @end
