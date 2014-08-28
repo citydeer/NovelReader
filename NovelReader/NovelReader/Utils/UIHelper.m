@@ -160,6 +160,31 @@
 	return ret;
 }
 
++(UIView*) addRect:(UIView*)v color:(UIColor*)color x:(CGFloat)x y:(CGFloat)y w:(CGFloat)w h:(CGFloat)h resizing:(UIViewAutoresizing)mask
+{
+	UIView* view = [[UIView alloc] initWithFrame:CGRectMake(x, y, w, h)];
+	view.autoresizingMask = mask;
+	view.backgroundColor = color;
+	[v addSubview:view];
+	return view;
+}
+
++(UILabel*) addLabel:(UIView*)v t:(NSString*)t tc:(UIColor*)tc fs:(CGFloat)fs b:(BOOL)bold al:(NSTextAlignment)alignment frame:(CGRect)frame
+{
+	UILabel* label = [[UILabel alloc] initWithFrame:frame];
+	label.backgroundColor = [UIColor clearColor];
+	label.text = t;
+	if (tc)
+		label.textColor = tc;
+	if (bold)
+		label.font = [UIFont boldSystemFontOfSize:fs];
+	else
+		label.font = [UIFont systemFontOfSize:fs];
+	label.textAlignment = alignment;
+	[v addSubview:label];
+	return label;
+}
+
 +(CGFloat) widthForSize:(CGSize)size fitHeight:(CGFloat)height maxLimit:(CGFloat)max minLimit:(CGFloat)min
 {
 	CGFloat ret = 0.0f;

@@ -11,6 +11,8 @@
 #import "UIHelper.h"
 #import "Models.h"
 #import "Properties.h"
+#import "XLLoginViewController.h"
+
 
 
 @interface UserViewController () <UITableViewDataSource, UITableViewDelegate, GetterControllerOwner>
@@ -156,11 +158,7 @@
 		label.tag = 1;
 		[cell addSubview:label];
 		
-		UIView* sepLine = [[UIView alloc] initWithFrame:CGRectMake(10, 0, width-10, 0.5)];
-		sepLine.tag = 2;
-		sepLine.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		sepLine.backgroundColor = CDColor(nil, @"d1d1d1");
-		[cell addSubview:sepLine];
+		[UIHelper addRect:cell color:CDColor(nil, @"d1d1d1") x:10 y:0 w:width-10 h:0.5f resizing:UIViewAutoresizingFlexibleWidth].tag = 2;
 		
 		UIImageView* iv = [[UIImageView alloc] initWithImage:CDImage(@"user/arrow")];
 		iv.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
@@ -193,6 +191,8 @@
 
 -(void) loginAction:(id)sender
 {
+	XLLoginViewController* vc = [[XLLoginViewController alloc] init];
+	[_parent.cdNavigationController pushViewController:vc];
 }
 
 -(void) rechargeAction:(id)sender

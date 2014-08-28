@@ -32,6 +32,9 @@
 +(void) setView:(UIView*)view toWidth:(CGFloat)w;
 +(void) setView:(UIView*)view toWidth:(CGFloat)w andHeight:(CGFloat)h;
 
++(UIView*) addRect:(UIView*)v color:(UIColor*)color x:(CGFloat)x y:(CGFloat)y w:(CGFloat)w h:(CGFloat)h resizing:(UIViewAutoresizing)mask;
++(UILabel*) addLabel:(UIView*)v t:(NSString*)t tc:(UIColor*)tc fs:(CGFloat)fs b:(BOOL)bold al:(NSTextAlignment)alignment frame:(CGRect)frame;
+
 +(CGFloat) heightForSize:(CGSize)size fitWidth:(CGFloat)width maxLimit:(CGFloat)max minLimit:(CGFloat)min;
 +(CGFloat) widthForSize:(CGSize)size fitHeight:(CGFloat)height maxLimit:(CGFloat)max minLimit:(CGFloat)min;;
 

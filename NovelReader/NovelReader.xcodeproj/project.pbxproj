@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		54C24FC819AF3A8100A3A103 /* XLLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C24FC519AF3A8100A3A103 /* XLLoginViewController.m */; };
+		54C24FC919AF3A8100A3A103 /* XLRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C24FC719AF3A8100A3A103 /* XLRegisterViewController.m */; };
+		54C24FCC19AF3AAC00A3A103 /* XLRechargeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C24FCB19AF3AAC00A3A103 /* XLRechargeViewController.m */; };
+		54C24FCF19AF3AE100A3A103 /* XLJoinVIPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C24FCE19AF3AE100A3A103 /* XLJoinVIPViewController.m */; };
 		F22A8D701989690000DA082A /* MainTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D6F1989690000DA082A /* MainTabViewController.m */; };
 		F22A8D7619896A2500DA082A /* BookShelfViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D7519896A2500DA082A /* BookShelfViewController.m */; };
 		F22A8D7919896B5100DA082A /* BookStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D7819896B5100DA082A /* BookStoreViewController.m */; };
@@ -62,6 +66,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		54C24FC419AF3A8100A3A103 /* XLLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLLoginViewController.h; sourceTree = "<group>"; };
+		54C24FC519AF3A8100A3A103 /* XLLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLLoginViewController.m; sourceTree = "<group>"; };
+		54C24FC619AF3A8100A3A103 /* XLRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLRegisterViewController.h; sourceTree = "<group>"; };
+		54C24FC719AF3A8100A3A103 /* XLRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLRegisterViewController.m; sourceTree = "<group>"; };
+		54C24FCA19AF3AAC00A3A103 /* XLRechargeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLRechargeViewController.h; sourceTree = "<group>"; };
+		54C24FCB19AF3AAC00A3A103 /* XLRechargeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLRechargeViewController.m; sourceTree = "<group>"; };
+		54C24FCD19AF3AE100A3A103 /* XLJoinVIPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLJoinVIPViewController.h; sourceTree = "<group>"; };
+		54C24FCE19AF3AE100A3A103 /* XLJoinVIPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLJoinVIPViewController.m; sourceTree = "<group>"; };
 		F22A8D6E1989690000DA082A /* MainTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabViewController.h; sourceTree = "<group>"; };
 		F22A8D6F1989690000DA082A /* MainTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabViewController.m; sourceTree = "<group>"; };
 		F22A8D7419896A2500DA082A /* BookShelfViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookShelfViewController.h; sourceTree = "<group>"; };
@@ -174,6 +186,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		54C24FC319AF3A8100A3A103 /* Xunlei */ = {
+			isa = PBXGroup;
+			children = (
+				54C24FC419AF3A8100A3A103 /* XLLoginViewController.h */,
+				54C24FC519AF3A8100A3A103 /* XLLoginViewController.m */,
+				54C24FC619AF3A8100A3A103 /* XLRegisterViewController.h */,
+				54C24FC719AF3A8100A3A103 /* XLRegisterViewController.m */,
+				54C24FCA19AF3AAC00A3A103 /* XLRechargeViewController.h */,
+				54C24FCB19AF3AAC00A3A103 /* XLRechargeViewController.m */,
+				54C24FCD19AF3AE100A3A103 /* XLJoinVIPViewController.h */,
+				54C24FCE19AF3AE100A3A103 /* XLJoinVIPViewController.m */,
+			);
+			path = Xunlei;
+			sourceTree = "<group>";
+		};
 		F22A8D71198969F900DA082A /* BookShelf */ = {
 			isa = PBXGroup;
 			children = (
@@ -365,6 +392,7 @@
 		F2D538221976BAC100A0FDDA /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				54C24FC319AF3A8100A3A103 /* Xunlei */,
 				F2A45C2A198C136A00A110F7 /* Reader */,
 				F22A8D71198969F900DA082A /* BookShelf */,
 				F22A8D72198969F900DA082A /* BookStore */,
@@ -508,8 +536,10 @@
 				F22A8D7619896A2500DA082A /* BookShelfViewController.m in Sources */,
 				F2A45C2D198C139500A110F7 /* ReaderViewController.m in Sources */,
 				F2D5384B1976BAC100A0FDDA /* RegexKitLite.m in Sources */,
+				54C24FCC19AF3AAC00A3A103 /* XLRechargeViewController.m in Sources */,
 				F22A8D701989690000DA082A /* MainTabViewController.m in Sources */,
 				F2D538681976C72C00A0FDDA /* SelectorView.m in Sources */,
+				54C24FCF19AF3AE100A3A103 /* XLJoinVIPViewController.m in Sources */,
 				F2D5383C1976BAC100A0FDDA /* CDNavigationController.m in Sources */,
 				F2D538421976BAC100A0FDDA /* KYPageControl.m in Sources */,
 				F2D5383F1976BAC100A0FDDA /* TableDataSource.m in Sources */,
@@ -517,6 +547,7 @@
 				F2D538391976BAC100A0FDDA /* RestfulAPIGetter.m in Sources */,
 				F2D5383A1976BAC100A0FDDA /* HttpGetter.m in Sources */,
 				F2D5383D1976BAC100A0FDDA /* CDViewController.m in Sources */,
+				54C24FC819AF3A8100A3A103 /* XLLoginViewController.m in Sources */,
 				F22A8D7919896B5100DA082A /* BookStoreViewController.m in Sources */,
 				F2A45C32198E518000A110F7 /* ReaderPageViewController.m in Sources */,
 				F2D5384E1976BAC100A0FDDA /* GraphicUtils.m in Sources */,
@@ -529,6 +560,7 @@
 				F22A8D7C19896B5A00DA082A /* UserViewController.m in Sources */,
 				F2D5384F1976BAC100A0FDDA /* Logger.m in Sources */,
 				F2D5384D1976BAC100A0FDDA /* Encodings.m in Sources */,
+				54C24FC919AF3A8100A3A103 /* XLRegisterViewController.m in Sources */,
 				F2D537D51976807A00A0FDDA /* main.m in Sources */,
 				F2D538511976BAC100A0FDDA /* UIHelper.m in Sources */,
 				F2D538441976BAC100A0FDDA /* KYTipsView.m in Sources */,
