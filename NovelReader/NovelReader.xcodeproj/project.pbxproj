@@ -20,6 +20,10 @@
 		F2A45C2F198D49BD00A110F7 /* Books in Resources */ = {isa = PBXBuildFile; fileRef = F2A45C2E198D49BD00A110F7 /* Books */; };
 		F2A45C32198E518000A110F7 /* ReaderPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A45C31198E518000A110F7 /* ReaderPageViewController.m */; };
 		F2A45C35198E80FD00A110F7 /* ReaderLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A45C34198E80FD00A110F7 /* ReaderLayoutInfo.m */; };
+		F2A8CC5119AFAA7B00A2D981 /* CDCustomViews.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A8CC5019AFAA7B00A2D981 /* CDCustomViews.m */; };
+		F2A8CC5719AFC12500A2D981 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A8CC5619AFC12500A2D981 /* libstdc++.dylib */; };
+		F2A8CC5919AFC13D00A2D981 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A8CC5819AFC13D00A2D981 /* libc++.dylib */; };
+		F2A8CC5B19AFC17500A2D981 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A8CC5A19AFC17500A2D981 /* libz.dylib */; };
 		F2D537C91976807A00A0FDDA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537C81976807A00A0FDDA /* Foundation.framework */; };
 		F2D537CB1976807A00A0FDDA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537CA1976807A00A0FDDA /* CoreGraphics.framework */; };
 		F2D537CD1976807A00A0FDDA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537CC1976807A00A0FDDA /* UIKit.framework */; };
@@ -91,6 +95,11 @@
 		F2A45C31198E518000A110F7 /* ReaderPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReaderPageViewController.m; sourceTree = "<group>"; };
 		F2A45C33198E80FD00A110F7 /* ReaderLayoutInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReaderLayoutInfo.h; sourceTree = "<group>"; };
 		F2A45C34198E80FD00A110F7 /* ReaderLayoutInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReaderLayoutInfo.m; sourceTree = "<group>"; };
+		F2A8CC4F19AFAA7B00A2D981 /* CDCustomViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDCustomViews.h; sourceTree = "<group>"; };
+		F2A8CC5019AFAA7B00A2D981 /* CDCustomViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDCustomViews.m; sourceTree = "<group>"; };
+		F2A8CC5619AFC12500A2D981 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+		F2A8CC5819AFC13D00A2D981 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		F2A8CC5A19AFC17500A2D981 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F2D537C51976807A00A0FDDA /* NovelReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NovelReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2D537C81976807A00A0FDDA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F2D537CA1976807A00A0FDDA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -174,6 +183,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2A8CC5B19AFC17500A2D981 /* libz.dylib in Frameworks */,
+				F2A8CC5919AFC13D00A2D981 /* libc++.dylib in Frameworks */,
+				F2A8CC5719AFC12500A2D981 /* libstdc++.dylib in Frameworks */,
 				F2D538651976C42500A0FDDA /* libicucore.dylib in Frameworks */,
 				F2D538631976C40A00A0FDDA /* CoreText.framework in Frameworks */,
 				F2D538611976C40400A0FDDA /* QuartzCore.framework in Frameworks */,
@@ -263,6 +275,9 @@
 		F2D537C71976807A00A0FDDA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F2A8CC5A19AFC17500A2D981 /* libz.dylib */,
+				F2A8CC5819AFC13D00A2D981 /* libc++.dylib */,
+				F2A8CC5619AFC12500A2D981 /* libstdc++.dylib */,
 				F2D538641976C42500A0FDDA /* libicucore.dylib */,
 				F2D538621976C40A00A0FDDA /* CoreText.framework */,
 				F2D538601976C40400A0FDDA /* QuartzCore.framework */,
@@ -370,6 +385,8 @@
 				F2D538141976BAC100A0FDDA /* KYRemoteImageView.m */,
 				F2D538151976BAC100A0FDDA /* KYTipsView.h */,
 				F2D538161976BAC100A0FDDA /* KYTipsView.m */,
+				F2A8CC4F19AFAA7B00A2D981 /* CDCustomViews.h */,
+				F2A8CC5019AFAA7B00A2D981 /* CDCustomViews.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -566,6 +583,7 @@
 				F2D538441976BAC100A0FDDA /* KYTipsView.m in Sources */,
 				F2D5384C1976BAC100A0FDDA /* AZImageCache.m in Sources */,
 				F2D5384A1976BAC100A0FDDA /* Reachability.m in Sources */,
+				F2A8CC5119AFAA7B00A2D981 /* CDCustomViews.m in Sources */,
 				F2D5383E1976BAC100A0FDDA /* PhotoBrowserController.m in Sources */,
 				F2A45C35198E80FD00A110F7 /* ReaderLayoutInfo.m in Sources */,
 				F2D538381976BAC100A0FDDA /* GetterController.m in Sources */,
@@ -678,8 +696,24 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NovelReader/NovelReader-Prefix.pch";
 				INFOPLIST_FILE = "NovelReader/NovelReader-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					../../XunleiSDK/libs/Debug,
+					/Users/citydeer/Git/XunleiSDK/libs/Debug,
+					/Users/citydeer/Git/XunleiSDK/libs/Release,
+				);
+				OTHER_LDFLAGS = (
+					"-lcrypto",
+					"-lssl",
+					"-lcurl",
+					"-lxlcommon",
+					"-lxlexternal",
+					"-lxltasks",
+					"-lxlmember",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "8DCAA58D-100F-4A03-B09C-7F669DE873D5";
+				USER_HEADER_SEARCH_PATHS = ../../XunleiSDK/include;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
@@ -692,8 +726,24 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NovelReader/NovelReader-Prefix.pch";
 				INFOPLIST_FILE = "NovelReader/NovelReader-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					../../XunleiSDK/libs/Release,
+					/Users/citydeer/Git/XunleiSDK/libs/Debug,
+					/Users/citydeer/Git/XunleiSDK/libs/Release,
+				);
+				OTHER_LDFLAGS = (
+					"-lcrypto",
+					"-lssl",
+					"-lcurl",
+					"-lxlcommon",
+					"-lxlexternal",
+					"-lxltasks",
+					"-lxlmember",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "8DCAA58D-100F-4A03-B09C-7F669DE873D5";
+				USER_HEADER_SEARCH_PATHS = ../../XunleiSDK/include;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};

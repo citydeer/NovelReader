@@ -297,15 +297,16 @@ static NSString* const KYTipsViewDismissString = @"__dismiss__";
 	if (contentView == nil)
 	{
 		contentView = [[KYTipsContentView alloc] init];
-		contentView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.6];
+		contentView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.8];
 		contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
 		contentView.layer.cornerRadius = 6.0;
 		contentView.layer.masksToBounds = YES;
 		contentView.tag = kTipsMsgContentTag;
 		contentView.userInteractionEnabled = NO;
+		contentView.alpha = 0.0f;
 		[self addSubview:contentView];
+		[UIView animateWithDuration:0.5 animations:^{ contentView.alpha = 1.0f; }];
 	}
-	contentView.alpha = 1.0;
 	contentView.title = title;
 	contentView.message = msg;
 	contentView.indicator = nil;
@@ -376,8 +377,11 @@ static NSString* const KYTipsViewDismissString = @"__dismiss__";
 			[contentView.indicator stopAnimating];
 			contentView.indicator = nil;
 		}
-		[contentView removeFromSuperview];
 		self.userInteractionEnabled = YES;
+		[UIView animateWithDuration:0.5 animations:^{ contentView.alpha = 0.0f; } completion:^(BOOL finished){
+			if (finished)
+				[contentView removeFromSuperview];
+		}];
 	}
 }
 

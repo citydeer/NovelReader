@@ -10,6 +10,7 @@
 #import "Properties.h"
 #import "MainTabViewController.h"
 #import "Models.h"
+#import "xlmember/XlMemberIosAdapter.h"
 
 
 
@@ -49,6 +50,9 @@ void uncaughtExceptionHandler(NSException *exception)
 
 -(void) loadProperties
 {
+	NSString* appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+	[[XlMemberIosAdapter instance] initXlMember:53 clientVersion:appVersion peerId:@"peerid"];
+	
 //	Properties* prop = [Properties appProperties];
 //	[GlodonAPIGetter setHost:prop.apiHost];
 //	CDSetProp(PropUserToken, nil);
@@ -114,6 +118,7 @@ NSString* const kApplicationPauseNotice = @"notice.application.pause";
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
 //	[[NSNotificationCenter defaultCenter] postNotificationName:kApplicationResumeNotice object:nil];
+	[[XlMemberIosAdapter instance] heartBeat:false];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
