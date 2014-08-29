@@ -1,19 +1,18 @@
 //
-//  KYAPIImageGetter.m
+//  CDImageGetter.m
 //  Kuyun
 //
 //  Created by Pang Zhenyu on 11-9-22.
 //  Copyright 2011年 Tenfen Inc. All rights reserved.
 //
 
-#import "KYAPIImageGetter.h"
+#import "CDImageGetter.h"
 #import "Encodings.h"
 #import "AZImageCache.h"
-#import "Properties.h"
 
 
 
-@implementation KYAPIImageGetter
+@implementation CDImageGetter
 
 -(id) init
 {
@@ -32,7 +31,8 @@
 	if (_imageId.length <= 0)
 		return nil;
 		
-	NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [Properties appProperties].imageHost, _imageId]];
+//	NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", [Properties appProperties].imageHost, _imageId]];
+	NSURL* url = [NSURL URLWithString:_imageId];
 	
 	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:120];
 	[request setHTTPMethod:@"GET"];

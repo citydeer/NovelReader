@@ -1,23 +1,23 @@
 //
-//  KYRemoteImageView.m
+//  CDRemoteImageView.m
 //  KuyunHD
 //
 //  Created by Pang Zhenyu on 12-3-6.
 //  Copyright (c) 2012年 tenfen Inc. All rights reserved.
 //
 
-#import "KYRemoteImageView.h"
+#import "CDRemoteImageView.h"
 #import "AZImageCache.h"
 
 
-@interface KYRemoteImageView()
+@interface CDRemoteImageView()
 
 
 @end
 
 
 
-@implementation KYRemoteImageView
+@implementation CDRemoteImageView
 
 -(void) dealloc
 {
@@ -93,7 +93,7 @@
 	
 	if (self.imageURL.length > 0)
 	{
-		//和 KYAPIImageGetter 中的cacheKey保持一致
+		//和 CDImageGetter 中的cacheKey保持一致
 		NSString* cacheKey = self.imageURL;
 		UIImage* image = [[AZImageCache sharedImageCache] cacheImageForKey:cacheKey];
 		if (image != nil)
@@ -109,7 +109,7 @@
 		}
 		else
 		{
-			_imageGetter = [[KYAPIImageGetter alloc] init];
+			_imageGetter = [[CDImageGetter alloc] init];
 			_imageGetter.delegate = self;
 			_imageGetter.getterObserver = self;
 			_imageGetter.imageId = self.imageURL;
@@ -137,7 +137,7 @@
 	{
 		_imageGetter = nil;
 		
-		KYAPIImageGetter* ig = (KYAPIImageGetter*)getter;
+		CDImageGetter* ig = (CDImageGetter*)getter;
 		if (ig.resultCode == KYResultCodeSuccess && [ig.imageId isEqualToString:self.imageURL])
 		{
 			if (_showMaskViewAfterLoaded)

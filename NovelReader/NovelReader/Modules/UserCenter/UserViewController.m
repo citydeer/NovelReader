@@ -11,6 +11,7 @@
 #import "UIHelper.h"
 #import "Models.h"
 #import "Properties.h"
+#import "CDRemoteImageView.h"
 #import "XLLoginViewController.h"
 
 
@@ -22,13 +23,13 @@
 	UIView* _guestView;
 	UIView* _userView;
 	
-	UIImageView* _avatarView;
+	CDRemoteImageView* _avatarView;
 	UIImageView* _xunleiMemberIcon;
 	UILabel* _userNameLabel;
 	UILabel* _balanceLabel;
-	UILabel* _favNumberLabel;
-	UILabel* _commentNumberLabel;
-	UILabel* _purchasedNumberLabel;
+	UILabel* _favNumLabel;
+	UILabel* _commentNumLabel;
+	UILabel* _purchasedNumLabel;
 	
 	GetterController* _getterController;
 }
@@ -103,17 +104,71 @@
 	[_guestView addSubview:button];
 	
 	_userView = [[UIView alloc] initWithFrame:iv.frame];
+	UIView* infoBGView = [UIHelper addRect:_userView color:CDColor(nil, @"66000000") x:0 y:_userView.bounds.size.height-47 w:_userView.bounds.size.width h:47 resizing:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
+	[UIHelper addRect:infoBGView color:CDColor(nil, @"d8af97") x:rect.size.width/3.0f y:10 w:0.5f h:27 resizing:0];
+	[UIHelper addRect:infoBGView color:CDColor(nil, @"d8af97") x:rect.size.width/3.0f*2.0f y:10 w:0.5f h:27 resizing:0];
 	[headerView addSubview:_userView];
 	
-	[self.view addSubview:_tableView];
+	_avatarView = [[CDRemoteImageView alloc] initWithFrame:CGRectMake(10, 10, 58, 58)];
+	_avatarView.placeholderImage = CDImage(@"user/avatar_defualt");
+	_avatarView.placeHolderContetMode = UIViewContentModeCenter;
+	_avatarView.imageContentMode = UIViewContentModeScaleAspectFill;
+	[_userView addSubview:_avatarView];
 	
+	_userNameLabel = [UIHelper addLabel:_userView t:nil tc:[UIColor whiteColor] fs:15 b:NO al:NSTextAlignmentLeft frame:CGRectMake(22+58, 15, 100, 20)];
+	_balanceLabel = [UIHelper addLabel:_userView t:nil tc:[UIColor whiteColor] fs:15 b:NO al:NSTextAlignmentLeft frame:CGRectMake(22+58, 42, 130, 20)];
+	_favNumLabel = [UIHelper addLabel:infoBGView t:nil tc:[UIColor whiteColor] fs:12 b:NO al:NSTextAlignmentCenter frame:CGRectMake(0, 7, 320.0f/3.0f, 16)];
+	[UIHelper addLabel:infoBGView t:@"收藏" tc:[UIColor whiteColor] fs:12 b:NO al:NSTextAlignmentCenter frame:CGRectMake(0, 24, 320.0f/3.0f, 16)];
+	_commentNumLabel = [UIHelper addLabel:infoBGView t:nil tc:[UIColor whiteColor] fs:12 b:NO al:NSTextAlignmentCenter frame:CGRectMake(320.0/3, 7, 320.0/3, 16)];
+	[UIHelper addLabel:infoBGView t:@"评论" tc:[UIColor whiteColor] fs:12 b:NO al:NSTextAlignmentCenter frame:CGRectMake(320.0/3, 24, 320.0/3.0, 16)];
+	_purchasedNumLabel = [UIHelper addLabel:infoBGView t:nil tc:[UIColor whiteColor] fs:12 b:NO al:NSTextAlignmentCenter frame:CGRectMake(320.0/3*2, 7, 320.0/3, 16)];
+	[UIHelper addLabel:infoBGView t:@"已购" tc:[UIColor whiteColor] fs:12 b:NO al:NSTextAlignmentCenter frame:CGRectMake(320.0/3*2, 24, 320.0f/3.0f, 16)];
+	
+	_xunleiMemberIcon = [[UIImageView alloc] initWithImage:CDImage(@"user/xunlei_member")];
+	[UIHelper moveView:_xunleiMemberIcon toY:19];
+	[_userView addSubview:_xunleiMemberIcon];
+	
+	button = [[UIButton alloc] initWithFrame:CGRectMake(rect.size.width-84-10, 27, 84, 25)];
+	[button setBackgroundImage:CDImage(@"user/button_recharge1") forState:UIControlStateNormal];
+	[button setBackgroundImage:CDImage(@"user/button_recharge2") forState:UIControlStateHighlighted];
+	[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	button.titleLabel.font = [UIFont systemFontOfSize:12];
+	[button setTitle:@"充值" forState:UIControlStateNormal];
+	[button addTarget:self action:@selector(rechargeAction:) forControlEvents:UIControlEventTouchUpInside];
+	[_userView addSubview:button];
+	
+	[self.view addSubview:_tableView];
+}
+
+-(void) willPresentView:(NSTimeInterval)duration
+{
+	[super willPresentView:duration];
 	[self updateViews];
 }
 
 -(void) updateViews
 {
-	_guestView.hidden = NO;
-	_userView.hidden = YES;
+	BOOL isLogined = (CDProp(PropUserID) != nil);
+	_guestView.hidden = isLogined;
+	_userView.hidden = !isLogined;
+	if (isLogined)
+	{
+		NSString* name = CDProp(PropUserName);
+		if (name.length <= 0)
+			name = CDProp(PropUserAccount);
+		_userNameLabel.text = name;
+		
+		CGFloat width = [name sizeWithFont:_userNameLabel.font].width;
+		if (width > _userNameLabel.frame.size.width) width = _userNameLabel.frame.size.width;
+		[UIHelper moveView:_xunleiMemberIcon toX:_userNameLabel.frame.origin.x+width+5];
+		_xunleiMemberIcon.hidden = NO;
+		
+		_avatarView.imageURL = CDProp(PropUserImage);
+		_balanceLabel.text = @"0书豆";
+		_favNumLabel.text = @"0";
+		_commentNumLabel.text = @"0";
+		_purchasedNumLabel.text = @"0";
+	}
 }
 
 -(void) handleGetter:(id<Getter>)getter

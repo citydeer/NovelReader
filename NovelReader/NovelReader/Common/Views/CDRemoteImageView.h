@@ -1,33 +1,33 @@
 //
-//  KYRemoteImageView.h
+//  CDRemoteImageView.h
 //  KuyunHD
 //
 //  Created by Pang Zhenyu on 12-3-6.
 //  Copyright (c) 2012年 tenfen Inc. All rights reserved.
 //
 
-#import "KYAPIImageGetter.h"
+#import "CDImageGetter.h"
 
 
-@class KYRemoteImageView;
+@class CDRemoteImageView;
 
-@protocol KYRemoteImageViewDelegate <NSObject>
+@protocol CDRemoteImageViewDelegate <NSObject>
 
 @optional
--(void) didReceiveResponse:(KYRemoteImageView*)imageView;
--(void) didFinishLoading:(KYRemoteImageView*)imageView;
+-(void) didReceiveResponse:(CDRemoteImageView*)imageView;
+-(void) didFinishLoading:(CDRemoteImageView*)imageView;
 
 @end
 
 
-@interface KYRemoteImageView : UIImageView <GetterDelegate, HttpGetterObserver>
+@interface CDRemoteImageView : UIImageView <GetterDelegate, HttpGetterObserver>
 {	
-	KYAPIImageGetter* _imageGetter;
+	CDImageGetter* _imageGetter;
 	
 	UIImageView* _maskView;
 }
 
-@property (nonatomic, weak) id<KYRemoteImageViewDelegate> delegate;
+@property (nonatomic, weak) id<CDRemoteImageViewDelegate> delegate;
 
 // 希望加载的图片的URL
 @property (nonatomic, copy) NSString* imageURL;

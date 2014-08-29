@@ -1,5 +1,5 @@
 //
-//  KYAPIImageGetter.h
+//  CDImageGetter.h
 //  Kuyun
 //
 //  Created by Pang Zhenyu on 11-9-22.
@@ -10,7 +10,7 @@
 #import "HttpGetter.h"
 
 
-@interface KYAPIImageGetter : HttpGetter
+@interface CDImageGetter : HttpGetter
 
 @property (nonatomic, copy) NSString* imageId;
 @property (nonatomic, copy) NSString* referUrl;

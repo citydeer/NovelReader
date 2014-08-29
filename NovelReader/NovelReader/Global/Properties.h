@@ -17,6 +17,7 @@
 #define PropUserName @"user.name"
 #define PropUserID @"user.id"
 #define PropUserAccount @"user.account"
+#define PropUserImage @"user.image"
 
 #define PropSettingServiceURL @"setting.service.url"
 

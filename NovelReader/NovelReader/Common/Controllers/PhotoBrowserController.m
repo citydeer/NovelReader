@@ -9,14 +9,14 @@
 #import "PhotoBrowserController.h"
 #import "GridView.h"
 #import "KYPageControl.h"
-#import "KYRemoteImageView.h"
+#import "CDRemoteImageView.h"
 #import "KYTipsView.h"
 
 
 
-@interface PhotoZoomCell : UIScrollView <UIScrollViewDelegate, KYRemoteImageViewDelegate>
+@interface PhotoZoomCell : UIScrollView <UIScrollViewDelegate, CDRemoteImageViewDelegate>
 {
-	KYRemoteImageView* _zoomImage;
+	CDRemoteImageView* _zoomImage;
 }
 
 @property (nonatomic, strong) NSString* imgUrl;
@@ -43,7 +43,7 @@
 		self.decelerationRate = UIScrollViewDecelerationRateFast;
 		self.delegate = self;
 		
-		_zoomImage = [[KYRemoteImageView alloc] initWithFrame:self.bounds];
+		_zoomImage = [[CDRemoteImageView alloc] initWithFrame:self.bounds];
 		_zoomImage.placeholderImage = CDImage(@"main/loading");
 		_zoomImage.placeHolderContetMode = UIViewContentModeScaleAspectFit;
 		_zoomImage.failHolderImage = CDImage(@"main/thumb_big");
@@ -132,7 +132,7 @@
 	return _zoomImage;
 }
 
--(void) didFinishLoading:(KYRemoteImageView *)imageView
+-(void) didFinishLoading:(CDRemoteImageView *)imageView
 {
 	[self adjustViewParams:_zoomImage.image];
 }

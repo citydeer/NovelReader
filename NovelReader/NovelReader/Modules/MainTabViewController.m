@@ -33,6 +33,7 @@
 -(void) switchAction:(id)sender;
 -(void) updateTabButtons;
 -(void) checkLoginInfo;
+-(void) onLogout:(NSNotification*)notice;
 
 @end
 
@@ -225,6 +226,8 @@
 
 -(void) checkLoginInfo
 {
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onLogout:) name:kUserLogoutNotification object:nil];
+	
 	NSNumber* uid = CDIDProp(PropUserID);
 	if (uid)
 	{
@@ -236,13 +239,29 @@
 	}
 }
 
+-(void) onLogout:(NSNotification*)notice
+{
+	CDSetProp(PropUserID, nil);
+	CDSetProp(PropUserName, nil);
+	CDSetProp(PropUserSession, nil);
+	CDSetProp(PropUserImage, nil);
+	
+	NSUInteger type = [[notice.userInfo objectForKey:kLogoutType] intValue];
+	if (type != XLLOGOUT_NORMAL)
+	{
+		NSString* msg = @"该账号已在其他终端登录，请重新登录";
+		if (type == XLLOGOUT_SESSION_TIMEOUT)
+			msg = @"您已太长时间没有登录，请重新登录";
+		UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil message:msg delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
+		[alert show];
+	}
+}
+
 -(void) onLoginResult:(enum XlMemberResultCode)code
 {
 	XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
-	[member removeObserver:self];
 	if (code == XLMEMBER_SUCCESS)
 	{
-		XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
 		[member requestUserInfo];
 		CDSetProp(PropUserAccount, member.userName);
 		CDSetProp(PropUserName, member.nickName);
@@ -250,7 +269,15 @@
 	}
 	else
 	{
+		[member removeObserver:self];
 	}
+}
+
+-(void) onUserInfoResult:(enum XlMemberResultCode)code
+{
+	XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
+	[member removeObserver:self];
+	CDSetProp(PropUserImage, member.pictureUrl);
 }
 
 @end

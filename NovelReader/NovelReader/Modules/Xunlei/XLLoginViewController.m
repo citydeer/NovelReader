@@ -335,6 +335,7 @@
  */
 -(void) onUserInfoResult:(enum XlMemberResultCode)code
 {
+	CDSetProp(PropUserImage, _xlMember.pictureUrl);
 }
 
 /**
