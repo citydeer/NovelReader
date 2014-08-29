@@ -8,14 +8,15 @@
 
 
 
-#define CDProp(key) ([[Properties appProperties] propertyForKey:(key)])
+#define CDProp(key) ((NSString*)[[Properties appProperties] propertyForKey:(key)])
 #define CDSetProp(key, value) ([[Properties appProperties] setProperty:(value) forKey:(key)])
+#define CDIDProp(key) ([[Properties appProperties] propertyForKey:(key)])
 
 
-#define PropUserToken @"user.token"
+#define PropUserSession @"user.session"
 #define PropUserName @"user.name"
+#define PropUserID @"user.id"
 #define PropUserAccount @"user.account"
-#define PropUserPassword @"user.password"
 
 #define PropSettingServiceURL @"setting.service.url"
 
@@ -37,8 +38,8 @@
 @property (nonatomic, strong) NSDate* lastVerifyDate;
 @property (readonly) NSTimeInterval minVerifyInterval;
 
--(NSString*) propertyForKey:(NSString*)key;
--(void) setProperty:(NSString*)property forKey:(NSString *)key;
+-(id) propertyForKey:(NSString*)key;
+-(void) setProperty:(id)property forKey:(NSString *)key;
 
 @end
 

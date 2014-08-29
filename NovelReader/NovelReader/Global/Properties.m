@@ -43,7 +43,7 @@
 	return self;
 }
 
--(NSString*) propertyForKey:(NSString*)key
+-(id) propertyForKey:(NSString*)key
 {
 	id prop = [_dic objectForKey:key];
 	if (prop == nil)
@@ -55,7 +55,7 @@
 	return prop;
 }
 
--(void) setProperty:(NSString*)property forKey:(NSString *)key
+-(void) setProperty:(id)property forKey:(NSString *)key
 {
 	if (property == nil)
 	{

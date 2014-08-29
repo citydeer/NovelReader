@@ -11,10 +11,12 @@
 #import "BookStoreViewController.h"
 #import "UserViewController.h"
 #import "UIHelper.h"
+#import "Properties.h"
+#import "xlmember/XlMemberIosAdapter.h"
 
 
 
-@interface MainTabViewController ()
+@interface MainTabViewController () <XlMemberEvents>
 {
 	UIViewController* _currentVC;
 	UIView* _containerView;
@@ -30,6 +32,7 @@
 
 -(void) switchAction:(id)sender;
 -(void) updateTabButtons;
+-(void) checkLoginInfo;
 
 @end
 
@@ -56,6 +59,7 @@
 
 - (void)dealloc
 {
+	[[XlMemberIosAdapter instance] removeObserver:self];
 }
 
 - (void)loadView
@@ -106,6 +110,8 @@
 	[self.view addSubview:tabbarView];
 	
 	[self switchAction:_shelfButton];
+	
+	[self checkLoginInfo];
 }
 
 -(void) willPresentView:(NSTimeInterval)duration
@@ -214,6 +220,36 @@
 		[_userButton setImage:CDImage(@"main/user1") forState:UIControlStateNormal];
 		[_userButton setImage:CDImage(@"main/user1") forState:UIControlStateHighlighted];
 		((UILabel*)[_userButton viewWithTag:1]).textColor = CDColor(nil, @"282828");
+	}
+}
+
+-(void) checkLoginInfo
+{
+	NSNumber* uid = CDIDProp(PropUserID);
+	if (uid)
+	{
+		XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
+		NSString* appVersion = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleVersion"];
+		[member initXlMember:53 clientVersion:appVersion peerId:@"peerid"];
+		[member addObserver:self];
+		[member loginByUserId:uid.unsignedLongLongValue];
+	}
+}
+
+-(void) onLoginResult:(enum XlMemberResultCode)code
+{
+	XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
+	[member removeObserver:self];
+	if (code == XLMEMBER_SUCCESS)
+	{
+		XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
+		[member requestUserInfo];
+		CDSetProp(PropUserAccount, member.userName);
+		CDSetProp(PropUserName, member.nickName);
+		CDSetProp(PropUserSession, member.sessionId);
+	}
+	else
+	{
 	}
 }
 

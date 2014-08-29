@@ -696,11 +696,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NovelReader/NovelReader-Prefix.pch";
 				INFOPLIST_FILE = "NovelReader/NovelReader-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					../../XunleiSDK/libs/Debug,
-					/Users/citydeer/Git/XunleiSDK/libs/Debug,
-					/Users/citydeer/Git/XunleiSDK/libs/Release,
-				);
+				LIBRARY_SEARCH_PATHS = ../../XunleiSDK/libs/Debug;
 				OTHER_LDFLAGS = (
 					"-lcrypto",
 					"-lssl",
@@ -726,11 +722,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NovelReader/NovelReader-Prefix.pch";
 				INFOPLIST_FILE = "NovelReader/NovelReader-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					../../XunleiSDK/libs/Release,
-					/Users/citydeer/Git/XunleiSDK/libs/Debug,
-					/Users/citydeer/Git/XunleiSDK/libs/Release,
-				);
+				LIBRARY_SEARCH_PATHS = ../../XunleiSDK/libs/Release;
 				OTHER_LDFLAGS = (
 					"-lcrypto",
 					"-lssl",

@@ -22,6 +22,9 @@
 	CDCustomTextField* _passwordField;
 	CDCustomTextField* _verifyField;
 	UIImageView* _verifyImage;
+	UIView* _verifyView;
+	UIView* _fieldView;
+	UIButton* _loginButton;
 	
 	XlMemberIosAdapter* _xlMember;
 }
@@ -30,6 +33,7 @@
 -(void) refreshVerifyCode:(id)sender;
 -(void) keyboardWillShown:(NSNotification*)notification;
 -(void) keyboardWillHide:(NSNotification*)notification;
+-(void) showVerifyView;
 
 @end
 
@@ -43,8 +47,6 @@
     if (self)
 	{
 		_xlMember = [XlMemberIosAdapter instance];
-		NSString* appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-		[_xlMember initXlMember:53 clientVersion:appVersion peerId:@"peerid"];
 		[_xlMember addObserver:self];
     }
     return self;
@@ -52,7 +54,6 @@
 
 -(void) dealloc
 {
-	[_xlMember cancel];
 	[_xlMember removeObserver:self];
 }
 
@@ -81,26 +82,28 @@
 	NSString* str = @"阅读会员免费阅读全站书籍";
 	[UIHelper addLabel:_scrollView t:str tc:CDColor(nil, @"969696") fs:10 b:NO al:NSTextAlignmentLeft frame:CGRectMake(9, 0, rect.size.width, 37)];
 	
-	UIView* av = [UIHelper addRect:_scrollView color:[UIColor whiteColor] x:0 y:37 w:rect.size.width h:120 resizing:UIViewAutoresizingFlexibleWidth];
-	[UIHelper addRect:av color:CDColor(nil, @"d1d1d1") x:0 y:0 w:rect.size.width h:0.5f resizing:UIViewAutoresizingFlexibleWidth];
-	[UIHelper addRect:av color:CDColor(nil, @"d1d1d1") x:0 y:119.5f w:rect.size.width h:0.5f resizing:UIViewAutoresizingFlexibleWidth];
-	[UIHelper addRect:av color:CDColor(nil, @"d1d1d1") x:10 y:40 w:rect.size.width-10 h:0.5f resizing:UIViewAutoresizingFlexibleWidth];
-	[UIHelper addRect:av color:CDColor(nil, @"d1d1d1") x:10 y:80 w:rect.size.width-10 h:0.5f resizing:UIViewAutoresizingFlexibleWidth];
-	[UIHelper addRect:av color:CDColor(nil, @"d1d1d1") x:227 y:80 w:0.5f h:40 resizing:0];
+	_fieldView = [UIHelper addRect:_scrollView color:[UIColor whiteColor] x:0 y:37 w:rect.size.width h:80 resizing:UIViewAutoresizingFlexibleWidth];
+	[UIHelper addRect:_fieldView color:CDColor(nil, @"d1d1d1") x:0 y:0 w:rect.size.width h:0.5f resizing:UIViewAutoresizingFlexibleWidth];
+	[UIHelper addRect:_fieldView color:CDColor(nil, @"d1d1d1") x:0 y:79.5f w:rect.size.width h:0.5f resizing:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin];
+	[UIHelper addRect:_fieldView color:CDColor(nil, @"d1d1d1") x:10 y:40 w:rect.size.width-10 h:0.5f resizing:UIViewAutoresizingFlexibleWidth];
+	
+	_verifyView = [UIHelper addRect:_fieldView color:nil x:0 y:80 w:rect.size.width h:40 resizing:UIViewAutoresizingFlexibleWidth];
+	[UIHelper addRect:_verifyView color:CDColor(nil, @"d1d1d1") x:10 y:0 w:rect.size.width-10 h:0.5f resizing:UIViewAutoresizingFlexibleWidth];
+	[UIHelper addRect:_verifyView color:CDColor(nil, @"d1d1d1") x:227 y:0 w:0.5f h:40 resizing:0];
 	
 	UIImageView* imageView = [[UIImageView alloc] initWithImage:CDImage(@"user/name_icon")];
 	[UIHelper moveView:imageView toX:6 andY:10];
-	[av addSubview:imageView];
+	[_fieldView addSubview:imageView];
 	
 	imageView = [[UIImageView alloc] initWithImage:CDImage(@"user/pwd_icon")];
 	[UIHelper moveView:imageView toX:6 andY:9+40];
-	[av addSubview:imageView];
+	[_fieldView addSubview:imageView];
 	
 	imageView = [[UIImageView alloc] initWithImage:CDImage(@"user/pwd_icon")];
-	[UIHelper moveView:imageView toX:6 andY:9+80];
-	[av addSubview:imageView];
+	[UIHelper moveView:imageView toX:6 andY:9];
+	[_verifyView addSubview:imageView];
 	
-	UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(10, 182, 300, 40)];
+	UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(10, 142, 300, 40)];
 	[button setBackgroundImage:CDImage(@"user/button_bg2") forState:UIControlStateNormal];
 	[button setBackgroundImage:CDImage(@"user/button_bg1") forState:UIControlStateDisabled];
 	[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -109,6 +112,7 @@
 	[button setTitle:@"迅雷账号登录" forState:UIControlStateNormal];
 	[button addTarget:self action:@selector(onLogin:) forControlEvents:UIControlEventTouchUpInside];
 	[_scrollView addSubview:button];
+	_loginButton = button;
 	
 	_nameField = [[CDCustomTextField alloc] initWithFrame:CGRectMake(36, 4, 268, 32)];
 	_nameField.returnKeyType = UIReturnKeyNext;
@@ -121,11 +125,12 @@
 	[_nameField drawPlaceholderInRect:CGRectZero];
 	_nameField.autocorrectionType = UITextAutocorrectionTypeNo;
 	_nameField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+	_nameField.text = CDProp(PropUserAccount);
 	_nameField.delegate = self;
-	[av addSubview:_nameField];
+	[_fieldView addSubview:_nameField];
 	
 	_passwordField = [[CDCustomTextField alloc] initWithFrame:CGRectMake(36, 44, 268, 32)];
-	_passwordField.returnKeyType = UIReturnKeyNext;
+	_passwordField.returnKeyType = UIReturnKeyGo;
 	_passwordField.keyboardType = UIKeyboardTypeASCIICapable;
 	_passwordField.secureTextEntry = YES;
 	_passwordField.placeHolderColor = CDColor(nil, @"c9c9c9");
@@ -134,9 +139,9 @@
 	_passwordField.textColor = CDColor(nil, @"282828");
 	_passwordField.font = [UIFont systemFontOfSize:18];
 	_passwordField.delegate = self;
-	[av addSubview:_passwordField];
+	[_fieldView addSubview:_passwordField];
 	
-	_verifyField = [[CDCustomTextField alloc] initWithFrame:CGRectMake(36, 84, 160, 32)];
+	_verifyField = [[CDCustomTextField alloc] initWithFrame:CGRectMake(36, 4, 160, 32)];
 	_verifyField.returnKeyType = UIReturnKeyGo;
 	_verifyField.keyboardType = UIKeyboardTypeASCIICapable;
 	_verifyField.placeHolderColor = CDColor(nil, @"c9c9c9");
@@ -147,16 +152,31 @@
 	_verifyField.autocorrectionType = UITextAutocorrectionTypeNo;
 	_verifyField.autocapitalizationType = UITextAutocapitalizationTypeNone;
 	_verifyField.delegate = self;
-	[av addSubview:_verifyField];
+	[_verifyView addSubview:_verifyField];
 	
-	_verifyImage = [[UIImageView alloc] initWithFrame:CGRectMake(228, 80, rect.size.width-228, 40)];
+	_verifyImage = [[UIImageView alloc] initWithFrame:CGRectMake(228, 0, rect.size.width-228, 40)];
 	_verifyImage.clipsToBounds = YES;
 	_verifyImage.contentMode = UIViewContentModeScaleAspectFit;
 	_verifyImage.userInteractionEnabled = YES;
 	[_verifyImage addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(refreshVerifyCode:)]];
-	[av addSubview:_verifyImage];
+	[_verifyView addSubview:_verifyImage];
 	
 	_scrollView.contentSize = CGSizeMake(rect.size.width, 240);
+	_verifyView.hidden = YES;
+}
+
+-(void) showVerifyView
+{
+	if (!_verifyView.hidden)
+		return;
+	
+	_verifyView.alpha = 0.0f;
+	_verifyView.hidden = NO;
+	[UIView animateWithDuration:0.3 animations:^{
+		_verifyView.alpha = 1.0f;
+		[UIHelper setView:_fieldView toHeight:120];
+		[UIHelper moveView:_loginButton dX:0 dY:40];
+	}];
 }
 
 -(void) willPresentView:(NSTimeInterval)duration
@@ -170,8 +190,6 @@
 -(void) didPresentView
 {
 	[super didPresentView];
-	
-	[_xlMember requestVerifyCode];
 }
 
 -(void) willDismissView:(NSTimeInterval)duration
@@ -219,7 +237,7 @@
 		return;
 	}
 	
-	if (_verifyField.text.length <= 0)
+	if (!_verifyView.hidden && _verifyField.text.length <= 0)
 	{
 		[self.view showPopMsg:@"请填写验证码" atY:160 timeout:3];
 		[_verifyField becomeFirstResponder];
@@ -228,7 +246,12 @@
 	
 	[self.view showColorIndicatorFreezeUI:YES];
 	
-	[_xlMember loginByUserName:_nameField.text password:_passwordField.text verifyCode:_verifyField.text];
+	NSString* appVersion = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleVersion"];
+	[_xlMember initXlMember:53 clientVersion:appVersion peerId:@"peerid"];
+	if (_verifyView.hidden)
+		[_xlMember loginByUserName:_nameField.text password:_passwordField.text];
+	else
+		[_xlMember loginByUserName:_nameField.text password:_passwordField.text verifyCode:_verifyField.text];
 }
 
 -(void) refreshVerifyCode:(id)sender
@@ -244,7 +267,10 @@
 	}
 	else if (textField == _passwordField)
 	{
-		[_verifyField becomeFirstResponder];
+		if (_verifyView.hidden)
+			[self onLogin:_passwordField];
+		else
+			[_verifyField becomeFirstResponder];
 	}
 	else if (textField == _verifyField)
 	{
@@ -260,10 +286,15 @@
 -(void) onLoginResult:(enum XlMemberResultCode)code
 {
 	[self.view dismiss];
-	
-	NSLog(@"************************* Login resule: %d", code);
 	if (code == XLMEMBER_SUCCESS)
 	{
+		[_xlMember requestUserInfo];
+		NSNumber* uid = [NSNumber numberWithUnsignedLongLong:_xlMember.userId];
+		CDSetProp(PropUserID, uid);
+		CDSetProp(PropUserAccount, _xlMember.userName);
+		CDSetProp(PropUserName, _xlMember.nickName);
+		CDSetProp(PropUserSession, _xlMember.sessionId);
+		[self.cdNavigationController popViewController];
 	}
 	else
 	{
@@ -278,6 +309,19 @@
 				str = @"服务器内部升级中，请稍后重试";
 				break;
 				
+			case XLMEMBER_ACCOUNT_EXCEPTION:
+			{
+				if (_verifyView.hidden)
+					str = @"账号异常，请输入验证码再登录";
+				else
+					str = @"验证码输入错误，请重新输入";
+				[self showVerifyView];
+				[_xlMember requestVerifyCode];
+				if ([_verifyField canBecomeFirstResponder])
+					[_verifyField becomeFirstResponder];
+				break;
+			}
+			
 			default:
 				break;
 		}
@@ -308,9 +352,8 @@
  */
 -(void) onVerfyCodeResult:(NSString *)imagePath
 {
-	NSLog(@"$$$$$$$$$$$$$$ imagepath: %@", imagePath);
-	UIImage* image = [UIImage imageWithContentsOfFile:imagePath];
-	_verifyImage.image = image;
+	_verifyImage.image = [UIImage imageWithContentsOfFile:imagePath];
 }
 
 @end
+

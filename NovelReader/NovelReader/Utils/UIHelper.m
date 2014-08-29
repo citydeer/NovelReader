@@ -164,7 +164,8 @@
 {
 	UIView* view = [[UIView alloc] initWithFrame:CGRectMake(x, y, w, h)];
 	view.autoresizingMask = mask;
-	view.backgroundColor = color;
+	if (color != nil)
+		view.backgroundColor = color;
 	[v addSubview:view];
 	return view;
 }
