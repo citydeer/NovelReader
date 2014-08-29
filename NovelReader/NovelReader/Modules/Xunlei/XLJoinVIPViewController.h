@@ -6,8 +6,9 @@
 //  Copyright (c) 2014年 citydeer. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "CDViewController.h"
 
-@interface XLJoinVIPViewController : NSObject
+
+@interface XLJoinVIPViewController : CDViewController
 
 @end

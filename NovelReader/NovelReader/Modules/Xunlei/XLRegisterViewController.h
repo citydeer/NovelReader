@@ -6,7 +6,10 @@
 //  Copyright (c) 2014年 citydeer. All rights reserved.
 //
 
+#import "CDViewController.h"
 
-@interface XLRegisterViewController : NSObject
+
+@interface XLRegisterViewController : CDViewController
 
 @end
+

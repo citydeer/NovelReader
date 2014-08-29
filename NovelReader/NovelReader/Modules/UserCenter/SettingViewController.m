@@ -1,25 +1,21 @@
 //
-//  UserViewController.m
+//  SettingViewController.m
 //  NovelReader
 //
-//  Created by Pang Zhenyu on 14-7-31.
+//  Created by Pang Zhenyu on 14-8-29.
 //  Copyright (c) 2014年 citydeer. All rights reserved.
 //
 
-#import "UserViewController.h"
-#import "MainTabViewController.h"
+#import "SettingViewController.h"
 #import "UIHelper.h"
 #import "Models.h"
 #import "Properties.h"
 #import "CDRemoteImageView.h"
 #import "XLLoginViewController.h"
-#import "XLRechargeViewController.h"
-#import "XLJoinVIPViewController.h"
-#import "SettingViewController.h"
 
 
 
-@interface UserViewController () <UITableViewDataSource, UITableViewDelegate, GetterControllerOwner>
+@interface SettingViewController () <UITableViewDataSource, UITableViewDelegate, GetterControllerOwner>
 {
 	UITableView* _tableView;
 	
@@ -45,7 +41,7 @@
 
 
 
-@implementation UserViewController
+@implementation SettingViewController
 
 -(id) init
 {
@@ -65,7 +61,9 @@
 {
 	[super loadView];
 	
-	self.titleLabel.text = @"个人中心";
+	self.titleLabel.text = @"设置";
+	[self.leftButton setImage:CDImage(@"main/navi_back") forState:UIControlStateNormal];
+	self.leftButton.imageEdgeInsets = UIEdgeInsetsMake(0, -15.0f, 0, 0);
 	
 	CGRect rect = self.view.bounds;
 	
@@ -245,32 +243,16 @@
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
-	
-	UIViewController* vc = nil;
-	if (indexPath.section == 0 && indexPath.row == 0)
-		vc = [[XLRechargeViewController alloc] init];
-	else if (indexPath.section == 0 && indexPath.row == 1)
-		vc = [[XLJoinVIPViewController alloc] init];
-	else if (indexPath.section == 1 && indexPath.row == 0)
-		vc = [[XLRechargeViewController alloc] init];
-	else if (indexPath.section == 1 && indexPath.row == 1)
-		vc = [[XLRechargeViewController alloc] init];
-	else if (indexPath.section == 2 && indexPath.row == 0)
-		vc = [[SettingViewController alloc] init];
-	if (vc != nil)
-		[_parent.cdNavigationController pushViewController:vc];
 }
 
 -(void) loginAction:(id)sender
 {
 	XLLoginViewController* vc = [[XLLoginViewController alloc] init];
-	[_parent.cdNavigationController pushViewController:vc];
+	[self.cdNavigationController pushViewController:vc];
 }
 
 -(void) rechargeAction:(id)sender
 {
-	[_parent.cdNavigationController pushViewController:[[XLRechargeViewController alloc] init]];
 }
 
 @end
-

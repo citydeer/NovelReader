@@ -448,6 +448,11 @@ CDNavigationController* getNaviController(void)
 //	[self popToViewController:controller inStyle:inStyle outStyle:outStyle duration:duration];
 }
 
+-(void) popToRootViewController
+{
+	[self popToViewController:_controllerStack.firstObject inStyle:ASTranslationToRight outStyle:ASTranslationToRight];
+}
+
 -(void) popToViewController:(UIViewController *)controller inStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle
 {
 	[self popToViewController:controller inStyle:inStyle outStyle:outStyle duration:DefaultAnimationDuration];

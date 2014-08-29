@@ -11,6 +11,7 @@
 #import "KYTipsView.h"
 #import "CDCustomViews.h"
 #import "Properties.h"
+#import "XLRegisterViewController.h"
 #import "xlmember/XlMemberIosAdapter.h"
 
 
@@ -47,7 +48,6 @@
     if (self)
 	{
 		_xlMember = [XlMemberIosAdapter instance];
-		[_xlMember addObserver:self];
     }
     return self;
 }
@@ -122,10 +122,8 @@
 	_nameField.placeholder = @"请输入您的迅雷账号";
 	_nameField.textColor = CDColor(nil, @"282828");
 	_nameField.font = [UIFont systemFontOfSize:18];
-	[_nameField drawPlaceholderInRect:CGRectZero];
 	_nameField.autocorrectionType = UITextAutocorrectionTypeNo;
 	_nameField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-	_nameField.text = CDProp(PropUserAccount);
 	_nameField.delegate = self;
 	[_fieldView addSubview:_nameField];
 	
@@ -185,17 +183,21 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShown:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+	
+	_nameField.text = CDProp(PropUserAccount);
 }
 
 -(void) didPresentView
 {
 	[super didPresentView];
+	[_xlMember addObserver:self];
 }
 
 -(void) willDismissView:(NSTimeInterval)duration
 {
 	[super willDismissView:duration];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[_xlMember removeObserver:self];
 }
 
 -(void) keyboardWillShown:(NSNotification*)notification
@@ -212,6 +214,7 @@
 
 -(void) rightButtonAction:(id)sender
 {
+	[self.cdNavigationController pushViewController:[[XLRegisterViewController alloc] init]];
 }
 
 -(void) onLogin:(id)sender
@@ -285,7 +288,6 @@
  */
 -(void) onLoginResult:(enum XlMemberResultCode)code
 {
-	[self.view dismiss];
 	if (code == XLMEMBER_SUCCESS)
 	{
 		[_xlMember requestUserInfo];
@@ -294,10 +296,10 @@
 		CDSetProp(PropUserAccount, _xlMember.userName);
 		CDSetProp(PropUserName, _xlMember.nickName);
 		CDSetProp(PropUserSession, _xlMember.sessionId);
-		[self.cdNavigationController popViewController];
 	}
 	else
 	{
+		[self.view dismiss];
 		NSString* str = @"登录失败，请检查用户名或密码";
 		switch (code)
 		{
@@ -335,7 +337,9 @@
  */
 -(void) onUserInfoResult:(enum XlMemberResultCode)code
 {
+	[self.view dismiss];
 	CDSetProp(PropUserImage, _xlMember.pictureUrl);
+	[self.cdNavigationController popViewController];
 }
 
 /**

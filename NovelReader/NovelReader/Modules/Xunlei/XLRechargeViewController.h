@@ -6,8 +6,9 @@
 //  Copyright (c) 2014年 citydeer. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "CDViewController.h"
 
-@interface XLRechargeViewController : NSObject
+
+@interface XLRechargeViewController : CDViewController
 
 @end

@@ -24,6 +24,7 @@
 		F2A8CC5719AFC12500A2D981 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A8CC5619AFC12500A2D981 /* libstdc++.dylib */; };
 		F2A8CC5919AFC13D00A2D981 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A8CC5819AFC13D00A2D981 /* libc++.dylib */; };
 		F2A8CC5B19AFC17500A2D981 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A8CC5A19AFC17500A2D981 /* libz.dylib */; };
+		F2CF3B7219B0B8F600133E96 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CF3B7119B0B8F600133E96 /* SettingViewController.m */; };
 		F2D537C91976807A00A0FDDA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537C81976807A00A0FDDA /* Foundation.framework */; };
 		F2D537CB1976807A00A0FDDA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537CA1976807A00A0FDDA /* CoreGraphics.framework */; };
 		F2D537CD1976807A00A0FDDA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537CC1976807A00A0FDDA /* UIKit.framework */; };
@@ -100,6 +101,8 @@
 		F2A8CC5619AFC12500A2D981 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
 		F2A8CC5819AFC13D00A2D981 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		F2A8CC5A19AFC17500A2D981 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		F2CF3B7019B0B8F600133E96 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
+		F2CF3B7119B0B8F600133E96 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		F2D537C51976807A00A0FDDA /* NovelReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NovelReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2D537C81976807A00A0FDDA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F2D537CA1976807A00A0FDDA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -238,6 +241,8 @@
 			children = (
 				F22A8D7A19896B5A00DA082A /* UserViewController.h */,
 				F22A8D7B19896B5A00DA082A /* UserViewController.m */,
+				F2CF3B7019B0B8F600133E96 /* SettingViewController.h */,
+				F2CF3B7119B0B8F600133E96 /* SettingViewController.m */,
 			);
 			path = UserCenter;
 			sourceTree = "<group>";
@@ -567,6 +572,7 @@
 				54C24FC819AF3A8100A3A103 /* XLLoginViewController.m in Sources */,
 				F22A8D7919896B5100DA082A /* BookStoreViewController.m in Sources */,
 				F2A45C32198E518000A110F7 /* ReaderPageViewController.m in Sources */,
+				F2CF3B7219B0B8F600133E96 /* SettingViewController.m in Sources */,
 				F2D5384E1976BAC100A0FDDA /* GraphicUtils.m in Sources */,
 				F250EAFC198AAFAB00DDECEF /* BookCell.m in Sources */,
 				F2D538471976BAC100A0FDDA /* Properties.m in Sources */,
