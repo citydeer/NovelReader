@@ -127,6 +127,7 @@
 	_phoneField = [[CDCustomTextField alloc] initWithFrame:CGRectMake(36, 4, 150, 32)];
 	_phoneField.returnKeyType = UIReturnKeyNext;
 	_phoneField.keyboardType = UIKeyboardTypeNumberPad;
+	_phoneField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_phoneField.placeHolderColor = CDColor(nil, @"c9c9c9");
 	_phoneField.placeHolderFont = [UIFont systemFontOfSize:12];
 	_phoneField.placeholder = @"11位手机号";
@@ -140,6 +141,7 @@
 	_phoneVerifyField = [[CDCustomTextField alloc] initWithFrame:CGRectMake(36, 44, 268, 32)];
 	_phoneVerifyField.returnKeyType = UIReturnKeyNext;
 	_phoneVerifyField.keyboardType = UIKeyboardTypeNumberPad;
+	_phoneVerifyField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_phoneVerifyField.placeHolderColor = CDColor(nil, @"c9c9c9");
 	_phoneVerifyField.placeHolderFont = [UIFont systemFontOfSize:12];
 	_phoneVerifyField.placeholder = @"手机验证码";
@@ -152,6 +154,7 @@
 	_phonePasswordField.returnKeyType = UIReturnKeyNext;
 	_phonePasswordField.keyboardType = UIKeyboardTypeASCIICapable;
 	_phonePasswordField.secureTextEntry = YES;
+	_phonePasswordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_phonePasswordField.placeHolderColor = CDColor(nil, @"c9c9c9");
 	_phonePasswordField.placeHolderFont = [UIFont systemFontOfSize:12];
 	_phonePasswordField.placeholder = @"6-32位密码";
@@ -163,6 +166,7 @@
 	_phoneNickField = [[CDCustomTextField alloc] initWithFrame:CGRectMake(36, 124, 268, 32)];
 	_phoneNickField.returnKeyType = UIReturnKeyGo;
 	_phoneNickField.keyboardType = UIKeyboardTypeDefault;
+	_phoneNickField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_phoneNickField.placeHolderColor = CDColor(nil, @"c9c9c9");
 	_phoneNickField.placeHolderFont = [UIFont systemFontOfSize:12];
 	_phoneNickField.placeholder = @"昵称";
@@ -204,6 +208,7 @@
 	_emailField = [[CDCustomTextField alloc] initWithFrame:CGRectMake(36, 4, 268, 32)];
 	_emailField.returnKeyType = UIReturnKeyNext;
 	_emailField.keyboardType = UIKeyboardTypeEmailAddress;
+	_emailField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_emailField.placeHolderColor = CDColor(nil, @"c9c9c9");
 	_emailField.placeHolderFont = [UIFont systemFontOfSize:12];
 	_emailField.placeholder = @"请输入邮箱";
@@ -218,6 +223,7 @@
 	_emailPasswordField.returnKeyType = UIReturnKeyNext;
 	_emailPasswordField.keyboardType = UIKeyboardTypeASCIICapable;
 	_emailPasswordField.secureTextEntry = YES;
+	_emailPasswordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_emailPasswordField.placeHolderColor = CDColor(nil, @"c9c9c9");
 	_emailPasswordField.placeHolderFont = [UIFont systemFontOfSize:12];
 	_emailPasswordField.placeholder = @"6-32位密码";
@@ -229,6 +235,7 @@
 	_emailVerifyField = [[CDCustomTextField alloc] initWithFrame:CGRectMake(36, 84, 160, 32)];
 	_emailVerifyField.returnKeyType = UIReturnKeyNext;
 	_emailVerifyField.keyboardType = UIKeyboardTypeASCIICapable;
+	_emailVerifyField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_emailVerifyField.placeHolderColor = CDColor(nil, @"c9c9c9");
 	_emailVerifyField.placeHolderFont = [UIFont systemFontOfSize:12];
 	_emailVerifyField.placeholder = @"请输入右边验证码";
@@ -242,6 +249,7 @@
 	_emailNickField = [[CDCustomTextField alloc] initWithFrame:CGRectMake(36, 124, 268, 32)];
 	_emailNickField.returnKeyType = UIReturnKeyGo;
 	_emailNickField.keyboardType = UIKeyboardTypeDefault;
+	_emailNickField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_emailNickField.placeHolderColor = CDColor(nil, @"c9c9c9");
 	_emailNickField.placeHolderFont = [UIFont systemFontOfSize:12];
 	_emailNickField.placeholder = @"昵称";

@@ -117,6 +117,7 @@
 	_nameField = [[CDCustomTextField alloc] initWithFrame:CGRectMake(36, 4, 268, 32)];
 	_nameField.returnKeyType = UIReturnKeyNext;
 	_nameField.keyboardType = UIKeyboardTypeASCIICapable;
+	_nameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_nameField.placeHolderColor = CDColor(nil, @"c9c9c9");
 	_nameField.placeHolderFont = [UIFont systemFontOfSize:12];
 	_nameField.placeholder = @"请输入您的迅雷账号";
@@ -131,6 +132,7 @@
 	_passwordField.returnKeyType = UIReturnKeyGo;
 	_passwordField.keyboardType = UIKeyboardTypeASCIICapable;
 	_passwordField.secureTextEntry = YES;
+	_passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_passwordField.placeHolderColor = CDColor(nil, @"c9c9c9");
 	_passwordField.placeHolderFont = [UIFont systemFontOfSize:12];
 	_passwordField.placeholder = @"请输入您的密码";
@@ -142,6 +144,7 @@
 	_verifyField = [[CDCustomTextField alloc] initWithFrame:CGRectMake(36, 4, 160, 32)];
 	_verifyField.returnKeyType = UIReturnKeyGo;
 	_verifyField.keyboardType = UIKeyboardTypeASCIICapable;
+	_verifyField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	_verifyField.placeHolderColor = CDColor(nil, @"c9c9c9");
 	_verifyField.placeHolderFont = [UIFont systemFontOfSize:12];
 	_verifyField.placeholder = @"请输入右侧验证码";

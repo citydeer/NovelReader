@@ -29,12 +29,12 @@
 	return self;
 }
 
-static NSString* _host_address = @"";
+static NSString* _default_host = @"";
 static NSString* _user_token = @"";
 
-+(void) setHost:(NSString*)host
++(void) setDefaultHost:(NSString*)host
 {
-	_host_address = host;
+	_default_host = host;
 }
 
 +(void) setUserToken:(NSString*)userToken
@@ -44,10 +44,12 @@ static NSString* _user_token = @"";
 
 -(NSURLRequest*) _createRequest:(KYHttpCachePolicy)cachePolicy
 {
-	if (_host_address.length <= 0)
+	NSString* host = _host;
+	if (host.length <= 0) host = _default_host;
+	if (host.length <= 0)
 		return nil;
 	
-	NSString* fullURL = [NSString stringWithFormat:@"%@%@", _host_address, self.path];
+	NSString* fullURL = [NSString stringWithFormat:@"%@%@", host, self.path];
 	
 	NSMutableDictionary* query = [NSMutableDictionary dictionary];
 	[query addEntriesFromDictionary:self.params];
@@ -131,10 +133,10 @@ static NSString* _user_token = @"";
 
 -(NSURLRequest*) _createRequest:(KYHttpCachePolicy)cachePolicy
 {
-	if (_host_address.length <= 0)
+	if (_default_host.length <= 0)
 		return nil;
 	
-	NSString* fullURL = [NSString stringWithFormat:@"%@%@", _host_address, @"users/upload"];
+	NSString* fullURL = [NSString stringWithFormat:@"%@%@", _default_host, @"users/upload"];
 	
 	NSURL* url = [NSURL URLWithString:fullURL];
 	

@@ -78,7 +78,6 @@
 	_tableView.bounces = NO;
 	_tableView.rowHeight = 38;
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-	_tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
 	_tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 50, 0);
 	
 	UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, 123.5+25)];
@@ -127,7 +126,7 @@
 	_purchasedNumLabel = [UIHelper addLabel:infoBGView t:nil tc:[UIColor whiteColor] fs:12 b:NO al:NSTextAlignmentCenter frame:CGRectMake(320.0/3*2, 7, 320.0/3, 16)];
 	[UIHelper addLabel:infoBGView t:@"已购" tc:[UIColor whiteColor] fs:12 b:NO al:NSTextAlignmentCenter frame:CGRectMake(320.0/3*2, 24, 320.0f/3.0f, 16)];
 	
-	_xunleiMemberIcon = [[UIImageView alloc] initWithImage:CDImage(@"user/xunlei_member")];
+	_xunleiMemberIcon = [[UIImageView alloc] initWithImage:CDImage(@"user/vip")];
 	[UIHelper moveView:_xunleiMemberIcon toY:19];
 	[_userView addSubview:_xunleiMemberIcon];
 	
@@ -190,7 +189,9 @@
 
 -(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-	return 10.0f;
+	if (section < 2)
+		return 10.0f;
+	return 0.0f;
 }
 
 -(UIView*) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section

@@ -75,43 +75,31 @@
 @end
 
 
-@implementation ProjectListModel
-@dynamic xmlb;
+@implementation RechargePriceModel
+@dynamic amount_list, price;
 -(id) initWithDictionary:(NSDictionary *)dictionary
 {
 	self = [super initWithDictionary:dictionary];
 	if (self)
 	{
-		[self replaceDictionaryItemsInArrayProperty:@"xmlb" withPKMappingObjectItems:[ProjectInfoModel class]];
+		self.price = 0.01;
+		self.amount_list = @[@1000, @2000, @5000, @10000];
 	}
 	return self;
 }
 @end
 
 
-@implementation ProjectInfoModel
-@dynamic progress, change, gxrq, htwzj, kgrq, xmmc, xmys, xxm, ygx, yj, id;
-@end
 
-
-@implementation ProjectDetailModel
-@dynamic id, xmmc, htwzj, kgrq, qyhtj, tp, xmsf, xmss, xmyf, xmyjs, xmys, xxjd;
+@implementation VIPPriceModel
+@dynamic monthprice, price_list;
 -(id) initWithDictionary:(NSDictionary *)dictionary
 {
 	self = [super initWithDictionary:dictionary];
 	if (self)
 	{
-		[self replaceDictionaryItemsInArrayProperty:@"htwzj" withPKMappingObjectItems:[CostItemModel class]];
-		[self replaceDictionaryItemsInArrayProperty:@"xmys" withPKMappingObjectItems:[CostItemModel class]];
-		[self replaceDictionaryItemsInArrayProperty:@"xmyf" withPKMappingObjectItems:[CostItemModel class]];
-		[self replaceDictionaryItemsInArrayProperty:@"tp" withPKMappingObjectItems:[PictureModel class]];
-		
-		for (CostItemModel* c in self.htwzj)
-			_htwzjAll += c.je;
-		for (CostItemModel* c in self.xmys)
-			_xmysAll += c.je;
-		for (CostItemModel* c in self.xmyf)
-			_xmyfAll += c.je;
+		self.monthprice = 15;
+		self.price_list = @[@1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12];
 	}
 	return self;
 }

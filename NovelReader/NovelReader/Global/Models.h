@@ -33,49 +33,20 @@
 
 
 
-@interface ProjectListModel : PKMappingObject
 
-@property (readonly) NSArray* xmlb;
+@interface RechargePriceModel : PKMappingObject
 
-@end
-
-
-
-@interface ProjectInfoModel : PKMappingObject
-
-@property (readonly) NSInteger id;
-@property (readonly) NSString* xmmc;
-@property (readonly) BOOL yj;
-@property (readonly) NSString* kgrq;
-@property (readonly) double change;
-@property (readonly) double htwzj;
-@property (readonly) double xmys;
-@property (readonly) NSString* gxrq;
-@property (readonly) float progress;
-@property (readonly) BOOL xxm;
-@property (readonly) BOOL ygx;
+@property (readwrite) double price;
+@property (readwrite) NSArray* amount_list;
 
 @end
 
 
 
-@interface ProjectDetailModel : PKMappingObject
+@interface VIPPriceModel : PKMappingObject
 
-@property (readonly) NSInteger id;
-@property (readonly) NSString* xmmc;
-@property (readonly) NSString* kgrq;
-@property (readonly) NSInteger xmyjs;
-@property (readonly) double qyhtj;
-@property (readonly) double xmss;
-@property (readonly) double xmsf;
-@property (readonly) NSString* xxjd;
-@property (readonly) NSArray* htwzj;
-@property (readonly) NSArray* xmys;
-@property (readonly) NSArray* xmyf;
-@property (readonly) NSArray* tp;
-@property (readonly) double htwzjAll;
-@property (readonly) double xmysAll;
-@property (readonly) double xmyfAll;
+@property (readwrite) double monthprice;
+@property (readwrite) NSArray* price_list;
 
 @end
 

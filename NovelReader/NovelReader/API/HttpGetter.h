@@ -74,6 +74,15 @@
 
 
 
+@interface URLGetter : HttpGetter
+
+@property (nonatomic, strong) NSString* url;
+@property (nonatomic, copy) NSData* data;
+
+@end
+
+
+
 @interface NSData (NSData_Json)
 
 /// Returns the NSDictionary or NSArray represented by the receiver's JSON representation, or nil on error

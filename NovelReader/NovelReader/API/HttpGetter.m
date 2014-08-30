@@ -405,6 +405,26 @@ static NSInteger _networkConnectionCount = 0;
 @end
 
 
+
+@implementation URLGetter
+
+-(NSURLRequest*) _createRequest:(KYHttpCachePolicy)cachePolicy
+{
+	if (self.url.length <= 0)
+		return nil;
+	return [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
+}
+
+-(NSInteger) _fillModelWithData:(NSData*)data
+{
+	self.data = data;
+	return KYResultCodeSuccess;
+}
+
+@end
+
+
+
 @implementation NSData(NSData_Json)
 
 - (id)JSONValue

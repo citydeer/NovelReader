@@ -11,6 +11,7 @@
 
 @interface RestfulAPIGetter : HttpGetter
 
+@property (nonatomic, copy) NSString* host;
 @property (nonatomic, copy) NSString* path;
 @property (nonatomic, copy) NSDictionary* params;
 @property (nonatomic, copy) NSString* method;
@@ -19,7 +20,7 @@
 
 @property (readonly) NSDictionary* result;
 
-+(void) setHost:(NSString*)host;
++(void) setDefaultHost:(NSString*)host;
 +(void) setUserToken:(NSString*)userToken;
 
 @end

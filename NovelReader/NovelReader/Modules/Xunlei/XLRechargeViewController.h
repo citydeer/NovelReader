@@ -12,3 +12,4 @@
 @interface XLRechargeViewController : CDViewController
 
 @end
+

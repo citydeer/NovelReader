@@ -18,6 +18,9 @@
 #define PropUserID @"user.id"
 #define PropUserAccount @"user.account"
 #define PropUserImage @"user.image"
+#define PropUserBalance @"user.balance"
+
+#define PropPayLastType @"pay.lasttype"
 
 #define PropSettingServiceURL @"setting.service.url"
 
