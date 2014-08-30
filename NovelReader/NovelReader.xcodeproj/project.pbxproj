@@ -177,8 +177,8 @@
 		F2D538601976C40400A0FDDA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F2D538621976C40A00A0FDDA /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		F2D538641976C42500A0FDDA /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		F2D538661976C72C00A0FDDA /* SelectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectorView.h; sourceTree = "<group>"; };
-		F2D538671976C72C00A0FDDA /* SelectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectorView.m; sourceTree = "<group>"; };
+		F2D538661976C72C00A0FDDA /* SelectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectorView.h; path = ../../Modules/SelectorView.h; sourceTree = "<group>"; };
+		F2D538671976C72C00A0FDDA /* SelectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectorView.m; path = ../../Modules/SelectorView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -392,6 +392,8 @@
 				F2D538161976BAC100A0FDDA /* KYTipsView.m */,
 				F2A8CC4F19AFAA7B00A2D981 /* CDCustomViews.h */,
 				F2A8CC5019AFAA7B00A2D981 /* CDCustomViews.m */,
+				F2D538661976C72C00A0FDDA /* SelectorView.h */,
+				F2D538671976C72C00A0FDDA /* SelectorView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -419,8 +421,6 @@
 				F22A8D71198969F900DA082A /* BookShelf */,
 				F22A8D72198969F900DA082A /* BookStore */,
 				F22A8D73198969F900DA082A /* UserCenter */,
-				F2D538661976C72C00A0FDDA /* SelectorView.h */,
-				F2D538671976C72C00A0FDDA /* SelectorView.m */,
 				F22A8D6E1989690000DA082A /* MainTabViewController.h */,
 				F22A8D6F1989690000DA082A /* MainTabViewController.m */,
 			);

@@ -12,11 +12,12 @@
 #import "Properties.h"
 #import "Models.h"
 #import "RestfulAPIGetter.h"
+#import "SelectorView.h"
 #import "XLJoinVIPViewController.h"
 
 
 
-@interface XLRechargeViewController () <GetterControllerOwner, UIPickerViewDelegate, UIPickerViewDataSource>
+@interface XLRechargeViewController () <GetterControllerOwner, SelectViewDelegate>
 {
 	GetterController* _getterController;
 	
@@ -33,9 +34,6 @@
 	UIImageView* _payTypeIcon;
 	UIButton* _payButton;
 	
-	UIView* _pickContainer;
-	UIPickerView* _pickerView;
-	
 	NSInteger _payType;	// 0, 1, 2
 	RechargePriceModel* _model;
 	NSInteger _listIndex;
@@ -46,7 +44,6 @@
 -(void) chooseAmountAction:(id)sender;
 -(void) choosePayTypeAction:(id)sender;
 -(void) vipAction:(id)sender;
--(void) dismissPicker:(UITapGestureRecognizer*)sender;
 -(void) updatePayType;
 -(void) updateView;
 
@@ -225,24 +222,19 @@
 
 -(void) chooseAmountAction:(id)sender
 {
-	CGRect rect = self.view.bounds;
+	SelectorView* sv = [[SelectorView alloc] initWithFrame:CGRectMake(30, _naviBarHeight + 115, 115, 150)];
+	sv.delegate = self;
+	NSMutableArray* strs = [NSMutableArray array];
+	for (NSNumber* amount in _model.amount_list)
+		[strs addObject:[NSString stringWithFormat:@"%d个", amount.intValue]];
+	sv.selectedIndex = _listIndex;
+	sv.items = strs;
+	CGFloat totalHeight = sv.totalHeight;
+	if (totalHeight > sv.cellHeight*4+12)
+		totalHeight = sv.cellHeight*4+12;
+	[UIHelper setView:sv toHeight:totalHeight];
 	
-	if (_pickContainer == nil)
-	{
-		_pickContainer = [[UIView alloc] initWithFrame:rect];
-		_pickContainer.backgroundColor = CDColor(nil, @"a000");
-		_pickContainer.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		[_pickContainer addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissPicker:)]];
-		
-		_pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, rect.size.height-200, rect.size.width, 200)];
-		_pickerView.backgroundColor = CDColor(nil, @"e7e7e7");
-		_pickerView.dataSource = self;
-		_pickerView.delegate = self;
-		[_pickContainer addSubview:_pickerView];
-	}
-	[self.view addSubview:_pickContainer];
-	_pickContainer.alpha = 0.0f;
-	[UIView animateWithDuration:0.3 animations:^{ _pickContainer.alpha = 1.0f; }];
+	[sv showInView:self.view];
 }
 
 -(void) choosePayTypeAction:(id)sender
@@ -257,17 +249,11 @@
 	[self.cdNavigationController pushViewController:vc];
 }
 
--(void) dismissPicker:(UITapGestureRecognizer*)sender
+-(void) didSelect:(SelectorView *)selectorView index:(NSUInteger)index
 {
-	if (!CGRectContainsPoint(_pickerView.frame, [sender locationInView:_pickContainer]))
-	{
-		_listIndex = [_pickerView selectedRowInComponent:0];
-		[self updateView];
-		[UIView animateWithDuration:0.3 animations:^{ _pickContainer.alpha = 0.0f; } completion:^(BOOL finished) {
-			if (finished)
-				[_pickContainer removeFromSuperview];
-		}];
-	}
+	[selectorView dismiss];
+	_listIndex = index;
+	[self updateView];
 }
 
 -(void) handleGetter:(id<Getter>)getter
@@ -276,23 +262,6 @@
 	_payButton.enabled = YES;
 	_model = [[RechargePriceModel alloc] initWithDictionary:nil];
 	[self updateView];
-}
-
-
--(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-{
-	return 1;
-}
-
--(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-	return _model.amount_list.count;
-}
-
--(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-	NSInteger amount = [_model.amount_list[row] intValue];
-	return [NSString stringWithFormat:@"%.0f元=%d阅读点", _model.price*amount, amount];
 }
 
 @end

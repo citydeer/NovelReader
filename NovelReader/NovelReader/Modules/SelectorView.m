@@ -41,8 +41,11 @@
 	self = [super initWithFrame:frame];
 	if (self)
 	{
+		_cellHeight = 40.0f;
+		
 		_bgView = [[UIImageView alloc] initWithFrame:self.bounds];
 		_bgView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		_bgView.image = [CDImage(@"main/selectorbg") resizableImageWithCapInsets:UIEdgeInsetsMake(20, 50, 20, 20)];
 		[self addSubview:_bgView];
 		
 		CGRect rect = self.bounds;
@@ -57,7 +60,7 @@
 		_tableView.dataSource = self;
 		_tableView.backgroundColor = [UIColor clearColor];
 		_tableView.backgroundView = nil;
-		_tableView.rowHeight = 44.0f;
+		_tableView.rowHeight = _cellHeight;
 		_tableView.showsHorizontalScrollIndicator = NO;
 		_tableView.showsVerticalScrollIndicator = YES;
 		_tableView.alwaysBounceVertical = YES;
@@ -83,6 +86,12 @@
 		[_tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:_selectedIndex inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
 }
 
+-(void) setCellHeight:(CGFloat)cellHeight
+{
+	_cellHeight = cellHeight;
+	_tableView.rowHeight = cellHeight;
+}
+
 -(CGFloat) totalHeight
 {
 	return _tableView.contentSize.height + BorderWidth * 2 + PopArrowHeight;
@@ -101,14 +110,19 @@
 	
 	[view addSubview:self];
 	
-	[_tableView flashScrollIndicators];
+	self.alpha = 0.0f;
+	[UIView animateWithDuration:0.2 animations:^{ self.alpha = 1.0f; } completion:^(BOOL finished){
+		[_tableView flashScrollIndicators];
+	}];
 }
 
 -(void) dismiss
 {
 	UIView* maskView = [self.superview viewWithTag:MaskViewTag];
-	[maskView removeFromSuperview];
-	[self removeFromSuperview];
+	[UIView animateWithDuration:0.2 animations:^{ self.alpha = 0.0f; } completion:^(BOOL finished){
+		[self removeFromSuperview];
+		[maskView removeFromSuperview];
+	}];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -159,7 +173,7 @@
 		
 		_line = [[UIImageView alloc] initWithFrame:CGRectMake(0, rect.size.height-1, rect.size.width, 1)];
 		_line.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-		_line.image = CDImage(@"report/popline");
+		_line.image = CDImage(@"main/selectorline");
 		[self.contentView addSubview:_line];
 		
 		UIView* bgView = [[UIView alloc] initWithFrame:rect];
