@@ -36,9 +36,6 @@
 +(Properties*) appProperties;
 
 @property (readonly) NSString* apiHost;
-@property (readonly) NSString* imageHost;
-@property (readonly) NSInteger maxWrongCodeCount;
-@property (nonatomic, assign) NSInteger numberOfWrongPatternCodeInput;
 @property (nonatomic, strong) NSDate* lastVerifyDate;
 @property (readonly) NSTimeInterval minVerifyInterval;
 

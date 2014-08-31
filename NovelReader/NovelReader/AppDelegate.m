@@ -10,6 +10,7 @@
 #import "Properties.h"
 #import "MainTabViewController.h"
 #import "Models.h"
+#import "RestfulAPIGetter.h"
 #import "xlmember/XlMemberIosAdapter.h"
 
 
@@ -50,9 +51,10 @@ void uncaughtExceptionHandler(NSException *exception)
 
 -(void) loadProperties
 {
-//	Properties* prop = [Properties appProperties];
-//	[GlodonAPIGetter setHost:prop.apiHost];
-//	CDSetProp(PropUserToken, nil);
+	Properties* prop = [Properties appProperties];
+	[RestfulAPIGetter setDefaultHost:prop.apiHost];
+	[RestfulAPIGetter setUserID:CDIDProp(PropUserID)];
+	[RestfulAPIGetter setSession:CDProp(PropUserSession)];
 	
 	if (CDProp(PropReaderNightMode).length <= 0)
 		CDSetProp(PropReaderNightMode, @"0");

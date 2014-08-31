@@ -16,12 +16,11 @@
 @property (nonatomic, copy) NSDictionary* params;
 @property (nonatomic, copy) NSString* method;
 
-@property (nonatomic, assign) BOOL doNotSendUserToken;
-
 @property (readonly) NSDictionary* result;
 
 +(void) setDefaultHost:(NSString*)host;
-+(void) setUserToken:(NSString*)userToken;
++(void) setSession:(NSString*)session;
++(void) setUserID:(NSNumber*)uid;
 
 @end
 

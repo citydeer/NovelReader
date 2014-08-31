@@ -12,6 +12,7 @@
 #import "UserViewController.h"
 #import "UIHelper.h"
 #import "Properties.h"
+#import "RestfulAPIGetter.h"
 #import "xlmember/XlMemberIosAdapter.h"
 
 
@@ -238,6 +239,9 @@ NSString* kUserDidLoginNotification = @"user.didlogin";
 	CDSetProp(PropUserAccount, xlMember.userName);
 	CDSetProp(PropUserName, xlMember.nickName);
 	CDSetProp(PropUserSession, xlMember.sessionId);
+	
+	[RestfulAPIGetter setUserID:CDIDProp(PropUserID)];
+	[RestfulAPIGetter setSession:CDProp(PropUserSession)];
 }
 
 -(void) processLogout:(NSNotification*)notice
@@ -246,6 +250,9 @@ NSString* kUserDidLoginNotification = @"user.didlogin";
 	CDSetProp(PropUserName, nil);
 	CDSetProp(PropUserSession, nil);
 	CDSetProp(PropUserImage, nil);
+	
+	[RestfulAPIGetter setUserID:CDIDProp(PropUserID)];
+	[RestfulAPIGetter setSession:CDProp(PropUserSession)];
 	
 	NSUInteger type = [[notice.userInfo objectForKey:kLogoutType] intValue];
 	if (type != XLLOGOUT_NORMAL)

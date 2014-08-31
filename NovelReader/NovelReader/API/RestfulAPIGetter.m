@@ -30,16 +30,22 @@
 }
 
 static NSString* _default_host = @"";
-static NSString* _user_token = @"";
+static NSString* _user_session = @"";
+static NSString* _user_id = @"";
 
 +(void) setDefaultHost:(NSString*)host
 {
 	_default_host = host;
 }
 
-+(void) setUserToken:(NSString*)userToken
++(void) setSession:(NSString*)session
 {
-	_user_token = userToken;
+	_user_session = (session == nil ? @"" : session);
+}
+
++(void) setUserID:(NSNumber*)uid
+{
+	_user_id = (uid == nil ? @"" : uid.stringValue);
 }
 
 -(NSURLRequest*) _createRequest:(KYHttpCachePolicy)cachePolicy
@@ -53,8 +59,7 @@ static NSString* _user_token = @"";
 	
 	NSMutableDictionary* query = [NSMutableDictionary dictionary];
 	[query addEntriesFromDictionary:self.params];
-	if (_user_token.length > 0 && !_doNotSendUserToken)
-		[query setObject:_user_token forKey:@"user_token"];
+	query[@"ver"] = @"1.0";;
 	
 	NSArray* keys = query.allKeys;
 	NSMutableString* buffer = [[NSMutableString alloc] initWithCapacity:0];
@@ -74,7 +79,7 @@ static NSString* _user_token = @"";
 	if ([self.method.uppercaseString isEqualToString:@"POST"])
 	{
 		NSURL* url = [NSURL URLWithString:fullURL];
-		request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60];
+		request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
 		request.HTTPMethod = @"POST";
 		request.HTTPBody = [queryStr dataUsingEncoding:NSUTF8StringEncoding];
 		[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -85,11 +90,17 @@ static NSString* _user_token = @"";
 			fullURL = [NSString stringWithFormat:@"%@?%@", fullURL, queryStr];
 		
 		NSURL* url = [NSURL URLWithString:fullURL];
-		request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60];
+		request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
 		request.HTTPMethod = @"GET";
 	}
 	
 	[request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
+	if (_user_id.length > 0 && _user_session.length > 0)
+	{
+		NSString* cookieStr = [NSString stringWithFormat:@"userid=%@; sessionid=%@", _user_id, _user_session];
+		[request setValue:cookieStr forHTTPHeaderField:@"Cookie"];
+		NSLog(@"Cookie string: %@", cookieStr);
+	}
 	
 	return request;
 }
@@ -101,16 +112,15 @@ static NSString* _user_token = @"";
 	id json = [data JSONValue];
 	if ([json isKindOfClass:[NSDictionary class]])
 	{
-		_result = [(NSDictionary*)json copy];
-		NSString* status = [_result objectForKey:@"status"];
-		if ([status isEqualToString:@"success"])
+		_result = [json[@"data"] copy];
+		_resultMessage = json[@"message"];
+		id status = json[@"result"];
+		if ([status respondsToSelector:@selector(intValue)])
 		{
-			retCode = KYResultCodeSuccess;
-		}
-		else
-		{
-			retCode = [[_result objectForKey:@"error_type"] intValue];
-			_resultMessage = [_result objectForKey:@"message"];
+			if ([status intValue] == 0)
+				retCode = KYResultCodeSuccess;
+			else
+				retCode = [status intValue];
 		}
 	}
 	return retCode;
@@ -178,9 +188,6 @@ static NSString* _user_token = @"";
 	NSData* boundary = [[NSString stringWithFormat:@"--%@\r\n", kBoundary] dataUsingEncoding:NSUTF8StringEncoding];
 	[body appendData:boundary];
 	NSString* formString = @"Content-Disposition: form-data; name=\"%@\"\r\n\r\n%@\r\n";
-	
-	[body appendData:[[NSString stringWithFormat:formString, @"user_token", _user_token] dataUsingEncoding:NSUTF8StringEncoding]];
-	[body appendData:boundary];
 	
 	[body appendData:[[NSString stringWithFormat:formString, @"user_account", self.account] dataUsingEncoding:NSUTF8StringEncoding]];
 	[body appendData:boundary];

@@ -16,6 +16,7 @@
 #import "XLRechargeViewController.h"
 #import "XLJoinVIPViewController.h"
 #import "SettingViewController.h"
+#import "RestfulAPIGetter.h"
 
 
 
@@ -147,6 +148,10 @@
 {
 	[super willPresentView:duration];
 	[self updateViews];
+	
+//	RestfulAPIGetter* getter = [[RestfulAPIGetter alloc] init];
+//	getter.params = @{@"c" : @"book", @"a" : @"getinfo", @"bookid" : @"1000215"};
+//	[_getterController launchGetter:getter];
 }
 
 -(void) updateViews
