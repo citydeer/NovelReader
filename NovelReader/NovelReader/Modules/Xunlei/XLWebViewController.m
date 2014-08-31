@@ -13,7 +13,6 @@
 
 @interface XLWebViewController () <UIWebViewDelegate>
 {
-	UIWebView* _webview;
 	BOOL _loaded;
 }
 
@@ -43,7 +42,7 @@
 {
 	[super loadView];
 	
-	self.titleLabel.text = _headerTitle;
+	self.titleLabel.text = _pageTitle;
 	[self.leftButton setImage:CDImage(@"main/navi_back") forState:UIControlStateNormal];
 	self.leftButton.imageEdgeInsets = UIEdgeInsetsMake(0, -15.0f, 0, 0);
 	
@@ -66,16 +65,20 @@
 	if (!_loaded)
 	{
 		_loaded = YES;
-		if (_request != nil)
-		{
-			[_webview loadRequest:_request];
-			_request = nil;
-		}
-		else
-		{
-			NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:_pageURL]];
-			[_webview loadRequest:request];
-		}
+		[self reloadPage];
+	}
+}
+
+-(void) reloadPage
+{
+	if (_request != nil)
+	{
+		[_webview loadRequest:_request];
+	}
+	else
+	{
+		NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:_pageURL]];
+		[_webview loadRequest:request];
 	}
 }
 

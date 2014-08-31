@@ -6,12 +6,12 @@
 //  Copyright (c) 2014年 citydeer. All rights reserved.
 //
 
-#import "CDViewController.h"
+#import "XLWebViewController.h"
 
 
 @class MainTabViewController;
 
-@interface BookStoreViewController : CDViewController
+@interface BookStoreViewController : XLWebViewController
 
 @property (nonatomic, weak) MainTabViewController* parent;
 

@@ -30,6 +30,8 @@
 #define PropReaderFontSize @"reader.font.size"
 #define PropReaderNightMode @"reader.nightmode"
 
+#define PropStoreChannel @"store.channel"
+
 
 @interface Properties : NSObject
 
