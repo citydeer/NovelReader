@@ -11,5 +11,9 @@
 
 @interface XLWebViewController : CDViewController
 
+@property (nonatomic, copy) NSString* headerTitle;
+@property (nonatomic, copy) NSString* pageURL;
+@property (nonatomic, strong) NSURLRequest* request;
+
 @end
 

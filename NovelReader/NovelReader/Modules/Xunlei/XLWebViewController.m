@@ -7,13 +7,17 @@
 //
 
 #import "XLWebViewController.h"
+#import "KYTipsView.h"
 
 
 
-@interface XLWebViewController ()
+@interface XLWebViewController () <UIWebViewDelegate>
 {
 	UIWebView* _webview;
+	BOOL _loaded;
 }
+
+-(BOOL) clientURLDetected:(NSDictionary*)params;
 
 @end
 
@@ -32,16 +36,87 @@
 
 -(void) dealloc
 {
+	_webview.delegate = nil;
 }
 
 -(void) loadView
 {
 	[super loadView];
 	
-	self.titleLabel.text = @"书城";
+	self.titleLabel.text = _headerTitle;
 	[self.leftButton setImage:CDImage(@"main/navi_back") forState:UIControlStateNormal];
 	self.leftButton.imageEdgeInsets = UIEdgeInsetsMake(0, -15.0f, 0, 0);
-	[self.rightButton setImage:CDImage(@"shelf/navi_menu1") forState:UIControlStateNormal];
+	
+	CGRect rect = self.view.bounds;
+	
+	_webview = [[UIWebView alloc] initWithFrame:CGRectMake(0, _naviBarHeight, rect.size.width, rect.size.height-_naviBarHeight)];
+	_webview.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+	_webview.delegate = self;
+	_webview.scalesPageToFit = NO;
+	_webview.suppressesIncrementalRendering = NO;
+	_webview.backgroundColor = [UIColor whiteColor];
+	_webview.scrollView.backgroundColor = [UIColor whiteColor];
+	_webview.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal;
+	[self.view addSubview:_webview];
+}
+
+-(void) willPresentView:(NSTimeInterval)duration
+{
+	[super willPresentView:duration];
+	if (!_loaded)
+	{
+		_loaded = YES;
+		if (_request != nil)
+		{
+			[_webview loadRequest:_request];
+			_request = nil;
+		}
+		else
+		{
+			NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:_pageURL]];
+			[_webview loadRequest:request];
+		}
+	}
+}
+
+-(BOOL) clientURLDetected:(NSDictionary*)params
+{
+	return NO;
+}
+
+-(BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+	NSArray* query = [request.URL.query componentsSeparatedByString:@"&"];
+	NSMutableDictionary* params = [NSMutableDictionary dictionary];
+	for (NSString* str in query)
+	{
+		NSArray* kv = [str componentsSeparatedByString:@"="];
+		if (kv.count == 2)
+		{
+			[params setObject:[kv[1] stringByRemovingPercentEncoding] forKey:[kv[0] stringByRemovingPercentEncoding]];
+		}
+	}
+	if ([[params objectForKey:@"appClient"] isEqualToString:@"1"])
+	{
+		return [self clientURLDetected:params];
+	}
+	
+	return YES;
+}
+
+-(void) webViewDidStartLoad:(UIWebView *)webView
+{
+	[self.view showColorIndicatorFreezeUI:NO];
+}
+
+-(void) webViewDidFinishLoad:(UIWebView *)webView
+{
+	[self.view dismiss];
+}
+
+-(void) webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error
+{
+	[self.view dismiss];
 }
 
 @end

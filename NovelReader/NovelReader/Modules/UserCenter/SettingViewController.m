@@ -10,6 +10,7 @@
 #import "UIHelper.h"
 #import "Models.h"
 #import "Properties.h"
+#import "XLWebViewController.h"
 
 
 
@@ -162,6 +163,10 @@
 	}
 	else if (indexPath.section == 0 && indexPath.row == 2)
 	{
+		XLWebViewController* vc = [[XLWebViewController alloc] init];
+		vc.headerTitle = @"反馈";
+		vc.pageURL = @"http://m.renren.com/";
+		[self.cdNavigationController pushViewController:vc];
 	}
 }
 

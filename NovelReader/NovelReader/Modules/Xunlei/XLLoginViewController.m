@@ -294,11 +294,8 @@
 	if (code == XLMEMBER_SUCCESS)
 	{
 		[_xlMember requestUserInfo];
-		NSNumber* uid = [NSNumber numberWithUnsignedLongLong:_xlMember.userId];
-		CDSetProp(PropUserID, uid);
-		CDSetProp(PropUserAccount, _xlMember.userName);
-		CDSetProp(PropUserName, _xlMember.nickName);
-		CDSetProp(PropUserSession, _xlMember.sessionId);
+		extern NSString* kUserDidLoginNotification;
+		[[NSNotificationCenter defaultCenter] postNotificationName:kUserDidLoginNotification object:nil];
 	}
 	else
 	{

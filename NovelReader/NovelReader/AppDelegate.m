@@ -50,9 +50,6 @@ void uncaughtExceptionHandler(NSException *exception)
 
 -(void) loadProperties
 {
-	NSString* appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-	[[XlMemberIosAdapter instance] initXlMember:53 clientVersion:appVersion peerId:@"peerid"];
-	
 //	Properties* prop = [Properties appProperties];
 //	[GlodonAPIGetter setHost:prop.apiHost];
 //	CDSetProp(PropUserToken, nil);

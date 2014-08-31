@@ -33,13 +33,16 @@
 -(void) switchAction:(id)sender;
 -(void) updateTabButtons;
 -(void) checkLoginInfo;
--(void) onLogout:(NSNotification*)notice;
+-(void) processLogout:(NSNotification*)notice;
+-(void) processLogin:(NSNotification*)notice;
 
 @end
 
 
 
 @implementation MainTabViewController
+
+NSString* kUserDidLoginNotification = @"user.didlogin";
 
 -(id) init
 {
@@ -54,6 +57,9 @@
 		_storeVC.parent = self;
 		_userVC = [[UserViewController alloc] init];
 		_userVC.parent = self;
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processLogout:) name:kUserLogoutNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processLogin:) name:kUserDidLoginNotification object:nil];
 	}
 	return self;
 }
@@ -224,22 +230,17 @@
 	}
 }
 
--(void) checkLoginInfo
+-(void) processLogin:(NSNotification*)notice
 {
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onLogout:) name:kUserLogoutNotification object:nil];
-	
-	NSNumber* uid = CDIDProp(PropUserID);
-	if (uid)
-	{
-		XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
-		NSString* appVersion = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleVersion"];
-		[member initXlMember:53 clientVersion:appVersion peerId:@"peerid"];
-		[member addObserver:self];
-		[member loginByUserId:uid.unsignedLongLongValue];
-	}
+	XlMemberIosAdapter* xlMember = [XlMemberIosAdapter instance];
+	NSNumber* uid = [NSNumber numberWithUnsignedLongLong:xlMember.userId];
+	CDSetProp(PropUserID, uid);
+	CDSetProp(PropUserAccount, xlMember.userName);
+	CDSetProp(PropUserName, xlMember.nickName);
+	CDSetProp(PropUserSession, xlMember.sessionId);
 }
 
--(void) onLogout:(NSNotification*)notice
+-(void) processLogout:(NSNotification*)notice
 {
 	CDSetProp(PropUserID, nil);
 	CDSetProp(PropUserName, nil);
@@ -257,15 +258,26 @@
 	}
 }
 
+-(void) checkLoginInfo
+{
+	NSNumber* uid = CDIDProp(PropUserID);
+	if (uid)
+	{
+		XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
+		NSString* appVersion = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleVersion"];
+		[member initXlMember:53 clientVersion:appVersion peerId:@"peerid"];
+		[member addObserver:self];
+		[member loginByUserId:uid.unsignedLongLongValue];
+	}
+}
+
 -(void) onLoginResult:(enum XlMemberResultCode)code
 {
 	XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
 	if (code == XLMEMBER_SUCCESS)
 	{
 		[member requestUserInfo];
-		CDSetProp(PropUserAccount, member.userName);
-		CDSetProp(PropUserName, member.nickName);
-		CDSetProp(PropUserSession, member.sessionId);
+		[[NSNotificationCenter defaultCenter] postNotificationName:kUserDidLoginNotification object:nil];
 	}
 	else
 	{

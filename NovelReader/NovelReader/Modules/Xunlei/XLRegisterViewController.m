@@ -616,13 +616,9 @@
 {
 	if (code == XLMEMBER_SUCCESS)
 	{
-		XlMemberIosAdapter* xlMember = [XlMemberIosAdapter instance];
-		[xlMember requestUserInfo];
-		NSNumber* uid = [NSNumber numberWithUnsignedLongLong:xlMember.userId];
-		CDSetProp(PropUserID, uid);
-		CDSetProp(PropUserAccount, xlMember.userName);
-		CDSetProp(PropUserName, xlMember.nickName);
-		CDSetProp(PropUserSession, xlMember.sessionId);
+		[[XlMemberIosAdapter instance] requestUserInfo];
+		extern NSString* kUserDidLoginNotification;
+		[[NSNotificationCenter defaultCenter] postNotificationName:kUserDidLoginNotification object:nil];
 	}
 	else
 	{
