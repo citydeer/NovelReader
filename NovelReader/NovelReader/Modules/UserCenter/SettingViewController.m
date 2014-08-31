@@ -101,7 +101,6 @@
 	{
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cid];
 		cell.selectionStyle = UITableViewCellSelectionStyleGray;
-		cell.backgroundColor = [UIColor whiteColor];
 		
 		CGFloat width = cell.bounds.size.width;
 		
@@ -145,6 +144,11 @@
 	}
 	
 	return cell;
+}
+
+-(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	cell.backgroundColor = [UIColor whiteColor];
 }
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

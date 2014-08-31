@@ -78,6 +78,8 @@
 	_tableView.bounces = NO;
 	_tableView.rowHeight = 38;
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	_tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
+	_tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 50, 0);
 	
 	UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, 123.5+25)];
 	headerView.backgroundColor = [UIColor clearColor];
@@ -208,7 +210,6 @@
 	{
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cid];
 		cell.selectionStyle = UITableViewCellSelectionStyleGray;
-		cell.backgroundColor = [UIColor whiteColor];
 		
 		CGFloat width = cell.bounds.size.width;
 		
@@ -240,6 +241,11 @@
 		label.text = nil;
 	
 	return cell;
+}
+
+-(void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	cell.backgroundColor = [UIColor whiteColor];
 }
 
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

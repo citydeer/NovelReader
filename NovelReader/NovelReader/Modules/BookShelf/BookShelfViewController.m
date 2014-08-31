@@ -59,6 +59,8 @@
 	_gridView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, _naviBarHeight, rect.size.width, rect.size.height-_naviBarHeight) collectionViewLayout:cvf];
 	_gridView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 	_gridView.backgroundColor = CDColor(nil, @"e1e1e1");
+	_gridView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
+	_gridView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 50, 0);
 	_gridView.dataSource = self;
 	_gridView.delegate = self;
 	[_gridView registerClass:[BookCell class] forCellWithReuseIdentifier:@"BookCell"];

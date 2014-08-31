@@ -11,6 +11,7 @@
 		54C24FC919AF3A8100A3A103 /* XLRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C24FC719AF3A8100A3A103 /* XLRegisterViewController.m */; };
 		54C24FCC19AF3AAC00A3A103 /* XLRechargeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C24FCB19AF3AAC00A3A103 /* XLRechargeViewController.m */; };
 		54C24FCF19AF3AE100A3A103 /* XLJoinVIPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C24FCE19AF3AE100A3A103 /* XLJoinVIPViewController.m */; };
+		F216AA5C19B2EFA400301C8E /* XLWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F216AA5B19B2EFA400301C8E /* XLWebViewController.m */; };
 		F22A8D701989690000DA082A /* MainTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D6F1989690000DA082A /* MainTabViewController.m */; };
 		F22A8D7619896A2500DA082A /* BookShelfViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D7519896A2500DA082A /* BookShelfViewController.m */; };
 		F22A8D7919896B5100DA082A /* BookStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D7819896B5100DA082A /* BookStoreViewController.m */; };
@@ -79,6 +80,8 @@
 		54C24FCB19AF3AAC00A3A103 /* XLRechargeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLRechargeViewController.m; sourceTree = "<group>"; };
 		54C24FCD19AF3AE100A3A103 /* XLJoinVIPViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLJoinVIPViewController.h; sourceTree = "<group>"; };
 		54C24FCE19AF3AE100A3A103 /* XLJoinVIPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLJoinVIPViewController.m; sourceTree = "<group>"; };
+		F216AA5A19B2EFA400301C8E /* XLWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLWebViewController.h; sourceTree = "<group>"; };
+		F216AA5B19B2EFA400301C8E /* XLWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLWebViewController.m; sourceTree = "<group>"; };
 		F22A8D6E1989690000DA082A /* MainTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabViewController.h; sourceTree = "<group>"; };
 		F22A8D6F1989690000DA082A /* MainTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabViewController.m; sourceTree = "<group>"; };
 		F22A8D7419896A2500DA082A /* BookShelfViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookShelfViewController.h; sourceTree = "<group>"; };
@@ -212,6 +215,8 @@
 				54C24FCB19AF3AAC00A3A103 /* XLRechargeViewController.m */,
 				54C24FCD19AF3AE100A3A103 /* XLJoinVIPViewController.h */,
 				54C24FCE19AF3AE100A3A103 /* XLJoinVIPViewController.m */,
+				F216AA5A19B2EFA400301C8E /* XLWebViewController.h */,
+				F216AA5B19B2EFA400301C8E /* XLWebViewController.m */,
 			);
 			path = Xunlei;
 			sourceTree = "<group>";
@@ -562,6 +567,7 @@
 				F22A8D701989690000DA082A /* MainTabViewController.m in Sources */,
 				F2D538681976C72C00A0FDDA /* SelectorView.m in Sources */,
 				54C24FCF19AF3AE100A3A103 /* XLJoinVIPViewController.m in Sources */,
+				F216AA5C19B2EFA400301C8E /* XLWebViewController.m in Sources */,
 				F2D5383C1976BAC100A0FDDA /* CDNavigationController.m in Sources */,
 				F2D538421976BAC100A0FDDA /* KYPageControl.m in Sources */,
 				F2D5383F1976BAC100A0FDDA /* TableDataSource.m in Sources */,

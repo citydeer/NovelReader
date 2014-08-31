@@ -70,7 +70,7 @@
 	CGRect rect = self.view.bounds;
 	CGFloat tabbarHeight = 50.0f;
 	
-	_containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, rect.size.height - tabbarHeight)];
+	_containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, rect.size.height)];
 	_containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	_containerView.backgroundColor = CDColor(nil, @"e1e1e1");
 	[self.view addSubview:_containerView];
