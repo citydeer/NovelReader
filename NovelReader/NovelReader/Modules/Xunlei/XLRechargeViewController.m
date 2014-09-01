@@ -222,7 +222,7 @@
 
 -(void) chooseAmountAction:(id)sender
 {
-	SelectorView* sv = [[SelectorView alloc] initWithFrame:CGRectMake(30, _naviBarHeight + 115, 115, 150)];
+	SelectorView* sv = [[SelectorView alloc] initWithFrame:CGRectMake(190, _naviBarHeight + 102, 115, 150)];
 	sv.delegate = self;
 	NSMutableArray* strs = [NSMutableArray array];
 	for (NSNumber* amount in _model.amount_list)
@@ -230,8 +230,8 @@
 	sv.selectedIndex = _listIndex;
 	sv.items = strs;
 	CGFloat totalHeight = sv.totalHeight;
-	if (totalHeight > sv.cellHeight*4+12)
-		totalHeight = sv.cellHeight*4+12;
+	if (totalHeight > sv.cellHeight*4+sv.borderHeight)
+		totalHeight = sv.cellHeight*4+sv.borderHeight;
 	[UIHelper setView:sv toHeight:totalHeight];
 	
 	[sv showInView:self.view];

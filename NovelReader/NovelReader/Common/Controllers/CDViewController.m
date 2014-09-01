@@ -65,7 +65,7 @@ NSString* const kCDChangeSkinNotification = @"CDShouldChangeSkinNotice";
 		_naviBarView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, rect.size.width, _naviBarHeight)];
 		_naviBarView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
 //		_naviBarView.layer.contents = (id)CDImage(@"navi_background").CGImage;
-		_naviBarView.backgroundColor = CDColor(nil, @"#e44d08");
+		_naviBarView.backgroundColor = CDColor(nil, @"#ec6400");
 		
 //		CGFloat height = 2;
 //		_naviBarShadowView = [[UIImageView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(_naviBarView.frame), CGRectGetWidth(_naviBarView.frame), height)];

@@ -24,9 +24,11 @@
 
 @property (nonatomic, weak) id<SelectViewDelegate> delegate;
 @property (nonatomic, strong) NSArray* items;
+@property (nonatomic, strong) NSArray* icons;
 @property (nonatomic, assign) NSInteger selectedIndex;
 @property (nonatomic, assign) CGFloat cellHeight;
 @property (readonly) CGFloat totalHeight;
+@property (readonly) CGFloat borderHeight;
 @property (readonly) UIImageView* bgView;
 
 -(void) showInView:(UIView*)view;

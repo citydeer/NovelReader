@@ -13,9 +13,13 @@
 
 
 @interface SelectorCell : UITableViewCell
+{
+	UIImageView* _icon;
+}
 
 @property (readonly) UILabel* label;
-@property (readonly) UIImageView* line;
+@property (readonly) UIImageView* icon;
+@property (readonly) UIView* line;
 
 @end
 
@@ -33,19 +37,20 @@
 @implementation SelectorView
 
 
-#define BorderWidth 3.0f
-#define PopArrowHeight 7.0f
+#define BorderWidth 7.0f
+#define PopArrowHeight 3.0f
 
 -(id)initWithFrame:(CGRect)frame
 {
 	self = [super initWithFrame:frame];
 	if (self)
 	{
-		_cellHeight = 40.0f;
+		_selectedIndex = -1;
+		_cellHeight = 37.0f;
 		
 		_bgView = [[UIImageView alloc] initWithFrame:self.bounds];
 		_bgView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		_bgView.image = [CDImage(@"main/selectorbg") resizableImageWithCapInsets:UIEdgeInsetsMake(20, 50, 20, 20)];
+		_bgView.image = [CDImage(@"main/selectorbg") resizableImageWithCapInsets:UIEdgeInsetsMake(20, 20, 20, 40)];
 		[self addSubview:_bgView];
 		
 		CGRect rect = self.bounds;
@@ -97,6 +102,11 @@
 	return _tableView.contentSize.height + BorderWidth * 2 + PopArrowHeight;
 }
 
+-(CGFloat) borderHeight
+{
+	return BorderWidth*2 + PopArrowHeight;
+}
+
 #define MaskViewTag 34207
 
 -(void) showInView:(UIView*)view
@@ -111,7 +121,7 @@
 	[view addSubview:self];
 	
 	self.alpha = 0.0f;
-	[UIView animateWithDuration:0.2 animations:^{ self.alpha = 1.0f; } completion:^(BOOL finished){
+	[UIView animateWithDuration:0.3 animations:^{ self.alpha = 1.0f; } completion:^(BOOL finished){
 		[_tableView flashScrollIndicators];
 	}];
 }
@@ -119,7 +129,7 @@
 -(void) dismiss
 {
 	UIView* maskView = [self.superview viewWithTag:MaskViewTag];
-	[UIView animateWithDuration:0.2 animations:^{ self.alpha = 0.0f; } completion:^(BOOL finished){
+	[UIView animateWithDuration:0.3 animations:^{ self.alpha = 0.0f; } completion:^(BOOL finished){
 		[self removeFromSuperview];
 		[maskView removeFromSuperview];
 	}];
@@ -140,7 +150,11 @@
 		cell.selectionStyle = UITableViewCellSelectionStyleDefault;
 		cell.backgroundColor = [UIColor clearColor];
 	}
+	[UIHelper moveView:cell.line toY:_cellHeight-cell.line.frame.size.height];
+	cell.line.hidden = (indexPath.row == _items.count-1);
 	cell.label.text = [_items objectAtIndex:indexPath.row];
+	if (_icons.count > 0 && indexPath.row < _icons.count)
+		cell.icon.image = [_icons objectAtIndex:indexPath.row];
 	return cell;
 }
 
@@ -165,22 +179,38 @@
 		_label = [[UILabel alloc] initWithFrame:CGRectMake(17, 0, rect.size.width - 32, rect.size.height)];
 		_label.backgroundColor = [UIColor clearColor];
 		_label.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-		_label.font = [UIFont systemFontOfSize:14.0f];
+		_label.font = [UIFont systemFontOfSize:15.0f];
 		_label.textAlignment = NSTextAlignmentLeft;
 		_label.lineBreakMode = NSLineBreakByTruncatingMiddle;
-		_label.textColor = CDColor(nil, @"f1f1f1");
+		_label.textColor = CDColor(nil, @"757575");
 		[self.contentView addSubview:_label];
 		
-		_line = [[UIImageView alloc] initWithFrame:CGRectMake(0, rect.size.height-1, rect.size.width, 1)];
-		_line.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-		_line.image = CDImage(@"main/selectorline");
-		[self.contentView addSubview:_line];
+//		_line = [[UIImageView alloc] initWithFrame:CGRectMake(0, rect.size.height-1, rect.size.width, 1)];
+//		_line.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+//		_line.image = CDImage(@"main/selectorline");
+//		[self.contentView addSubview:_line];
+		
+		_line = [UIHelper addRect:self.contentView color:CDColor(nil, @"d1d1d1") x:0 y:0 w:rect.size.width h:0.5f resizing:UIViewAutoresizingFlexibleWidth];
 		
 		UIView* bgView = [[UIView alloc] initWithFrame:rect];
-		bgView.backgroundColor = CDColor(nil, @"973d17");
+		bgView.backgroundColor = CDColor(nil, @"ec6400");
 		self.selectedBackgroundView = bgView;
 	}
 	return self;
+}
+
+-(UIImageView*) icon
+{
+	if (_icon == nil)
+	{
+		CGRect rect = self.contentView.bounds;
+		_icon = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 40, rect.size.height)];
+		_icon.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+		_icon.contentMode = UIViewContentModeCenter;
+		[self.contentView addSubview:_icon];
+		_label.frame = CGRectMake(42, 0, rect.size.width-50, rect.size.height);
+	}
+	return _icon;
 }
 
 @end

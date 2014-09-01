@@ -12,10 +12,12 @@
 #import "BookCell.h"
 #import "Models.h"
 #import "KYTipsView.h"
+#import "SelectorView.h"
+#import "UIHelper.h"
 
 
 
-@interface BookShelfViewController () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface BookShelfViewController () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SelectViewDelegate>
 {
 	UICollectionView* _gridView;
 	
@@ -104,6 +106,17 @@
 
 -(void) rightButtonAction:(id)sender
 {
+	SelectorView* sv = [[SelectorView alloc] initWithFrame:CGRectMake(320-156-10, _naviBarHeight-13, 156, 150)];
+	sv.delegate = self;
+	sv.icons = @[CDImage(@"shelf/import_book"), CDImage(@"shelf/manage_book"), CDImage(@"shelf/clean_book")];
+	sv.items = @[@"导入本地书籍", @"管理书籍", @"清理无效书籍"];
+	[UIHelper setView:sv toHeight:sv.totalHeight];
+	[sv showInView:self.view];
+}
+
+-(void) didSelect:(SelectorView *)selectorView index:(NSUInteger)index
+{
+	[selectorView dismiss];
 }
 
 -(NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
