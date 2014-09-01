@@ -30,7 +30,7 @@
 	{
 		self.pageTitle = @"书城";
 //		NSInteger channel = CDProp(PropStoreChannel).intValue;
-		self.pageURL = @"http://www.36kr.com";
+		self.pageURL = [Properties appProperties].XLWebHost;
 	}
 	return self;
 }

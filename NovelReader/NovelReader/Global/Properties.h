@@ -40,6 +40,7 @@
 @property (readonly) NSString* APIHost;
 @property (readonly) NSInteger XLMemberAppID;
 @property (readonly) NSString* APPVersion;
+@property (readonly) NSString* XLWebHost;
 
 @property (nonatomic, strong) NSDate* lastVerifyDate;
 @property (readonly) NSTimeInterval minVerifyInterval;

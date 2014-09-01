@@ -39,6 +39,9 @@
 //		_APIHost = @"http://yuedu.xunlei.com/apper";
 //		_APIHost = @"http://test.yuedu.xunlei.com/apper";
 		
+		_XLWebHost = @"http://test.app.yuedu.xunlei.com/";
+//		_XLWebHost = @"http://app.yuedu.xunlei.com/";
+		
 		_XLMemberAppID = 60;
 		
 		_APPVersion = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleVersion"];
