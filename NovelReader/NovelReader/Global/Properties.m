@@ -35,9 +35,14 @@
 	{
 		_dic = [[NSMutableDictionary alloc] initWithCapacity:0];
 		
-		_apiHost = @"http://123.150.216.141/apper";
-//		_apiHost = @"http://yuedu.xunlei.com/apper";
-//		_apiHost = @"http://test.yuedu.xunlei.com/apper";
+		_APIHost = @"http://123.150.216.141/apper";
+//		_APIHost = @"http://yuedu.xunlei.com/apper";
+//		_APIHost = @"http://test.yuedu.xunlei.com/apper";
+		
+		_XLMemberAppID = 60;
+		
+		_APPVersion = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleVersion"];
+		
 		_minVerifyInterval = 60.0;
 	}
 	return self;

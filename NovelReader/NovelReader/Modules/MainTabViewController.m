@@ -271,8 +271,7 @@ NSString* kUserDidLoginNotification = @"user.didlogin";
 	if (uid)
 	{
 		XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
-		NSString* appVersion = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleVersion"];
-		[member initXlMember:53 clientVersion:appVersion peerId:@"peerid"];
+		[member initXlMember:[Properties appProperties].XLMemberAppID clientVersion:[Properties appProperties].APPVersion peerId:@"peerid"];
 		[member addObserver:self];
 		[member loginByUserId:uid.unsignedLongLongValue];
 	}

@@ -52,7 +52,7 @@ void uncaughtExceptionHandler(NSException *exception)
 -(void) loadProperties
 {
 	Properties* prop = [Properties appProperties];
-	[RestfulAPIGetter setDefaultHost:prop.apiHost];
+	[RestfulAPIGetter setDefaultHost:prop.APIHost];
 	[RestfulAPIGetter setUserID:CDIDProp(PropUserID)];
 	[RestfulAPIGetter setSession:CDProp(PropUserSession)];
 	

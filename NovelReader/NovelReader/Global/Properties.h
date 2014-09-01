@@ -37,7 +37,10 @@
 
 +(Properties*) appProperties;
 
-@property (readonly) NSString* apiHost;
+@property (readonly) NSString* APIHost;
+@property (readonly) NSInteger XLMemberAppID;
+@property (readonly) NSString* APPVersion;
+
 @property (nonatomic, strong) NSDate* lastVerifyDate;
 @property (readonly) NSTimeInterval minVerifyInterval;
 

@@ -252,8 +252,7 @@
 	
 	[self.view showColorIndicatorFreezeUI:YES];
 	
-	NSString* appVersion = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleVersion"];
-	[_xlMember initXlMember:53 clientVersion:appVersion peerId:@"peerid"];
+	[_xlMember initXlMember:[Properties appProperties].XLMemberAppID clientVersion:[Properties appProperties].APPVersion peerId:@"peerid"];
 	if (_verifyView.hidden)
 		[_xlMember loginByUserName:_nameField.text password:_passwordField.text];
 	else

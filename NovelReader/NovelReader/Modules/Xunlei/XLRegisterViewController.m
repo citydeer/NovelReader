@@ -600,8 +600,7 @@
 			pwd = _phoneField.text;
 		
 		XlMemberIosAdapter* xlMember = [XlMemberIosAdapter instance];
-		NSString* appVersion = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleVersion"];
-		[xlMember initXlMember:53 clientVersion:appVersion peerId:@"peerid"];
+		[xlMember initXlMember:[Properties appProperties].XLMemberAppID clientVersion:[Properties appProperties].APPVersion peerId:@"peerid"];
 		[xlMember addObserver:self];
 		[xlMember loginByUserName:account password:pwd];
 	}
