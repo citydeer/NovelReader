@@ -8,15 +8,22 @@
 
 #import "XLWebViewController.h"
 #import "KYTipsView.h"
+#import "Encodings.h"
+#import "SelectorView.h"
+#import "UIHelper.h"
 
 
 
-@interface XLWebViewController () <UIWebViewDelegate>
+@interface XLWebViewController () <UIWebViewDelegate, SelectViewDelegate>
 {
 	BOOL _loaded;
+	BOOL _shouldReload;
+	
+	NSInteger _sortType;
+	NSArray* _sortTypeNames;
 }
 
--(BOOL) clientURLDetected:(NSDictionary*)params;
+-(void) updateSortButton;
 
 @end
 
@@ -29,6 +36,7 @@
 	self = [super init];
 	if (self)
 	{
+		_sortTypeNames = @[@"按热度", @"按更新", @"按评分"];
 	}
 	return self;
 }
@@ -71,37 +79,92 @@
 
 -(void) reloadPage
 {
-	if (_request != nil)
+	NSURL* url = [NSURL URLWithString:_pageURL];
+	NSString* appclient = [url queryDictionary][@"appclient"];
+	if ([appclient isEqualToString:@"2"])
 	{
-		[_webview loadRequest:_request];
+		[self updateSortButton];
+		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@&sort=%d", _pageURL, _sortType]];
 	}
-	else
+	else if ([appclient isEqualToString:@"3"])
 	{
-		NSURLRequest* request = [NSURLRequest requestWithURL:[NSURL URLWithString:_pageURL]];
-		[_webview loadRequest:request];
+		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@&fav=0&down=0", _pageURL]];
 	}
+	
+	_shouldReload = YES;
+	NSURLRequest* request = [NSURLRequest requestWithURL:url];
+	[_webview loadRequest:request];
 }
 
--(BOOL) clientURLDetected:(NSDictionary*)params
+-(void) updateSortButton
 {
-	return NO;
+	[UIHelper setView:self.rightButton toWidth:100];
+	[UIHelper moveView:self.rightButton toX:self.view.bounds.size.width-100];
+	[self.rightButton setImage:CDImage(@"store/menu_arrow") forState:UIControlStateNormal];
+	self.rightButton.titleLabel.font = [UIFont systemFontOfSize:15.0f];
+	[self.rightButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	[self.rightButton setTitle:_sortTypeNames[_sortType] forState:UIControlStateNormal];
+	
+	CGFloat iw = self.rightButton.imageView.frame.size.width;
+	CGFloat bw = self.rightButton.frame.size.width;
+	self.rightButton.titleEdgeInsets = UIEdgeInsetsMake(0, -10, 0, iw);
+	self.rightButton.imageEdgeInsets = UIEdgeInsetsMake(0, bw-iw-10, 0, 0);
+}
+
+-(void) rightButtonAction:(id)sender
+{
+	SelectorView* sv = [[SelectorView alloc] initWithFrame:CGRectMake(320-93-4, _naviBarHeight-13, 93, 150)];
+	sv.delegate = self;
+	sv.items = _sortTypeNames;
+	[UIHelper setView:sv toHeight:sv.totalHeight];
+	[sv showInView:self.view];
+}
+
+-(void) didSelect:(SelectorView *)selectorView index:(NSUInteger)index
+{
+	[selectorView dismiss];
+	_sortType = index;
+	[self reloadPage];
 }
 
 -(BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-	NSArray* query = [request.URL.query componentsSeparatedByString:@"&"];
-	NSMutableDictionary* params = [NSMutableDictionary dictionary];
-	for (NSString* str in query)
+	NSLog(@"%@", request.URL.absoluteString);
+	
+	if (_shouldReload)
 	{
-		NSArray* kv = [str componentsSeparatedByString:@"="];
-		if (kv.count == 2)
-		{
-			[params setObject:[kv[1] stringByRemovingPercentEncoding] forKey:[kv[0] stringByRemovingPercentEncoding]];
-		}
+		_shouldReload = NO;
+		return YES;
 	}
-	if ([[params objectForKey:@"appClient"] isEqualToString:@"1"])
+	
+	NSString* scheme = request.URL.scheme;
+	if ([scheme isEqualToString:@"xlreader"])
 	{
-		return [self clientURLDetected:params];
+		NSString* path = request.URL.path;
+		NSDictionary* params = [request.URL queryDictionary];
+		if ([path isEqualToString:@"showreader"])
+		{
+			[self.view showPopMsg:[NSString stringWithFormat:@"阅读, bookid=%@, dirid=%@", params[@"bookid"], params[@"dirid"]] timeout:5];
+		}
+		else if ([path isEqualToString:@"addfav"])
+		{
+			[self.view showPopMsg:[NSString stringWithFormat:@"收藏, bookid=%@", params[@"bookid"]] timeout:5];
+		}
+		else if ([path isEqualToString:@"download"])
+		{
+			[self.view showPopMsg:[NSString stringWithFormat:@"下载, bookid=%@", params[@"bookid"]] timeout:5];
+		}
+		return NO;
+	}
+	
+	NSDictionary* params = [request.URL queryDictionary];
+	if (params[@"appclient"] != nil)
+	{
+		XLWebViewController* vc = [[XLWebViewController alloc] init];
+		vc.pageURL = request.URL.absoluteString;
+		vc.pageTitle = params[@"title"];
+		[self.cdNavigationController pushViewController:vc];
+		return NO;
 	}
 	
 	return YES;

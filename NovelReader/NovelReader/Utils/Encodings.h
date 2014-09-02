@@ -64,6 +64,8 @@ DateFormat;
 
 
 @interface NSURL (Params)
-- (NSDictionary*)paramsDictionaryUsingEncoding:(NSStringEncoding)encoding;
+
+-(NSDictionary*) paramsDictionaryUsingEncoding:(NSStringEncoding)encoding;
+-(NSDictionary*) queryDictionary;
 
 @end

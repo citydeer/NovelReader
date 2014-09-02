@@ -17,7 +17,6 @@
 
 @property (nonatomic, copy) NSString* pageTitle;
 @property (nonatomic, copy) NSString* pageURL;
-@property (nonatomic, strong) NSURLRequest* request;
 
 -(void) reloadPage;
 

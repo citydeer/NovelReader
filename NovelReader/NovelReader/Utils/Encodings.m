@@ -511,5 +511,21 @@
     return [NSDictionary dictionaryWithDictionary:pairs];
 }
 
+-(NSDictionary*) queryDictionary
+{
+	NSArray* query = [self.query componentsSeparatedByString:@"&"];
+	NSMutableDictionary* params = [NSMutableDictionary dictionary];
+	for (NSString* str in query)
+	{
+		NSArray* kv = [str componentsSeparatedByString:@"="];
+		if (kv.count == 2)
+		{
+			NSString* key = [kv[0] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			NSString* value = [kv[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+			[params setObject:value forKey:key];
+		}
+	}
+	return [NSDictionary dictionaryWithDictionary:params];
+}
 
 @end
