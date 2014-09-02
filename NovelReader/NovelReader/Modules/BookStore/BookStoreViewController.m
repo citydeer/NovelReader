@@ -10,6 +10,7 @@
 #import "MainTabViewController.h"
 #import "Properties.h"
 #import "UIHelper.h"
+#import "SearchBookViewController.h"
 
 
 
@@ -71,6 +72,8 @@
 
 -(void) rightButtonAction:(id)sender
 {
+	SearchBookViewController* vc = [[SearchBookViewController alloc] init];
+	[self.cdNavigationController pushViewController:vc];
 }
 
 @end

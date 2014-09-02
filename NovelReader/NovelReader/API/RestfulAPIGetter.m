@@ -112,7 +112,7 @@ static NSString* _user_id = @"";
 	id json = [data JSONValue];
 	if ([json isKindOfClass:[NSDictionary class]])
 	{
-		_result = [json[@"data"] copy];
+		_result = [json copy];
 		_resultMessage = json[@"message"];
 		id status = json[@"result"];
 		if ([status respondsToSelector:@selector(intValue)])

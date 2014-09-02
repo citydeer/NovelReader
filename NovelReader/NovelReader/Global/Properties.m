@@ -35,9 +35,9 @@
 	{
 		_dic = [[NSMutableDictionary alloc] initWithCapacity:0];
 		
-		_APIHost = @"http://123.150.216.141/apper";
+//		_APIHost = @"http://123.150.216.141/apper";
 //		_APIHost = @"http://yuedu.xunlei.com/apper";
-//		_APIHost = @"http://test.yuedu.xunlei.com/apper";
+		_APIHost = @"http://test.yuedu.xunlei.com/apper";
 		
 		_XLWebHost = @"http://test.app.yuedu.xunlei.com/";
 //		_XLWebHost = @"http://app.yuedu.xunlei.com/";
