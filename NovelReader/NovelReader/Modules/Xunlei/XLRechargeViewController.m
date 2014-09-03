@@ -168,10 +168,11 @@
 		[self.view showColorIndicatorFreezeUI:NO];
 		_payButton.enabled = NO;
 		
-		RestfulAPIGetter* getter = [[RestfulAPIGetter alloc] init];
-		getter.host = @"http://dypay.vip.xunlei.com/";
-		getter.path = @"phonepay/yueduprice/";
-		getter.params = @{@"userid" : @"", @"biztype" : @"0", @"callback" : @""};
+		URLGetter* getter = [[URLGetter alloc] init];
+		NSString* uid = [CDIDProp(PropUserID) stringValue];
+//		if (uid == nil)
+			
+//		getter.url = [NSString stringWithFormat:@"http://dypay.vip.xunlei.com/phonepay/yueduprice/?userid=%@&biztype=0&callback=%.0f"];
 		[_getterController launchGetter:getter];
 	}
 }

@@ -176,6 +176,7 @@
 	
 	if (_shouldReload)
 	{
+		// 对第一次请求不会拦截
 		_shouldReload = NO;
 		return YES;
 	}
