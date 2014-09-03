@@ -30,8 +30,8 @@
 	if (self)
 	{
 		self.pageTitle = @"书城";
-//		NSInteger channel = CDProp(PropStoreChannel).intValue;
-		self.pageURL = [Properties appProperties].XLWebHost;
+		NSInteger channel = CDProp(PropStoreChannel).intValue;
+		self.pageURL = [NSString stringWithFormat:@"%@?gender=%d", [Properties appProperties].XLWebHost, (channel == 1 ? 1 : 0)];
 	}
 	return self;
 }
@@ -53,7 +53,7 @@
 	[self.leftButton setImage:CDImage(@"store/channel") forState:UIControlStateNormal];
 	self.leftButton.titleLabel.font = [UIFont systemFontOfSize:18.0f];
 	[self.leftButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-	[self.leftButton setTitle:(CDProp(PropStoreChannel).intValue == 1 ? @"男频" : @"女频") forState:UIControlStateNormal];
+	[self.leftButton setTitle:(CDProp(PropStoreChannel).intValue == 1 ? @"女频" : @"男频") forState:UIControlStateNormal];
 	
 	[self.rightButton setImage:CDImage(@"store/search") forState:UIControlStateNormal];
 	self.rightButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15.0f);
@@ -66,7 +66,8 @@
 {
 	NSInteger channel = (CDProp(PropStoreChannel).intValue == 1 ? 0 : 1);
 	CDSetProp(PropStoreChannel, ([NSString stringWithFormat:@"%d", channel]));
-	[self.leftButton setTitle:(channel == 1 ? @"男频" : @"女频") forState:UIControlStateNormal];
+	[self.leftButton setTitle:(channel == 1 ? @"女频" : @"男频") forState:UIControlStateNormal];
+	self.pageURL = [NSString stringWithFormat:@"%@?gender=%d", [Properties appProperties].XLWebHost, channel];
 	[self reloadPage];
 }
 
