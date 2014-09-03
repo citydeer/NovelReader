@@ -142,15 +142,15 @@
 	{
 		NSString* path = request.URL.path;
 		NSDictionary* params = [request.URL queryDictionary];
-		if ([path isEqualToString:@"showreader"])
+		if ([path isEqualToString:@"/showreader"])
 		{
 			[self.view showPopMsg:[NSString stringWithFormat:@"阅读, bookid=%@, dirid=%@", params[@"bookid"], params[@"dirid"]] timeout:5];
 		}
-		else if ([path isEqualToString:@"addfav"])
+		else if ([path isEqualToString:@"/addfav"])
 		{
 			[self.view showPopMsg:[NSString stringWithFormat:@"收藏, bookid=%@", params[@"bookid"]] timeout:5];
 		}
-		else if ([path isEqualToString:@"download"])
+		else if ([path isEqualToString:@"/download"])
 		{
 			[self.view showPopMsg:[NSString stringWithFormat:@"下载, bookid=%@", params[@"bookid"]] timeout:5];
 		}
