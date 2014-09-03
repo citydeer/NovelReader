@@ -21,6 +21,8 @@
 +(void) setDefaultHost:(NSString*)host;
 +(void) setSession:(NSString*)session;
 +(void) setUserID:(NSNumber*)uid;
++(void) setUserAccount:(NSString*)account;
++(void) setUserName:(NSString*)name;
 
 @end
 

@@ -11,6 +11,20 @@
 #import "Encodings.h"
 #import "SelectorView.h"
 #import "UIHelper.h"
+#import "PKMappingObject.h"
+#import "Encodings.h"
+#import "Properties.h"
+
+
+
+@interface SortTypeModel : PKMappingObject
+@property (readonly) NSInteger sortid;
+@property (readonly) NSString* sortname;
+@end
+
+@implementation SortTypeModel
+@dynamic sortid, sortname;
+@end
 
 
 
@@ -19,7 +33,7 @@
 	BOOL _loaded;
 	BOOL _shouldReload;
 	
-	NSInteger _sortType;
+	NSInteger _sortIndex;
 	NSArray* _sortTypeNames;
 }
 
@@ -36,7 +50,6 @@
 	self = [super init];
 	if (self)
 	{
-		_sortTypeNames = @[@"按热度", @"按更新", @"按评分"];
 	}
 	return self;
 }
@@ -61,8 +74,8 @@
 	_webview.delegate = self;
 	_webview.scalesPageToFit = NO;
 	_webview.suppressesIncrementalRendering = NO;
-	_webview.backgroundColor = [UIColor whiteColor];
-	_webview.scrollView.backgroundColor = [UIColor whiteColor];
+	_webview.backgroundColor = CDColor(nil, @"e7e7e7");
+	_webview.scrollView.backgroundColor = CDColor(nil, @"e7e7e7");
 	_webview.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal;
 	[self.view addSubview:_webview];
 }
@@ -80,11 +93,19 @@
 -(void) reloadPage
 {
 	NSURL* url = [NSURL URLWithString:_pageURL];
-	NSString* appclient = [url queryDictionary][@"appclient"];
+	NSDictionary* params = [url queryDictionary];
+	NSString* appclient = params[@"appclient"];
 	if ([appclient isEqualToString:@"2"])
 	{
-		[self updateSortButton];
-		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@&sort=%d", _pageURL, _sortType]];
+		_sortTypeNames = [params[@"sortfield"] JSONValue];
+		if (_sortTypeNames.count > 0)
+		{
+			if (_sortIndex >= _sortTypeNames.count)
+				_sortIndex = 0;
+			[self updateSortButton];
+			SortTypeModel* sm = [[SortTypeModel alloc] initWithDictionary:_sortTypeNames[_sortIndex]];
+			url = [NSURL URLWithString:[NSString stringWithFormat:@"%@&sortid=%d", _pageURL, sm.sortid]];
+		}
 	}
 	else if ([appclient isEqualToString:@"3"])
 	{
@@ -92,7 +113,19 @@
 	}
 	
 	_shouldReload = YES;
-	NSURLRequest* request = [NSURLRequest requestWithURL:url];
+	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
+	NSNumber* uid = CDIDProp(PropUserID);
+	NSString* userid = (uid == nil ? @"" : uid.stringValue);
+	NSString* session = CDProp(PropUserSession);
+	if (userid.length > 0 && session.length > 0)
+	{
+		NSString* account = CDProp(PropUserAccount);
+		NSString* name = CDProp(PropUserName);
+		if (account == nil) account = @"";
+		if (name == nil) name = @"";
+		NSString* cookieStr = [NSString stringWithFormat:@"userid=%@; sessionid=%@; usrname=%@; nickname=%@", userid, session, account, name];
+		[request setValue:cookieStr forHTTPHeaderField:@"Cookie"];
+	}
 	[_webview loadRequest:request];
 }
 
@@ -103,7 +136,9 @@
 	[self.rightButton setImage:CDImage(@"store/menu_arrow") forState:UIControlStateNormal];
 	self.rightButton.titleLabel.font = [UIFont systemFontOfSize:15.0f];
 	[self.rightButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-	[self.rightButton setTitle:_sortTypeNames[_sortType] forState:UIControlStateNormal];
+	SortTypeModel* sm = [[SortTypeModel alloc] initWithDictionary:_sortTypeNames[_sortIndex]];
+	NSString* sortName = [NSString stringWithFormat:@"按%@", sm.sortname];
+	[self.rightButton setTitle:sortName forState:UIControlStateNormal];
 	
 	CGFloat iw = self.rightButton.imageView.frame.size.width;
 	CGFloat bw = self.rightButton.frame.size.width;
@@ -115,7 +150,15 @@
 {
 	SelectorView* sv = [[SelectorView alloc] initWithFrame:CGRectMake(320-93-4, _naviBarHeight-13, 93, 150)];
 	sv.delegate = self;
-	sv.items = _sortTypeNames;
+	NSMutableArray* items = [NSMutableArray array];
+	for (NSDictionary* dic in _sortTypeNames)
+	{
+		SortTypeModel* sm = [[SortTypeModel alloc] initWithDictionary:dic];
+		NSString* sortName = [NSString stringWithFormat:@"按%@", sm.sortname];
+		[items addObject:sortName];
+	}
+	sv.selectedIndex = _sortIndex;
+	sv.items = [NSArray arrayWithArray:items];
 	[UIHelper setView:sv toHeight:sv.totalHeight];
 	[sv showInView:self.view];
 }
@@ -123,7 +166,7 @@
 -(void) didSelect:(SelectorView *)selectorView index:(NSUInteger)index
 {
 	[selectorView dismiss];
-	_sortType = index;
+	_sortIndex = index;
 	[self reloadPage];
 }
 

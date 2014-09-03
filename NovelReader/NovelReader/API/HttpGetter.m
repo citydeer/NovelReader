@@ -423,18 +423,3 @@ static NSInteger _networkConnectionCount = 0;
 
 @end
 
-
-
-@implementation NSData(NSData_Json)
-
-- (id)JSONValue
-{
-	NSError* error;
-	id json = [NSJSONSerialization JSONObjectWithData:self options:0 error:&error];
-	if (error)
-        LOG_debug(@"-JSONValue failed. Error is: %@", error);
-	return json;
-}
-
-@end
-

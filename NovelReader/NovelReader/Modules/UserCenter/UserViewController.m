@@ -17,6 +17,7 @@
 #import "XLJoinVIPViewController.h"
 #import "SettingViewController.h"
 #import "RestfulAPIGetter.h"
+#import "XLWebViewController.h"
 
 
 
@@ -263,9 +264,19 @@
 	else if (indexPath.section == 0 && indexPath.row == 1)
 		vc = [[XLJoinVIPViewController alloc] init];
 	else if (indexPath.section == 1 && indexPath.row == 0)
-		vc = [[XLRechargeViewController alloc] init];
+	{
+		XLWebViewController* wvc = [[XLWebViewController alloc] init];
+		wvc.pageTitle = @"消费记录";
+		wvc.pageURL = [NSString stringWithFormat:@"%@buyrecord.html", [Properties appProperties].XLWebHost];
+		vc = wvc;
+	}
 	else if (indexPath.section == 1 && indexPath.row == 1)
-		vc = [[XLRechargeViewController alloc] init];
+	{
+		XLWebViewController* wvc = [[XLWebViewController alloc] init];
+		wvc.pageTitle = @"充值记录";
+		wvc.pageURL = [NSString stringWithFormat:@"%@payrecord.html", [Properties appProperties].XLWebHost];
+		vc = wvc;
+	}
 	else if (indexPath.section == 2 && indexPath.row == 0)
 		vc = [[SettingViewController alloc] init];
 	if (vc != nil)

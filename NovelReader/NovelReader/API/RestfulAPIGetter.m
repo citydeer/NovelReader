@@ -31,6 +31,8 @@
 
 static NSString* _default_host = @"";
 static NSString* _user_session = @"";
+static NSString* _user_account = @"";
+static NSString* _user_name = @"";
 static NSString* _user_id = @"";
 
 +(void) setDefaultHost:(NSString*)host
@@ -41,6 +43,16 @@ static NSString* _user_id = @"";
 +(void) setSession:(NSString*)session
 {
 	_user_session = (session == nil ? @"" : session);
+}
+
++(void) setUserAccount:(NSString *)account
+{
+	_user_account = (account == nil ? @"" : account);
+}
+
++(void) setUserName:(NSString *)name
+{
+	_user_name = (name == nil ? @"" : name);
 }
 
 +(void) setUserID:(NSNumber*)uid
@@ -97,7 +109,7 @@ static NSString* _user_id = @"";
 	[request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 	if (_user_id.length > 0 && _user_session.length > 0)
 	{
-		NSString* cookieStr = [NSString stringWithFormat:@"userid=%@; sessionid=%@", _user_id, _user_session];
+		NSString* cookieStr = [NSString stringWithFormat:@"userid=%@; sessionid=%@; usrname=%@; nickname=%@", _user_id, _user_session, _user_account, _user_name];
 		[request setValue:cookieStr forHTTPHeaderField:@"Cookie"];
 		NSLog(@"Cookie string: %@", cookieStr);
 	}

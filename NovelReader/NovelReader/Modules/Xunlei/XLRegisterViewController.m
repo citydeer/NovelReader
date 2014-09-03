@@ -14,6 +14,7 @@
 #import "RegexKitLite.h"
 #import "xlmember/XlMemberIosAdapter.h"
 #import "xlmember/XlMemberRegistorIosAdapter.h"
+#import "XLWebViewController.h"
 
 
 
@@ -470,6 +471,9 @@
 
 -(void) showEULAAction:(id)sender
 {
+	XLWebViewController* vc = [[XLWebViewController alloc] init];
+	vc.pageURL = [NSString stringWithFormat:@"%@agreement.html", [Properties appProperties].XLWebHost];
+	[self.cdNavigationController pushViewController:vc];
 }
 
 -(void) verifyPhone:(id)sender

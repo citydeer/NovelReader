@@ -242,6 +242,8 @@ NSString* kUserDidLoginNotification = @"user.didlogin";
 	
 	[RestfulAPIGetter setUserID:CDIDProp(PropUserID)];
 	[RestfulAPIGetter setSession:CDProp(PropUserSession)];
+	[RestfulAPIGetter setUserName:CDProp(PropUserName)];
+	[RestfulAPIGetter setUserAccount:CDProp(PropUserAccount)];
 }
 
 -(void) processLogout:(NSNotification*)notice
@@ -253,6 +255,8 @@ NSString* kUserDidLoginNotification = @"user.didlogin";
 	
 	[RestfulAPIGetter setUserID:CDIDProp(PropUserID)];
 	[RestfulAPIGetter setSession:CDProp(PropUserSession)];
+	[RestfulAPIGetter setUserName:CDProp(PropUserName)];
+	[RestfulAPIGetter setUserAccount:CDProp(PropUserAccount)];
 	
 	NSUInteger type = [[notice.userInfo objectForKey:kLogoutType] intValue];
 	if (type != XLLOGOUT_NORMAL)

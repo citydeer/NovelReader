@@ -13,6 +13,7 @@
 #import "CDCustomViews.h"
 #import "RestfulAPIGetter.h"
 #import "XLWebViewController.h"
+#import "Encodings.h"
 
 
 
@@ -217,7 +218,7 @@
 	
 	XLWebViewController* vc = [[XLWebViewController alloc] init];
 	vc.pageTitle = @"搜索结果";
-	vc.pageURL = [Properties appProperties].XLWebHost;
+	vc.pageURL = [NSString stringWithFormat:@"%@list.html?keyword=%@", [Properties appProperties].XLWebHost, [_keywordField.text urlEncode:NSUTF8StringEncoding]];
 	[self.cdNavigationController pushViewController:vc];
 }
 
@@ -229,7 +230,6 @@
 		if ([data isKindOfClass:[NSArray class]])
 		{
 			_hotkeys = [data copy];
-//			_hotkeys = @[@"大主宰", @"匆匆那年", @"贴身高手", @"鬼吹灯", @"华胥引", @"甄嬛传", @"盗墓笔记"];
 			[self updateView];
 		}
 	}

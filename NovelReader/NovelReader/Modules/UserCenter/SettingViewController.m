@@ -165,7 +165,7 @@
 	{
 		XLWebViewController* vc = [[XLWebViewController alloc] init];
 		vc.pageTitle = @"反馈";
-		vc.pageURL = @"http://m.renren.com/";
+		vc.pageURL = [NSString stringWithFormat:@"%@feedback.html", [Properties appProperties].XLWebHost];
 		[self.cdNavigationController pushViewController:vc];
 	}
 }

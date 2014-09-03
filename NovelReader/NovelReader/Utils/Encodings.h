@@ -34,7 +34,10 @@ DateFormat;
 // 返回“两天前”，“一年前”， “三小时前”等描述相对时间的字符串
 -(NSString*) relativeDateFromString:(DateFormat)format;
 
+-(id) JSONValue;
+
 @end
+
 
 
 @interface NSData(NSDataEx)
@@ -47,6 +50,8 @@ DateFormat;
 
 // 转为base64编码并再urlencoding
 -(NSString*) base64EncodeAndURLEncoding;
+
+-(id) JSONValue;
 
 @end
 
