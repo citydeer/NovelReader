@@ -76,34 +76,30 @@
 
 
 @implementation RechargePriceModel
-@dynamic amount_list, price;
--(id) initWithDictionary:(NSDictionary *)dictionary
-{
-	self = [super initWithDictionary:dictionary];
-	if (self)
-	{
-		self.price = 0.01;
-		self.amount_list = @[@1000, @2000, @5000, @10000];
-	}
-	return self;
-}
+@dynamic amount_list, prize, ret;
 @end
 
 
 
 @implementation VIPPriceModel
-@dynamic monthprice, price_list;
+@dynamic monthprice, price_list, ret;
 -(id) initWithDictionary:(NSDictionary *)dictionary
 {
 	self = [super initWithDictionary:dictionary];
 	if (self)
 	{
-		self.monthprice = 15;
-		self.price_list = @[@1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11, @12];
+		[self replaceDictionaryItemsInArrayProperty:@"price_list" withPKMappingObjectItems:[PriceItemModel class]];
 	}
 	return self;
 }
 @end
+
+
+
+@implementation PriceItemModel
+@dynamic amount, price;
+@end
+
 
 
 @implementation CostItemModel

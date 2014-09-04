@@ -13,6 +13,7 @@
 #import "Models.h"
 #import "SelectorView.h"
 #import "RestfulAPIGetter.h"
+#import "Encodings.h"
 
 
 
@@ -158,10 +159,10 @@
 		[self.view showColorIndicatorFreezeUI:NO];
 		_payButton.enabled = NO;
 		
-		RestfulAPIGetter* getter = [[RestfulAPIGetter alloc] init];
-		getter.host = @"http://dypay.vip.xunlei.com/";
-		getter.path = @"phonepay/yueduprice/";
-		getter.params = @{@"userid" : @"", @"biztype" : @"1", @"callback" : @""};
+		URLGetter* getter = [[URLGetter alloc] init];
+		NSString* uid = (CDIDProp(PropUserID) ? [(CDIDProp(PropUserID)) stringValue] : @"");
+		double callback = [NSDate timeIntervalSinceReferenceDate];
+		getter.url = [NSString stringWithFormat:@"http://dypay.vip.xunlei.com/phonepay/yueduprice/?userid=%@&biztype=1&callback=%.0f", uid, callback];
 		[_getterController launchGetter:getter];
 	}
 }
@@ -178,14 +179,14 @@
 
 -(void) updateView
 {
-	_firstLabel.text = [NSString stringWithFormat:@"%.0f 阅读点", _model.monthprice];
+	_firstLabel.text = [NSString stringWithFormat:@"%.0f元/月", _model.monthprice];
 	_priceLabel.text = @"迅雷白金、钻石会员优惠价5元/月 | 迅雷普通会员优惠价10元/月";
 	
 	if (_model.price_list.count > 0 && _model.price_list.count > _listIndex)
 	{
-		NSInteger amount = [[_model.price_list objectAtIndex:_listIndex] intValue];
-		_amountLabel.text = [NSString stringWithFormat:@"%d个月", amount];
-		_totalPriceLabel.text = [NSString stringWithFormat:@"%.0f元", _model.monthprice*amount];
+		PriceItemModel* pi = _model.price_list[_listIndex];
+		_amountLabel.text = [NSString stringWithFormat:@"%d个月", pi.amount];
+		_totalPriceLabel.text = [NSString stringWithFormat:@"%.0f元", pi.price];
 	}
 	else
 	{
@@ -212,8 +213,8 @@
 	SelectorView* sv = [[SelectorView alloc] initWithFrame:CGRectMake(190, _naviBarHeight + 102, 115, 150)];
 	sv.delegate = self;
 	NSMutableArray* strs = [NSMutableArray array];
-	for (NSNumber* amount in _model.price_list)
-		[strs addObject:[NSString stringWithFormat:@"%d个月", amount.intValue]];
+	for (PriceItemModel* pi in _model.price_list)
+		[strs addObject:[NSString stringWithFormat:@"%d个月", pi.amount]];
 	sv.selectedIndex = _listIndex;
 	sv.items = strs;
 	CGFloat totalHeight = sv.totalHeight;
@@ -240,9 +241,13 @@
 -(void) handleGetter:(id<Getter>)getter
 {
 	[self.view dismiss];
-	_payButton.enabled = YES;
-	_model = [[VIPPriceModel alloc] initWithDictionary:nil];
-	[self updateView];
+	if (getter.resultCode == KYResultCodeSuccess)
+	{
+		_model = [[VIPPriceModel alloc] initWithDictionary:[((URLGetter*)getter).data JSONValue]];
+		[self updateView];
+		if ([_model rawValue:@"ret"] != nil && _model.ret == 0)
+			_payButton.enabled = YES;
+	}
 }
 
 @end

@@ -13,6 +13,7 @@
 #import "Models.h"
 #import "RestfulAPIGetter.h"
 #import "SelectorView.h"
+#import "Encodings.h"
 #import "XLJoinVIPViewController.h"
 
 
@@ -169,10 +170,9 @@
 		_payButton.enabled = NO;
 		
 		URLGetter* getter = [[URLGetter alloc] init];
-		NSString* uid = [CDIDProp(PropUserID) stringValue];
-//		if (uid == nil)
-			
-//		getter.url = [NSString stringWithFormat:@"http://dypay.vip.xunlei.com/phonepay/yueduprice/?userid=%@&biztype=0&callback=%.0f"];
+		NSString* uid = (CDIDProp(PropUserID) ? [(CDIDProp(PropUserID)) stringValue] : @"");
+		double callback = [NSDate timeIntervalSinceReferenceDate];
+		getter.url = [NSString stringWithFormat:@"http://dypay.vip.xunlei.com/phonepay/yueduprice/?userid=%@&biztype=0&callback=%.0f", uid, callback];
 		[_getterController launchGetter:getter];
 	}
 }
@@ -190,8 +190,8 @@
 -(void) updateView
 {
 	_firstLabel.text = [NSString stringWithFormat:@"%d 阅读点", _userBalance];
-	if (_model.price > 0.0)
-		_priceLabel.text = [NSString stringWithFormat:@"1元=%.0f阅读点", 1.0/_model.price];
+	if (_model.prize > 0.0)
+		_priceLabel.text = [NSString stringWithFormat:@"1元=%.0f阅读点", 1.0/_model.prize];
 	else
 		_priceLabel.text = @"";
 	
@@ -199,7 +199,7 @@
 	{
 		NSInteger amount = [[_model.amount_list objectAtIndex:_listIndex] intValue];
 		_amountLabel.text = [NSString stringWithFormat:@"%d个", amount];
-		_totalPriceLabel.text = [NSString stringWithFormat:@"%.0f元", _model.price*amount];
+		_totalPriceLabel.text = [NSString stringWithFormat:@"%.0f元", _model.prize*amount];
 	}
 	else
 	{
@@ -260,9 +260,13 @@
 -(void) handleGetter:(id<Getter>)getter
 {
 	[self.view dismiss];
-	_payButton.enabled = YES;
-	_model = [[RechargePriceModel alloc] initWithDictionary:nil];
-	[self updateView];
+	if (getter.resultCode == KYResultCodeSuccess)
+	{
+		_model = [[RechargePriceModel alloc] initWithDictionary:[((URLGetter*)getter).data JSONValue]];
+		[self updateView];
+		if ([_model rawValue:@"ret"] != nil && _model.ret == 0)
+			_payButton.enabled = YES;
+	}
 }
 
 @end

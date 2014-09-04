@@ -79,6 +79,11 @@ Class getPropertyTypeClass(objc_property_t property);
 	}
 }
 
+-(id) rawValue:(NSString*)propertyName
+{
+	return [_dic objectForKey:propertyName];
+}
+
 -(NSString*) keyFromSetterString:(SEL)selector
 {
 	NSString* selStr = NSStringFromSelector(selector);

@@ -353,8 +353,6 @@ static NSInteger _networkConnectionCount = 0;
 	_totalBytesExpectedToReceive = [[headers objectForKey:@"Content-Length"] intValue];
 	_totalBytesReceived = 0;
 	
-	LOG_debug(@"###################### Content Length: %d ############", _totalBytesExpectedToReceive);
-	
 	[self _didReceiveResponse:response];
 	
 	[self performSelectorOnMainThread:@selector(callObserverForReceivingEvent) withObject:nil waitUntilDone:NO];
@@ -412,6 +410,7 @@ static NSInteger _networkConnectionCount = 0;
 {
 	if (self.url.length <= 0)
 		return nil;
+	NSLog(@"%@", self.url);
 	return [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
 }
 

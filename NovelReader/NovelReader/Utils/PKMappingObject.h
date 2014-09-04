@@ -36,6 +36,8 @@
  */
 -(void) replaceDictionaryItemsInArrayProperty:(NSString*)arrayPropertyName withPKMappingObjectItems:(Class)mappingObjectClass;
 
+-(id) rawValue:(NSString*)propertyName;
+
 @end
 
 
