@@ -54,6 +54,14 @@
 
 
 
+@interface UserInfoModel : PKMappingObject
+@property (readonly) NSInteger buynum;
+@property (readonly) NSInteger coin;
+@property (readonly) BOOL yueduvip;
+@property (readonly) NSInteger bookmark;
+@end
+
+
 @interface CostItemModel : PKMappingObject
 
 @property (readonly) NSInteger id;

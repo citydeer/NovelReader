@@ -11,13 +11,10 @@
 #import "BookStoreViewController.h"
 #import "UserViewController.h"
 #import "UIHelper.h"
-#import "Properties.h"
-#import "RestfulAPIGetter.h"
-#import "xlmember/XlMemberIosAdapter.h"
 
 
 
-@interface MainTabViewController () <XlMemberEvents>
+@interface MainTabViewController ()
 {
 	UIViewController* _currentVC;
 	UIView* _containerView;
@@ -33,17 +30,12 @@
 
 -(void) switchAction:(id)sender;
 -(void) updateTabButtons;
--(void) checkLoginInfo;
--(void) processLogout:(NSNotification*)notice;
--(void) processLogin:(NSNotification*)notice;
 
 @end
 
 
 
 @implementation MainTabViewController
-
-NSString* kUserDidLoginNotification = @"user.didlogin";
 
 -(id) init
 {
@@ -58,16 +50,8 @@ NSString* kUserDidLoginNotification = @"user.didlogin";
 		_storeVC.parent = self;
 		_userVC = [[UserViewController alloc] init];
 		_userVC.parent = self;
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processLogout:) name:kUserLogoutNotification object:nil];
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processLogin:) name:kUserDidLoginNotification object:nil];
 	}
 	return self;
-}
-
-- (void)dealloc
-{
-	[[XlMemberIosAdapter instance] removeObserver:self];
 }
 
 - (void)loadView
@@ -119,7 +103,7 @@ NSString* kUserDidLoginNotification = @"user.didlogin";
 	
 	[self switchAction:_shelfButton];
 	
-	[self checkLoginInfo];
+	[_userVC checkLoginInfo];
 }
 
 -(void) willPresentView:(NSTimeInterval)duration
@@ -229,77 +213,6 @@ NSString* kUserDidLoginNotification = @"user.didlogin";
 		[_userButton setImage:CDImage(@"main/user1") forState:UIControlStateHighlighted];
 		((UILabel*)[_userButton viewWithTag:1]).textColor = CDColor(nil, @"282828");
 	}
-}
-
--(void) processLogin:(NSNotification*)notice
-{
-	XlMemberIosAdapter* xlMember = [XlMemberIosAdapter instance];
-	NSNumber* uid = [NSNumber numberWithUnsignedLongLong:xlMember.userId];
-	CDSetProp(PropUserID, uid);
-	CDSetProp(PropUserAccount, xlMember.userName);
-	CDSetProp(PropUserName, xlMember.nickName);
-	CDSetProp(PropUserSession, xlMember.sessionId);
-	
-	[RestfulAPIGetter setUserID:CDIDProp(PropUserID)];
-	[RestfulAPIGetter setSession:CDProp(PropUserSession)];
-	[RestfulAPIGetter setUserName:CDProp(PropUserName)];
-	[RestfulAPIGetter setUserAccount:CDProp(PropUserAccount)];
-}
-
--(void) processLogout:(NSNotification*)notice
-{
-	CDSetProp(PropUserID, nil);
-	CDSetProp(PropUserName, nil);
-	CDSetProp(PropUserSession, nil);
-	CDSetProp(PropUserImage, nil);
-	
-	[RestfulAPIGetter setUserID:CDIDProp(PropUserID)];
-	[RestfulAPIGetter setSession:CDProp(PropUserSession)];
-	[RestfulAPIGetter setUserName:CDProp(PropUserName)];
-	[RestfulAPIGetter setUserAccount:CDProp(PropUserAccount)];
-	
-	NSUInteger type = [[notice.userInfo objectForKey:kLogoutType] intValue];
-	if (type != XLLOGOUT_NORMAL)
-	{
-		NSString* msg = @"该账号已在其他终端登录，请重新登录";
-		if (type == XLLOGOUT_SESSION_TIMEOUT)
-			msg = @"您已太长时间没有登录，请重新登录";
-		UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil message:msg delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
-		[alert show];
-	}
-}
-
--(void) checkLoginInfo
-{
-	NSNumber* uid = CDIDProp(PropUserID);
-	if (uid)
-	{
-		XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
-		[member initXlMember:[Properties appProperties].XLMemberAppID clientVersion:[Properties appProperties].APPVersion peerId:@"peerid"];
-		[member addObserver:self];
-		[member loginByUserId:uid.unsignedLongLongValue];
-	}
-}
-
--(void) onLoginResult:(enum XlMemberResultCode)code
-{
-	XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
-	if (code == XLMEMBER_SUCCESS)
-	{
-		[member requestUserInfo];
-		[[NSNotificationCenter defaultCenter] postNotificationName:kUserDidLoginNotification object:nil];
-	}
-	else
-	{
-		[member removeObserver:self];
-	}
-}
-
--(void) onUserInfoResult:(enum XlMemberResultCode)code
-{
-	XlMemberIosAdapter* member = [XlMemberIosAdapter instance];
-	[member removeObserver:self];
-	CDSetProp(PropUserImage, member.pictureUrl);
 }
 
 @end

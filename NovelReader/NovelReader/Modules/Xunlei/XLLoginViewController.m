@@ -284,21 +284,15 @@
 	return YES;
 }
 
-/**
- * @brief 登陆操作完成， 通知结果
- * @param code @see XlMemberResultCode
- */
 -(void) onLoginResult:(enum XlMemberResultCode)code
 {
+	[self.view dismiss];
 	if (code == XLMEMBER_SUCCESS)
 	{
-		[_xlMember requestUserInfo];
-		extern NSString* kUserDidLoginNotification;
-		[[NSNotificationCenter defaultCenter] postNotificationName:kUserDidLoginNotification object:nil];
+		[self.cdNavigationController popViewController];
 	}
 	else
 	{
-		[self.view dismiss];
 		NSString* str = @"登录失败，请检查用户名或密码";
 		switch (code)
 		{
@@ -328,26 +322,6 @@
 		}
 		[self.view showPopMsg:str atY:160 timeout:5];
 	}
-}
-
-/**
- * @brief 请求用户信息完成， 通知结果
- * @param code @see XlMemberResultCode
- */
--(void) onUserInfoResult:(enum XlMemberResultCode)code
-{
-	[self.view dismiss];
-	CDSetProp(PropUserImage, _xlMember.pictureUrl);
-	[self.cdNavigationController popViewController];
-}
-
-/**
- * @brief 注销登录完成，或者 用户被迫重新登录回调
- * @param code @see XlMemberResultCode
- * @param type @see XlLogoutType
- */
--(void) onLogoutResult:(enum XlMemberResultCode)code logoutType:(enum XlLogoutType) type
-{
 }
 
 /**

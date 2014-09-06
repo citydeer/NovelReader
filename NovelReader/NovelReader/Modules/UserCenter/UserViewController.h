@@ -15,5 +15,7 @@
 
 @property (nonatomic, weak) MainTabViewController* parent;
 
+-(void) checkLoginInfo;
+
 @end
 

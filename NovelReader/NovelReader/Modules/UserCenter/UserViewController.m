@@ -18,10 +18,11 @@
 #import "SettingViewController.h"
 #import "RestfulAPIGetter.h"
 #import "XLWebViewController.h"
+#import "xlmember/XlMemberIosAdapter.h"
 
 
 
-@interface UserViewController () <UITableViewDataSource, UITableViewDelegate, GetterControllerOwner>
+@interface UserViewController () <UITableViewDataSource, UITableViewDelegate, GetterControllerOwner, XlMemberEvents, UIActionSheetDelegate>
 {
 	UITableView* _tableView;
 	
@@ -37,11 +38,16 @@
 	UILabel* _purchasedNumLabel;
 	
 	GetterController* _getterController;
+	XlMemberIosAdapter* _xlMember;
 }
 
 -(void) updateViews;
+-(void) requestData;
 -(void) loginAction:(id)sender;
+-(void) logoutAction:(id)sender;
 -(void) rechargeAction:(id)sender;
+
+-(void) processLogout:(NSNotification*)notice;
 
 @end
 
@@ -55,12 +61,17 @@
 	if (self)
 	{
 		_getterController = [[GetterController alloc] initWithOwner:self];
+		_xlMember = [XlMemberIosAdapter instance];
+		[_xlMember addObserver:self];
+		
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processLogout:) name:kUserLogoutNotification object:nil];
 	}
 	return self;
 }
 
 -(void) dealloc
 {
+	[_xlMember removeObserver:self];
 }
 
 -(void) loadView
@@ -118,6 +129,7 @@
 	_avatarView.placeholderImage = CDImage(@"user/avatar_defualt");
 	_avatarView.placeHolderContetMode = UIViewContentModeCenter;
 	_avatarView.imageContentMode = UIViewContentModeScaleAspectFill;
+	[_avatarView setTarget:self action:@selector(logoutAction:)];
 	[_userView addSubview:_avatarView];
 	
 	_userNameLabel = [UIHelper addLabel:_userView t:nil tc:[UIColor whiteColor] fs:15 b:NO al:NSTextAlignmentLeft frame:CGRectMake(22+58, 15, 100, 20)];
@@ -149,10 +161,6 @@
 {
 	[super willPresentView:duration];
 	[self updateViews];
-	
-//	RestfulAPIGetter* getter = [[RestfulAPIGetter alloc] init];
-//	getter.params = @{@"c" : @"book", @"a" : @"getinfo", @"bookid" : @"1000215"};
-//	[_getterController launchGetter:getter];
 }
 
 -(void) updateViews
@@ -170,18 +178,35 @@
 		CGFloat width = [name sizeWithFont:_userNameLabel.font].width;
 		if (width > _userNameLabel.frame.size.width) width = _userNameLabel.frame.size.width;
 		[UIHelper moveView:_xunleiMemberIcon toX:_userNameLabel.frame.origin.x+width+5];
-		_xunleiMemberIcon.hidden = NO;
+		_xunleiMemberIcon.hidden = !CDProp(PropUserVIP).boolValue;
 		
 		_avatarView.imageURL = CDProp(PropUserImage);
-		_balanceLabel.text = @"0书豆";
-		_favNumLabel.text = @"0";
+		_balanceLabel.text = [NSString stringWithFormat:@"%d书豆", [CDIDProp(PropUserBalance) intValue]];
+		_favNumLabel.text = [CDIDProp(PropUserFavCount) stringValue];
 		_commentNumLabel.text = @"0";
-		_purchasedNumLabel.text = @"0";
+		_purchasedNumLabel.text = [CDIDProp(PropUserBuyCount) stringValue];
 	}
+}
+
+-(void) requestData
+{
+	RestfulAPIGetter* getter = [[RestfulAPIGetter alloc] init];
+	getter.params = @{@"c" : @"user", @"a" : @"getinfo"};
+	[_getterController launchGetter:getter];
 }
 
 -(void) handleGetter:(id<Getter>)getter
 {
+	if (getter.resultCode == KYResultCodeSuccess)
+	{
+		UserInfoModel* model = [[UserInfoModel alloc] initWithDictionary:((RestfulAPIGetter*)getter).result[@"data"]];
+		CDSetProp(PropUserVIP, (model.yueduvip ? @"1" : @"0"));
+		CDSetProp(PropUserBalance, [NSNumber numberWithInteger:model.coin]);
+		CDSetProp(PropUserFavCount, [NSNumber numberWithInteger:model.bookmark]);
+		CDSetProp(PropUserBuyCount, [NSNumber numberWithInteger:model.buynum]);
+		if (self.isViewLoaded)
+			[self updateViews];
+	}
 }
 
 -(NSInteger) numberOfSectionsInTableView:(UITableView*)tableView
@@ -289,9 +314,109 @@
 	[_parent.cdNavigationController pushViewController:vc];
 }
 
+-(void) logoutAction:(id)sender
+{
+	UIActionSheet* as = [[UIActionSheet alloc] initWithTitle:@"您确定要注销吗？" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:nil];
+	[as showInView:self.view];
+}
+
 -(void) rechargeAction:(id)sender
 {
 	[_parent.cdNavigationController pushViewController:[[XLRechargeViewController alloc] init]];
+}
+
+-(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+	if (buttonIndex == 0)
+		[_xlMember logout];
+}
+
+
+-(void) checkLoginInfo
+{
+	NSNumber* uid = CDIDProp(PropUserID);
+	if (uid)
+	{
+		[_xlMember initXlMember:[Properties appProperties].XLMemberAppID clientVersion:[Properties appProperties].APPVersion peerId:@"peerid"];
+		[_xlMember loginByUserId:uid.unsignedLongLongValue];
+	}
+}
+
+-(void) processLogout:(NSNotification*)notice
+{
+	CDSetProp(PropUserID, nil);
+	CDSetProp(PropUserName, nil);
+	CDSetProp(PropUserSession, nil);
+	CDSetProp(PropUserImage, nil);
+	CDSetProp(PropUserVIP, nil);
+	CDSetProp(PropUserBalance, nil);
+	CDSetProp(PropUserFavCount, nil);
+	CDSetProp(PropUserBuyCount, nil);
+	
+	[RestfulAPIGetter setUserID:CDIDProp(PropUserID)];
+	[RestfulAPIGetter setSession:CDProp(PropUserSession)];
+	[RestfulAPIGetter setUserName:CDProp(PropUserName)];
+	[RestfulAPIGetter setUserAccount:CDProp(PropUserAccount)];
+	
+	NSUInteger type = [[notice.userInfo objectForKey:kLogoutType] intValue];
+	if (type != XLLOGOUT_NORMAL)
+	{
+		NSString* msg = @"该账号已在其他终端登录，请重新登录";
+		if (type == XLLOGOUT_SESSION_TIMEOUT)
+			msg = @"您已太长时间没有登录，请重新登录";
+		UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil message:msg delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
+		[alert show];
+	}
+	
+	if (self.isViewLoaded)
+		[self updateViews];
+}
+
+/**
+ * @brief 登陆操作完成， 通知结果
+ * @param code @see XlMemberResultCode
+ */
+-(void) onLoginResult:(enum XlMemberResultCode)code
+{
+	if (code == XLMEMBER_SUCCESS)
+	{
+		[_xlMember requestUserInfo];
+		
+		NSNumber* uid = [NSNumber numberWithUnsignedLongLong:_xlMember.userId];
+		CDSetProp(PropUserID, uid);
+		CDSetProp(PropUserAccount, _xlMember.userName);
+		CDSetProp(PropUserName, _xlMember.nickName);
+		CDSetProp(PropUserSession, _xlMember.sessionId);
+		
+		[RestfulAPIGetter setUserID:CDIDProp(PropUserID)];
+		[RestfulAPIGetter setSession:CDProp(PropUserSession)];
+		[RestfulAPIGetter setUserName:CDProp(PropUserName)];
+		[RestfulAPIGetter setUserAccount:CDProp(PropUserAccount)];
+		
+		[self requestData];
+	}
+	
+	if (self.isViewLoaded)
+		[self updateViews];
+}
+
+/**
+ * @brief 请求用户信息完成， 通知结果
+ * @param code @see XlMemberResultCode
+ */
+-(void) onUserInfoResult:(enum XlMemberResultCode)code
+{
+	CDSetProp(PropUserImage, _xlMember.pictureUrl);
+	_avatarView.imageURL = CDProp(PropUserImage);
+}
+
+/**
+ * @brief 注销登录完成，或者 用户被迫重新登录回调
+ * @param code @see XlMemberResultCode
+ * @param type @see XlLogoutType
+ */
+-(void) onLogoutResult:(enum XlMemberResultCode)code logoutType:(enum XlLogoutType) type
+{
 }
 
 @end

@@ -112,6 +112,11 @@
 @end
 
 
+@implementation UserInfoModel
+@dynamic bookmark, buynum, coin, yueduvip;
+@end
+
+
 
 @implementation ContractListModel
 @dynamic htlb;

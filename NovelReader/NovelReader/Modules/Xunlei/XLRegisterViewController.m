@@ -617,24 +617,15 @@
 
 -(void) onLoginResult:(enum XlMemberResultCode)code
 {
+	[self.view dismiss];
 	if (code == XLMEMBER_SUCCESS)
 	{
-		[[XlMemberIosAdapter instance] requestUserInfo];
-		extern NSString* kUserDidLoginNotification;
-		[[NSNotificationCenter defaultCenter] postNotificationName:kUserDidLoginNotification object:nil];
+		[self.cdNavigationController popToRootViewController];
 	}
 	else
 	{
-		[self.view dismiss];
 		[self.view showPopMsg:@"注册成功，请重新登录" atY:200 timeout:5];
 	}
-}
-
--(void) onUserInfoResult:(enum XlMemberResultCode)code
-{
-	[self.view dismiss];
-	CDSetProp(PropUserImage, [XlMemberIosAdapter instance].pictureUrl);
-	[self.cdNavigationController popToRootViewController];
 }
 
 @end

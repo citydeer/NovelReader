@@ -19,6 +19,9 @@
 #define PropUserAccount @"user.account"
 #define PropUserImage @"user.image"
 #define PropUserBalance @"user.balance"
+#define PropUserVIP @"user.isvip"
+#define PropUserFavCount @"user.fav.count"
+#define PropUserBuyCount @"user.buy.count"
 
 #define PropPayLastType @"pay.lasttype"
 
