@@ -12,6 +12,7 @@
 #import "Models.h"
 #import "RestfulAPIGetter.h"
 #import "xlmember/XlMemberIosAdapter.h"
+#import "DaemonWorker.h"
 
 
 
@@ -62,6 +63,9 @@ void uncaughtExceptionHandler(NSException *exception)
 		CDSetProp(PropReaderFontSize, @"15");
 	if (CDProp(PropReaderBrightness).length <= 0)
 		CDSetProp(PropReaderBrightness, @"1.0");
+	
+	[[DaemonWorker worker] checkAppUpdateInfo:NO];
+	[[DaemonWorker worker] getRecommendBooks];
 }
 
 -(void) createControllers

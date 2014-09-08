@@ -26,6 +26,8 @@
 		F2A8CC5719AFC12500A2D981 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A8CC5619AFC12500A2D981 /* libstdc++.dylib */; };
 		F2A8CC5919AFC13D00A2D981 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A8CC5819AFC13D00A2D981 /* libc++.dylib */; };
 		F2A8CC5B19AFC17500A2D981 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A8CC5A19AFC17500A2D981 /* libz.dylib */; };
+		F2B4C32619BCFF890036404A /* DaemonWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B4C32519BCFF890036404A /* DaemonWorker.m */; };
+		F2B4C32819BDD6ED0036404A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2B4C32719BDD6ED0036404A /* AdSupport.framework */; };
 		F2CF3B7219B0B8F600133E96 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CF3B7119B0B8F600133E96 /* SettingViewController.m */; };
 		F2D537C91976807A00A0FDDA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537C81976807A00A0FDDA /* Foundation.framework */; };
 		F2D537CB1976807A00A0FDDA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537CA1976807A00A0FDDA /* CoreGraphics.framework */; };
@@ -46,7 +48,6 @@
 		F2D538421976BAC100A0FDDA /* KYPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D538121976BAC100A0FDDA /* KYPageControl.m */; };
 		F2D538431976BAC100A0FDDA /* CDRemoteImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D538141976BAC100A0FDDA /* CDRemoteImageView.m */; };
 		F2D538441976BAC100A0FDDA /* KYTipsView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D538161976BAC100A0FDDA /* KYTipsView.m */; };
-		F2D538451976BAC100A0FDDA /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F2D538191976BAC100A0FDDA /* Localizable.strings */; };
 		F2D538461976BAC100A0FDDA /* Models.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D5381C1976BAC100A0FDDA /* Models.m */; };
 		F2D538471976BAC100A0FDDA /* Properties.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D5381E1976BAC100A0FDDA /* Properties.m */; };
 		F2D538481976BAC100A0FDDA /* Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D538201976BAC100A0FDDA /* Theme.m */; };
@@ -107,6 +108,9 @@
 		F2A8CC5619AFC12500A2D981 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
 		F2A8CC5819AFC13D00A2D981 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		F2A8CC5A19AFC17500A2D981 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		F2B4C32419BCFF890036404A /* DaemonWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DaemonWorker.h; sourceTree = "<group>"; };
+		F2B4C32519BCFF890036404A /* DaemonWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DaemonWorker.m; sourceTree = "<group>"; };
+		F2B4C32719BDD6ED0036404A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		F2CF3B7019B0B8F600133E96 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		F2CF3B7119B0B8F600133E96 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		F2D537C51976807A00A0FDDA /* NovelReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NovelReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,14 +151,12 @@
 		F2D538151976BAC100A0FDDA /* KYTipsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KYTipsView.h; sourceTree = "<group>"; };
 		F2D538161976BAC100A0FDDA /* KYTipsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KYTipsView.m; sourceTree = "<group>"; };
 		F2D538181976BAC100A0FDDA /* Define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Define.h; sourceTree = "<group>"; };
-		F2D5381A1976BAC100A0FDDA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F2D5381B1976BAC100A0FDDA /* Models.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Models.h; sourceTree = "<group>"; };
 		F2D5381C1976BAC100A0FDDA /* Models.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Models.m; sourceTree = "<group>"; };
 		F2D5381D1976BAC100A0FDDA /* Properties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Properties.h; sourceTree = "<group>"; };
 		F2D5381E1976BAC100A0FDDA /* Properties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Properties.m; sourceTree = "<group>"; };
 		F2D5381F1976BAC100A0FDDA /* Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Theme.h; sourceTree = "<group>"; };
 		F2D538201976BAC100A0FDDA /* Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Theme.m; sourceTree = "<group>"; };
-		F2D538211976BAC100A0FDDA /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		F2D538241976BAC100A0FDDA /* DataCacheService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataCacheService.h; sourceTree = "<group>"; };
 		F2D538251976BAC100A0FDDA /* DataCacheService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataCacheService.m; sourceTree = "<group>"; };
 		F2D538271976BAC100A0FDDA /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2B4C32819BDD6ED0036404A /* AdSupport.framework in Frameworks */,
 				F2A8CC5B19AFC17500A2D981 /* libz.dylib in Frameworks */,
 				F2A8CC5919AFC13D00A2D981 /* libc++.dylib in Frameworks */,
 				F2A8CC5719AFC12500A2D981 /* libstdc++.dylib in Frameworks */,
@@ -294,6 +297,7 @@
 				F2A8CC5819AFC13D00A2D981 /* libc++.dylib */,
 				F2A8CC5619AFC12500A2D981 /* libstdc++.dylib */,
 				F2D538641976C42500A0FDDA /* libicucore.dylib */,
+				F2B4C32719BDD6ED0036404A /* AdSupport.framework */,
 				F2D538621976C40A00A0FDDA /* CoreText.framework */,
 				F2D538601976C40400A0FDDA /* QuartzCore.framework */,
 				F2D537C81976807A00A0FDDA /* Foundation.framework */,
@@ -412,13 +416,14 @@
 			isa = PBXGroup;
 			children = (
 				F2D538181976BAC100A0FDDA /* Define.h */,
-				F2D538191976BAC100A0FDDA /* Localizable.strings */,
 				F2D5381B1976BAC100A0FDDA /* Models.h */,
 				F2D5381C1976BAC100A0FDDA /* Models.m */,
 				F2D5381D1976BAC100A0FDDA /* Properties.h */,
 				F2D5381E1976BAC100A0FDDA /* Properties.m */,
 				F2D5381F1976BAC100A0FDDA /* Theme.h */,
 				F2D538201976BAC100A0FDDA /* Theme.m */,
+				F2B4C32419BCFF890036404A /* DaemonWorker.h */,
+				F2B4C32519BCFF890036404A /* DaemonWorker.m */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -536,7 +541,6 @@
 				F2D5385E1976BCFC00A0FDDA /* Icon-114.png in Resources */,
 				F2D538531976BC8F00A0FDDA /* Images in Resources */,
 				F2D5385D1976BCFC00A0FDDA /* Icon-57.png in Resources */,
-				F2D538451976BAC100A0FDDA /* Localizable.strings in Resources */,
 				F2D5385F1976BCFC00A0FDDA /* Icon-120.png in Resources */,
 				F2D5385B1976BCFC00A0FDDA /* Default.png in Resources */,
 			);
@@ -576,6 +580,7 @@
 				F2D5383C1976BAC100A0FDDA /* CDNavigationController.m in Sources */,
 				F2D538421976BAC100A0FDDA /* KYPageControl.m in Sources */,
 				F2D5383F1976BAC100A0FDDA /* TableDataSource.m in Sources */,
+				F2B4C32619BCFF890036404A /* DaemonWorker.m in Sources */,
 				F2D538481976BAC100A0FDDA /* Theme.m in Sources */,
 				F2D538391976BAC100A0FDDA /* RestfulAPIGetter.m in Sources */,
 				F2D5383A1976BAC100A0FDDA /* HttpGetter.m in Sources */,
@@ -621,15 +626,6 @@
 				F2D537D21976807A00A0FDDA /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		F2D538191976BAC100A0FDDA /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F2D5381A1976BAC100A0FDDA /* en */,
-				F2D538211976BAC100A0FDDA /* zh-Hans */,
-			);
-			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

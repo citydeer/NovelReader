@@ -14,6 +14,7 @@
 #import "PKMappingObject.h"
 #import "Encodings.h"
 #import "Properties.h"
+#import <AdSupport/AdSupport.h>
 
 
 
@@ -121,9 +122,11 @@
 	{
 		NSString* account = CDProp(PropUserAccount);
 		NSString* name = CDProp(PropUserName);
+		NSString* uuid = [ASIdentifierManager sharedManager].advertisingIdentifier.UUIDString;
 		if (account == nil) account = @"";
 		if (name == nil) name = @"";
-		NSString* cookieStr = [NSString stringWithFormat:@"userid=%@; sessionid=%@; usrname=%@; nickname=%@", userid, session, account, name];
+		if (uuid == nil) uuid = @"";
+		NSString* cookieStr = [NSString stringWithFormat:@"userid=%@; sessionid=%@; usrname=%@; nickname=%@; uuid=%@", userid, session, account, name, uuid];
 		[request setValue:cookieStr forHTTPHeaderField:@"Cookie"];
 	}
 	[_webview loadRequest:request];
@@ -202,6 +205,12 @@
 	}
 	
 	NSDictionary* params = [request.URL queryDictionary];
+	if ([params[@"appclient"] isEqualToString:@"4"])
+	{
+		[[UIApplication sharedApplication] openURL:request.URL];
+		return NO;
+	}
+	
 	if (params[@"appclient"] != nil)
 	{
 		XLWebViewController* vc = [[XLWebViewController alloc] init];

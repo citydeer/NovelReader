@@ -11,6 +11,7 @@
 #import "Models.h"
 #import "Properties.h"
 #import "XLWebViewController.h"
+#import "DaemonWorker.h"
 
 
 
@@ -157,9 +158,11 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	if (indexPath.section == 0 && indexPath.row == 0)
 	{
+		[[DaemonWorker worker] checkAppUpdateInfo:YES];
 	}
 	else if (indexPath.section == 0 && indexPath.row == 1)
 	{
+		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:CDProp(PropAppCommentURL)]];
 	}
 	else if (indexPath.section == 0 && indexPath.row == 2)
 	{

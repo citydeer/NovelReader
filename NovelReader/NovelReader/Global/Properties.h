@@ -25,9 +25,10 @@
 
 #define PropPayLastType @"pay.lasttype"
 
-#define PropSettingServiceURL @"setting.service.url"
-
-#define PropDeviceToken @"device.token"
+#define PropAppCommentURL @"app.comment.url"
+#define PropAppStartFirst @"app.start.isfirst"
+#define PropAppStartBooks @"app.start.books"
+#define PropAppDeviceToken @"app.device.token"
 
 #define PropReaderBrightness @"reader.brightness"
 #define PropReaderFontSize @"reader.font.size"
