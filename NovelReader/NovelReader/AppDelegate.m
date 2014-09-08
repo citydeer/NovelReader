@@ -8,8 +8,7 @@
 
 #import "AppDelegate.h"
 #import "Properties.h"
-#import "MainTabViewController.h"
-#import "Models.h"
+#import "LaunchViewController.h"
 #import "RestfulAPIGetter.h"
 #import "xlmember/XlMemberIosAdapter.h"
 #import "DaemonWorker.h"
@@ -70,25 +69,22 @@ void uncaughtExceptionHandler(NSException *exception)
 
 -(void) createControllers
 {
-	MainTabViewController* vc = [[MainTabViewController alloc] init];
-	_navigationController = [[CDNavigationController alloc] initWithRootViewController:vc];
+	if ([CDProp(PropAppLaunchedFlag) boolValue])
+	{
+		UIViewController* vc = [[LaunchViewController alloc] init];
+		_navigationController = [[CDNavigationController alloc] initWithRootViewController:vc];
+	}
+	else
+	{
+		CDSetProp(PropAppLaunchedFlag, @"1");
+		UIViewController* vc = [[FirstLaunchViewController alloc] init];
+		_navigationController = [[CDNavigationController alloc] initWithRootViewController:vc];
+	}
 	
 	self.window.rootViewController = _navigationController;
 	[self.window makeKeyAndVisible];
 	
 	_navigationController.view.frame = self.window.bounds;
-}
-
--(void) logoutWithMsg:(NSString*)msg
-{
-//	CDSetProp(PropUserToken, nil);
-//	CDSetProp(PropUserPassword, nil);
-//	[GlodonAPIGetter setUserToken:nil];
-//	
-//	LoginViewController* vc = [[LoginViewController alloc] init];
-//	vc.popMsg = msg;
-//	vc.activeKeyboard = YES;
-//	[_navigationController setRootViewController:vc];
 }
 
 //-(void) application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken

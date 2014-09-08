@@ -26,7 +26,7 @@
 #define PropPayLastType @"pay.lasttype"
 
 #define PropAppCommentURL @"app.comment.url"
-#define PropAppStartFirst @"app.start.isfirst"
+#define PropAppLaunchedFlag @"app.start.flag"
 #define PropAppStartBooks @"app.start.books"
 #define PropAppDeviceToken @"app.device.token"
 

@@ -340,7 +340,9 @@
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	if (buttonIndex == 0)
+	{
 		[_xlMember logout];
+	}
 }
 
 

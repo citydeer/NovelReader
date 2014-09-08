@@ -12,7 +12,6 @@
 		54C24FCC19AF3AAC00A3A103 /* XLRechargeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C24FCB19AF3AAC00A3A103 /* XLRechargeViewController.m */; };
 		54C24FCF19AF3AE100A3A103 /* XLJoinVIPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C24FCE19AF3AE100A3A103 /* XLJoinVIPViewController.m */; };
 		F216AA5C19B2EFA400301C8E /* XLWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F216AA5B19B2EFA400301C8E /* XLWebViewController.m */; };
-		F22A8D701989690000DA082A /* MainTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D6F1989690000DA082A /* MainTabViewController.m */; };
 		F22A8D7619896A2500DA082A /* BookShelfViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D7519896A2500DA082A /* BookShelfViewController.m */; };
 		F22A8D7919896B5100DA082A /* BookStoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D7819896B5100DA082A /* BookStoreViewController.m */; };
 		F22A8D7C19896B5A00DA082A /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F22A8D7B19896B5A00DA082A /* UserViewController.m */; };
@@ -28,6 +27,9 @@
 		F2A8CC5B19AFC17500A2D981 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A8CC5A19AFC17500A2D981 /* libz.dylib */; };
 		F2B4C32619BCFF890036404A /* DaemonWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B4C32519BCFF890036404A /* DaemonWorker.m */; };
 		F2B4C32819BDD6ED0036404A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2B4C32719BDD6ED0036404A /* AdSupport.framework */; };
+		F2B4C32B19BE24DD0036404A /* SelectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B4C32A19BE24DD0036404A /* SelectorView.m */; };
+		F2B4C32F19BE24FE0036404A /* MainTabViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B4C32E19BE24FE0036404A /* MainTabViewController.m */; };
+		F2B4C33219BE26280036404A /* LaunchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2B4C33119BE26280036404A /* LaunchViewController.m */; };
 		F2CF3B7219B0B8F600133E96 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CF3B7119B0B8F600133E96 /* SettingViewController.m */; };
 		F2D537C91976807A00A0FDDA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537C81976807A00A0FDDA /* Foundation.framework */; };
 		F2D537CB1976807A00A0FDDA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D537CA1976807A00A0FDDA /* CoreGraphics.framework */; };
@@ -70,7 +72,6 @@
 		F2D538611976C40400A0FDDA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D538601976C40400A0FDDA /* QuartzCore.framework */; };
 		F2D538631976C40A00A0FDDA /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D538621976C40A00A0FDDA /* CoreText.framework */; };
 		F2D538651976C42500A0FDDA /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D538641976C42500A0FDDA /* libicucore.dylib */; };
-		F2D538681976C72C00A0FDDA /* SelectorView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D538671976C72C00A0FDDA /* SelectorView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,8 +85,6 @@
 		54C24FCE19AF3AE100A3A103 /* XLJoinVIPViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLJoinVIPViewController.m; sourceTree = "<group>"; };
 		F216AA5A19B2EFA400301C8E /* XLWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLWebViewController.h; sourceTree = "<group>"; };
 		F216AA5B19B2EFA400301C8E /* XLWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLWebViewController.m; sourceTree = "<group>"; };
-		F22A8D6E1989690000DA082A /* MainTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabViewController.h; sourceTree = "<group>"; };
-		F22A8D6F1989690000DA082A /* MainTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabViewController.m; sourceTree = "<group>"; };
 		F22A8D7419896A2500DA082A /* BookShelfViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookShelfViewController.h; sourceTree = "<group>"; };
 		F22A8D7519896A2500DA082A /* BookShelfViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookShelfViewController.m; sourceTree = "<group>"; };
 		F22A8D7719896B5100DA082A /* BookStoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookStoreViewController.h; sourceTree = "<group>"; };
@@ -111,6 +110,12 @@
 		F2B4C32419BCFF890036404A /* DaemonWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DaemonWorker.h; sourceTree = "<group>"; };
 		F2B4C32519BCFF890036404A /* DaemonWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DaemonWorker.m; sourceTree = "<group>"; };
 		F2B4C32719BDD6ED0036404A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		F2B4C32919BE24DD0036404A /* SelectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectorView.h; sourceTree = "<group>"; };
+		F2B4C32A19BE24DD0036404A /* SelectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectorView.m; sourceTree = "<group>"; };
+		F2B4C32D19BE24FE0036404A /* MainTabViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainTabViewController.h; sourceTree = "<group>"; };
+		F2B4C32E19BE24FE0036404A /* MainTabViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainTabViewController.m; sourceTree = "<group>"; };
+		F2B4C33019BE26280036404A /* LaunchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LaunchViewController.h; sourceTree = "<group>"; };
+		F2B4C33119BE26280036404A /* LaunchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LaunchViewController.m; sourceTree = "<group>"; };
 		F2CF3B7019B0B8F600133E96 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		F2CF3B7119B0B8F600133E96 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		F2D537C51976807A00A0FDDA /* NovelReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NovelReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -185,8 +190,6 @@
 		F2D538601976C40400A0FDDA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F2D538621976C40A00A0FDDA /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		F2D538641976C42500A0FDDA /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		F2D538661976C72C00A0FDDA /* SelectorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectorView.h; path = ../../Modules/SelectorView.h; sourceTree = "<group>"; };
-		F2D538671976C72C00A0FDDA /* SelectorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SelectorView.m; path = ../../Modules/SelectorView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +274,17 @@
 				F2A45C34198E80FD00A110F7 /* ReaderLayoutInfo.m */,
 			);
 			path = Reader;
+			sourceTree = "<group>";
+		};
+		F2B4C32C19BE24FE0036404A /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				F2B4C33019BE26280036404A /* LaunchViewController.h */,
+				F2B4C33119BE26280036404A /* LaunchViewController.m */,
+				F2B4C32D19BE24FE0036404A /* MainTabViewController.h */,
+				F2B4C32E19BE24FE0036404A /* MainTabViewController.m */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 		F2D537BC1976807A00A0FDDA = {
@@ -406,8 +420,8 @@
 				F2D538161976BAC100A0FDDA /* KYTipsView.m */,
 				F2A8CC4F19AFAA7B00A2D981 /* CDCustomViews.h */,
 				F2A8CC5019AFAA7B00A2D981 /* CDCustomViews.m */,
-				F2D538661976C72C00A0FDDA /* SelectorView.h */,
-				F2D538671976C72C00A0FDDA /* SelectorView.m */,
+				F2B4C32919BE24DD0036404A /* SelectorView.h */,
+				F2B4C32A19BE24DD0036404A /* SelectorView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -431,13 +445,12 @@
 		F2D538221976BAC100A0FDDA /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				F2B4C32C19BE24FE0036404A /* Home */,
 				54C24FC319AF3A8100A3A103 /* Xunlei */,
 				F2A45C2A198C136A00A110F7 /* Reader */,
 				F22A8D71198969F900DA082A /* BookShelf */,
 				F22A8D72198969F900DA082A /* BookStore */,
 				F22A8D73198969F900DA082A /* UserCenter */,
-				F22A8D6E1989690000DA082A /* MainTabViewController.h */,
-				F22A8D6F1989690000DA082A /* MainTabViewController.m */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -570,11 +583,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F22A8D7619896A2500DA082A /* BookShelfViewController.m in Sources */,
+				F2B4C32F19BE24FE0036404A /* MainTabViewController.m in Sources */,
 				F2A45C2D198C139500A110F7 /* ReaderViewController.m in Sources */,
+				F2B4C33219BE26280036404A /* LaunchViewController.m in Sources */,
 				F2D5384B1976BAC100A0FDDA /* RegexKitLite.m in Sources */,
 				54C24FCC19AF3AAC00A3A103 /* XLRechargeViewController.m in Sources */,
-				F22A8D701989690000DA082A /* MainTabViewController.m in Sources */,
-				F2D538681976C72C00A0FDDA /* SelectorView.m in Sources */,
 				54C24FCF19AF3AE100A3A103 /* XLJoinVIPViewController.m in Sources */,
 				F216AA5C19B2EFA400301C8E /* XLWebViewController.m in Sources */,
 				F2D5383C1976BAC100A0FDDA /* CDNavigationController.m in Sources */,
@@ -592,6 +605,7 @@
 				F2D5384E1976BAC100A0FDDA /* GraphicUtils.m in Sources */,
 				F250EAFC198AAFAB00DDECEF /* BookCell.m in Sources */,
 				F2D538471976BAC100A0FDDA /* Properties.m in Sources */,
+				F2B4C32B19BE24DD0036404A /* SelectorView.m in Sources */,
 				F2D538401976BAC100A0FDDA /* GridView.m in Sources */,
 				F2D538461976BAC100A0FDDA /* Models.m in Sources */,
 				F2D538491976BAC100A0FDDA /* DataCacheService.m in Sources */,
