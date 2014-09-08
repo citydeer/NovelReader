@@ -10,6 +10,8 @@
 #import "RestfulAPIGetter.h"
 #import "Models.h"
 #import "Properties.h"
+#import "CDNavigationController.h"
+#import "XLLoginViewController.h"
 
 
 
@@ -67,7 +69,7 @@
 {
 	if (getter.tag == GetUpdateInfoTag)
 	{
-		if ([Model checkGetter:getter onView:[UIApplication sharedApplication].keyWindow.rootViewController.view showMsg:nil])
+		if ([Model checkGetter:getter onView:getNaviController().view showMsg:nil])
 		{
 			AppInfoModel* model = [[AppInfoModel alloc] initWithDictionary:((RestfulAPIGetter*)getter).result[@"data"]];
 			CDSetProp(PropAppCommentURL, model.commurl);
@@ -102,6 +104,22 @@
 	if (buttonIndex == 1)
 	{
 		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.updateURL]];
+	}
+}
+
+-(void) checkLoginStatus:(void (^)(void))block
+{
+	BOOL isLogined = (CDProp(PropUserID) != nil);
+	if (isLogined)
+	{
+		if (block != NULL)
+			block();
+	}
+	else
+	{
+		XLLoginViewController* vc = [[XLLoginViewController alloc] init];
+		[vc setSuccessBlock:block];
+		[getNaviController() pushViewController:vc];
 	}
 }
 

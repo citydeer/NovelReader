@@ -47,13 +47,17 @@ typedef NS_OPTIONS(NSInteger, AnimationOptions)
 -(void) popViewController;
 -(void) popViewControllerWithInStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle;
 -(void) popViewControllerWithInStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle duration:(NSTimeInterval)duration;
+
+-(void) popToRootViewController;
+-(void) popToViewController:(UIViewController *)controller;
 -(void) popToViewController:(UIViewController *)controller inStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle;
 -(void) popToViewController:(UIViewController *)controller inStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle duration:(NSTimeInterval)duration;
--(void) popToRootViewController;
 
 -(void) setRootViewController:(UIViewController*)controller;
 -(void) setRootViewController:(UIViewController*)controller inStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle;
 -(void) setRootViewController:(UIViewController*)controller inStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle duration:(NSTimeInterval)duration;
+
+-(void) setViewController:(UIViewController*)controller afterController:(UIViewController*)foreController;
 
 @end
 

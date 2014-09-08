@@ -39,6 +39,8 @@
 	CDCustomTextField* _emailVerifyField;
 	CDCustomTextField* _emailNickField;
 	UIImageView* _verifyImage;
+	
+	void (^_successBlock)(void);
 }
 
 -(void) switchAction:(UIButton*)sender;
@@ -70,6 +72,11 @@
 -(void) dealloc
 {
 	[[XlMemberIosAdapter instance] removeObserver:self];
+}
+
+-(void) setSuccessBlock:(void (^)(void))block
+{
+	_successBlock = [block copy];
 }
 
 -(void) loadView
@@ -620,7 +627,10 @@
 	[self.view dismiss];
 	if (code == XLMEMBER_SUCCESS)
 	{
-		[self.cdNavigationController popToRootViewController];
+		if (_successBlock != NULL)
+			_successBlock();
+		else
+			[self.cdNavigationController popToRootViewController];
 	}
 	else
 	{

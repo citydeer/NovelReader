@@ -19,6 +19,7 @@
 #import "RestfulAPIGetter.h"
 #import "XLWebViewController.h"
 #import "xlmember/XlMemberIosAdapter.h"
+#import "DaemonWorker.h"
 
 
 
@@ -283,29 +284,40 @@
 {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
-	UIViewController* vc = nil;
 	if (indexPath.section == 0 && indexPath.row == 0)
-		vc = [[XLRechargeViewController alloc] init];
+	{
+		[[DaemonWorker worker] checkLoginStatus:^{
+			[_parent.cdNavigationController setViewController:[[XLRechargeViewController alloc] init] afterController:_parent];
+		}];
+	}
 	else if (indexPath.section == 0 && indexPath.row == 1)
-		vc = [[XLJoinVIPViewController alloc] init];
+	{
+		[[DaemonWorker worker] checkLoginStatus:^{
+			[_parent.cdNavigationController setViewController:[[XLJoinVIPViewController alloc] init] afterController:_parent];
+		}];
+	}
 	else if (indexPath.section == 1 && indexPath.row == 0)
 	{
-		XLWebViewController* wvc = [[XLWebViewController alloc] init];
-		wvc.pageTitle = @"消费记录";
-		wvc.pageURL = [NSString stringWithFormat:@"%@buyrecord.html", [Properties appProperties].XLWebHost];
-		vc = wvc;
+		[[DaemonWorker worker] checkLoginStatus:^{
+			XLWebViewController* wvc = [[XLWebViewController alloc] init];
+			wvc.pageTitle = @"消费记录";
+			wvc.pageURL = [NSString stringWithFormat:@"%@buyrecord.html", [Properties appProperties].XLWebHost];
+			[_parent.cdNavigationController setViewController:wvc afterController:_parent];
+		}];
 	}
 	else if (indexPath.section == 1 && indexPath.row == 1)
 	{
-		XLWebViewController* wvc = [[XLWebViewController alloc] init];
-		wvc.pageTitle = @"充值记录";
-		wvc.pageURL = [NSString stringWithFormat:@"%@payrecord.html", [Properties appProperties].XLWebHost];
-		vc = wvc;
+		[[DaemonWorker worker] checkLoginStatus:^{
+			XLWebViewController* wvc = [[XLWebViewController alloc] init];
+			wvc.pageTitle = @"充值记录";
+			wvc.pageURL = [NSString stringWithFormat:@"%@payrecord.html", [Properties appProperties].XLWebHost];
+			[_parent.cdNavigationController setViewController:wvc afterController:_parent];
+		}];
 	}
 	else if (indexPath.section == 2 && indexPath.row == 0)
-		vc = [[SettingViewController alloc] init];
-	if (vc != nil)
-		[_parent.cdNavigationController pushViewController:vc];
+	{
+		[_parent.cdNavigationController setViewController:[[SettingViewController alloc] init] afterController:_parent];
+	}
 }
 
 -(void) loginAction:(id)sender

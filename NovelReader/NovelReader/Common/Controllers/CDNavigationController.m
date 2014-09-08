@@ -17,7 +17,10 @@ NSString* const CDNavigationWillSwitchNotification = @"CDNavigationWillSwitchNot
 
 CDNavigationController* getNaviController(void)
 {
-	return (CDNavigationController *)[UIApplication sharedApplication].delegate.window.rootViewController;
+	UIViewController* rootVC = [UIApplication sharedApplication].delegate.window.rootViewController;
+	if ([rootVC isKindOfClass:[CDNavigationController class]])
+		return (CDNavigationController *)rootVC;
+	return nil;
 }
 
 @interface UIViewController (_CDNavigationController)
@@ -444,13 +447,16 @@ CDNavigationController* getNaviController(void)
 	[_controllerStack removeLastObject];
 	UIViewController* newVC = [_controllerStack lastObject];
 	[self switchFromController:oldVC fromStyle:outStyle toController:newVC toStyle:inStyle isToAbove:NO duration:duration];
-//	UIViewController* controller = [_controllerStack objectAtIndex:_controllerStack.count - 2];
-//	[self popToViewController:controller inStyle:inStyle outStyle:outStyle duration:duration];
 }
 
 -(void) popToRootViewController
 {
-	[self popToViewController:_controllerStack.firstObject inStyle:ASTranslationToRight outStyle:ASTranslationToRight];
+	[self popToViewController:_controllerStack.firstObject inStyle:ASTranslationToRight outStyle:ASTranslationToRight duration:DefaultAnimationDuration];
+}
+
+-(void) popToViewController:(UIViewController *)controller
+{
+	[self popToViewController:controller inStyle:ASTranslationToRight outStyle:ASTranslationToRight duration:DefaultAnimationDuration];
 }
 
 -(void) popToViewController:(UIViewController *)controller inStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle
@@ -494,7 +500,7 @@ CDNavigationController* getNaviController(void)
 
 -(void) setRootViewController:(UIViewController*)controller
 {
-	[self setRootViewController:controller inStyle:ASTranslationToLeft outStyle:ASTranslationToLeft];
+	[self setRootViewController:controller inStyle:ASTranslationToLeft outStyle:ASTranslationToLeft duration:DefaultAnimationDuration];
 }
 
 -(void) setRootViewController:(UIViewController*)controller inStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle
@@ -514,6 +520,32 @@ CDNavigationController* getNaviController(void)
 	[_controllerStack removeAllObjects];
 	[_controllerStack addObject:controller];
 	[self switchFromController:oldVC fromStyle:outStyle toController:controller toStyle:inStyle isToAbove:YES duration:duration];
+}
+
+-(void) setViewController:(UIViewController*)controller afterController:(UIViewController*)foreController
+{
+	if (controller == nil || [_controllerStack indexOfObjectIdenticalTo:controller] != NSNotFound)
+	{
+		LOG_debug(@"Pushed controller is nil, or in navigation stack already!");
+		return;
+	}
+	
+	NSUInteger index = [_controllerStack indexOfObject:foreController];
+	if (index == NSNotFound || index == _controllerStack.count - 1)
+	{
+		[self pushViewController:controller];
+		return;
+	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:CDNavigationWillPopNotification object:nil];
+	
+	for (int i = _controllerStack.count - 2; i > index; i--)
+		[_controllerStack removeObjectAtIndex:i];
+	
+	UIViewController* oldVC = [_controllerStack lastObject];
+	[_controllerStack removeLastObject];
+	[_controllerStack addObject:controller];
+	[self switchFromController:oldVC fromStyle:ASTranslationToLeft toController:controller toStyle:ASTranslationToLeft isToAbove:YES duration:DefaultAnimationDuration];
 }
 
 @end

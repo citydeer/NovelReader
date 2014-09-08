@@ -18,6 +18,7 @@
 
 -(void) checkAppUpdateInfo:(BOOL)showAlert;
 -(void) getRecommendBooks;
+-(void) checkLoginStatus:(void (^)(void))block;
 
 @end
 

@@ -11,5 +11,7 @@
 
 @interface XLRegisterViewController : CDViewController
 
+-(void) setSuccessBlock:(void (^)(void))block;
+
 @end
 

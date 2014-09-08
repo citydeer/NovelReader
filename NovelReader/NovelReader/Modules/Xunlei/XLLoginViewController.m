@@ -28,6 +28,8 @@
 	UIButton* _loginButton;
 	
 	XlMemberIosAdapter* _xlMember;
+	
+	void (^_successBlock)(void);
 }
 
 -(void) onLogin:(id)sender;
@@ -55,6 +57,11 @@
 -(void) dealloc
 {
 	[_xlMember removeObserver:self];
+}
+
+-(void) setSuccessBlock:(void (^)(void))block
+{
+	_successBlock = [block copy];
 }
 
 -(void) loadView
@@ -217,7 +224,9 @@
 
 -(void) rightButtonAction:(id)sender
 {
-	[self.cdNavigationController pushViewController:[[XLRegisterViewController alloc] init]];
+	XLRegisterViewController* vc = [[XLRegisterViewController alloc] init];
+	[vc setSuccessBlock:_successBlock];
+	[self.cdNavigationController pushViewController:vc];
 }
 
 -(void) onLogin:(id)sender
@@ -289,7 +298,10 @@
 	[self.view dismiss];
 	if (code == XLMEMBER_SUCCESS)
 	{
-		[self.cdNavigationController popViewController];
+		if (_successBlock != NULL)
+			_successBlock();
+		else
+			[self.cdNavigationController popViewController];
 	}
 	else
 	{

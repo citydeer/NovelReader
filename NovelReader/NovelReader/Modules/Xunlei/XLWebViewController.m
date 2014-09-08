@@ -128,6 +128,7 @@
 		if (uuid == nil) uuid = @"";
 		NSString* cookieStr = [NSString stringWithFormat:@"userid=%@; sessionid=%@; usrname=%@; nickname=%@; uuid=%@", userid, session, account, name, uuid];
 		[request setValue:cookieStr forHTTPHeaderField:@"Cookie"];
+		NSLog(@"Cookie string: %@", cookieStr);
 	}
 	[_webview loadRequest:request];
 }
