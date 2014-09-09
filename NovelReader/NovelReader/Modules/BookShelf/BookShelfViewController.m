@@ -10,7 +10,7 @@
 #import "MainTabViewController.h"
 #import "ReaderViewController.h"
 #import "BookCell.h"
-#import "Models.h"
+#import "BookManager.h"
 #import "KYTipsView.h"
 #import "SelectorView.h"
 #import "UIHelper.h"

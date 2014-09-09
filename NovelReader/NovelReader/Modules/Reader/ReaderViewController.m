@@ -8,10 +8,10 @@
 
 #import "ReaderViewController.h"
 #import "UIHelper.h"
-#import "Models.h"
 #import "Properties.h"
 #import "ReaderPageViewController.h"
 #import "KYTipsView.h"
+#import "BookManager.h"
 
 
 

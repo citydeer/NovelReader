@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5400224F19BED518003FAF21 /* BookManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5400224E19BED518003FAF21 /* BookManager.m */; };
 		54C24FC819AF3A8100A3A103 /* XLLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C24FC519AF3A8100A3A103 /* XLLoginViewController.m */; };
 		54C24FC919AF3A8100A3A103 /* XLRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C24FC719AF3A8100A3A103 /* XLRegisterViewController.m */; };
 		54C24FCC19AF3AAC00A3A103 /* XLRechargeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 54C24FCB19AF3AAC00A3A103 /* XLRechargeViewController.m */; };
@@ -75,6 +76,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5400224D19BED518003FAF21 /* BookManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookManager.h; sourceTree = "<group>"; };
+		5400224E19BED518003FAF21 /* BookManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookManager.m; sourceTree = "<group>"; };
 		54C24FC419AF3A8100A3A103 /* XLLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLLoginViewController.h; sourceTree = "<group>"; };
 		54C24FC519AF3A8100A3A103 /* XLLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XLLoginViewController.m; sourceTree = "<group>"; };
 		54C24FC619AF3A8100A3A103 /* XLRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XLRegisterViewController.h; sourceTree = "<group>"; };
@@ -237,6 +240,8 @@
 				F22A8D7519896A2500DA082A /* BookShelfViewController.m */,
 				F250EAFA198AAFAB00DDECEF /* BookCell.h */,
 				F250EAFB198AAFAB00DDECEF /* BookCell.m */,
+				5400224D19BED518003FAF21 /* BookManager.h */,
+				5400224E19BED518003FAF21 /* BookManager.m */,
 			);
 			path = BookShelf;
 			sourceTree = "<group>";
@@ -590,6 +595,7 @@
 				54C24FCC19AF3AAC00A3A103 /* XLRechargeViewController.m in Sources */,
 				54C24FCF19AF3AE100A3A103 /* XLJoinVIPViewController.m in Sources */,
 				F216AA5C19B2EFA400301C8E /* XLWebViewController.m in Sources */,
+				5400224F19BED518003FAF21 /* BookManager.m in Sources */,
 				F2D5383C1976BAC100A0FDDA /* CDNavigationController.m in Sources */,
 				F2D538421976BAC100A0FDDA /* KYPageControl.m in Sources */,
 				F2D5383F1976BAC100A0FDDA /* TableDataSource.m in Sources */,

@@ -55,6 +55,10 @@
 	getter.tag = GetUpdateInfoTag;
 	getter.userData = (showAlert ? @"1" : @"0");
 	[_getterController enqueueGetter:getter];
+	
+	getter = [[RestfulAPIGetter alloc] init];
+	getter.params = @{@"c" : @"book", @"a" : @"getcontent", @"bookid" : @"10008109"};
+	[_getterController enqueueGetter:getter];
 }
 
 -(void) getRecommendBooks

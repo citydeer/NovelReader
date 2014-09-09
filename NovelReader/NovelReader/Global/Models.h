@@ -19,17 +19,6 @@
 
 
 
-@interface BookModel : PKMappingObject
-@property (readwrite) NSString* bookID;
-@property (readwrite) NSString* name;
-@property (readwrite) NSString* image;
-@property (readwrite) NSString* path;
-@property (readwrite) BOOL isNew;
-@property (readwrite) BOOL isPreview;
-@end
-
-
-
 
 @interface RechargePriceModel : PKMappingObject
 @property (readwrite) NSInteger ret;

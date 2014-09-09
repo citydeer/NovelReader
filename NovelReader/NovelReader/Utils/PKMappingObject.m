@@ -59,6 +59,21 @@ Class getPropertyTypeClass(objc_property_t property);
 	return self;
 }
 
+-(id) initWithContentsOfFile:(NSString*)path
+{
+	self = [super init];
+	if (self)
+	{
+		_dic = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
+	}
+	return self;
+}
+
+-(BOOL) writeToFile:(NSString*)path
+{
+	return [_dic writeToFile:path atomically:YES];
+}
+
 -(void) replaceDictionaryItemsInArrayProperty:(NSString*)arrayPropertyName withPKMappingObjectItems:(Class)mappingObjectClass
 {
 	if (arrayPropertyName != nil && [mappingObjectClass isSubclassOfClass:[PKMappingObject class]])

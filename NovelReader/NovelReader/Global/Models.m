@@ -48,11 +48,6 @@
 
 
 
-@implementation BookModel
-@dynamic bookID, image, isNew, isPreview, name, path;
-@end
-
-
 @implementation RechargePriceModel
 @dynamic amount_list, prize, ret;
 @end

@@ -28,6 +28,8 @@
 }
 
 -(id) initWithDictionary:(NSDictionary*)dictionary;
+-(id) initWithContentsOfFile:(NSString*)path;
+-(BOOL) writeToFile:(NSString*)path;
 
 /**
  把某个NSArray中的NSDictionary元素替换成为PKMappingObject元素。
