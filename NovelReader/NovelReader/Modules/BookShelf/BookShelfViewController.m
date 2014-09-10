@@ -22,9 +22,11 @@
 	UICollectionView* _gridView;
 	
 	NSArray* _books;
+	
+	BookManager* _bookManager;
+	
+	BOOL _onScreen;
 }
-
--(void) searchBooks;
 
 @end
 
@@ -37,12 +39,15 @@
 	self = [super init];
 	if (self)
 	{
+		_bookManager = [BookManager instance];
+		[_bookManager addObserver:self forKeyPath:@"books" options:0 context:nil];
 	}
 	return self;
 }
 
 -(void) dealloc
 {
+	[_bookManager removeObserver:self forKeyPath:@"books"];
 }
 
 -(void) loadView
@@ -67,41 +72,33 @@
 	_gridView.delegate = self;
 	[_gridView registerClass:[BookCell class] forCellWithReuseIdentifier:@"BookCell"];
 	[self.view addSubview:_gridView];
-	
-	[self searchBooks];
 }
 
--(void) searchBooks
+-(void) willPresentView:(NSTimeInterval)duration
 {
-	[self.view showColorIndicatorFreezeUI:NO];
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		@autoreleasepool {
-			NSString* searchHome = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Books"];
-			NSFileManager* localFileManager = [[NSFileManager alloc] init];
-			NSDirectoryEnumerator* dirEnum = [localFileManager enumeratorAtPath:searchHome];
-			
-			NSMutableArray* arr = [NSMutableArray array];
-			NSString* file;
-			while ((file = [dirEnum nextObject]))
-			{
-				if ([file.pathExtension.lowercaseString isEqualToString: @"txt"])
-				{
-					BookModel* model = [[BookModel alloc] init];
-					model.path = [searchHome stringByAppendingPathComponent:file];
-					model.name = file.lastPathComponent.stringByDeletingPathExtension;
-					model.isPreview = YES;
-					model.image = [[searchHome stringByAppendingPathComponent:model.name] stringByAppendingPathExtension:@"jpg"];
-					[arr addObject:model];
-				}
-			}
-			_books = [NSArray arrayWithArray:arr];
-			
-			dispatch_async(dispatch_get_main_queue(), ^{
-				[self.view dismiss];
-				[_gridView reloadData];
-			});
-		}
-	});
+	[super willPresentView:duration];
+	_onScreen = YES;
+	
+	_books = _bookManager.books;
+	[_gridView reloadData];
+}
+
+-(void) willDismissView:(NSTimeInterval)duration
+{
+	[super willDismissView:duration];
+	_onScreen = NO;
+}
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	if (!_onScreen)
+		return;
+	
+	if ([@"books" isEqualToString:keyPath])
+	{
+		_books = _bookManager.books;
+		[_gridView reloadData];
+	}
 }
 
 -(void) rightButtonAction:(id)sender

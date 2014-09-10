@@ -43,3 +43,10 @@
 @end
 
 
+@interface NSArray (PKMappingExtension)
+
+-(NSArray*) convertItemsToPKMappingObject:(Class)PKMappingObjectClass;
+
+@end
+
+

@@ -99,7 +99,7 @@
 	[self.rightButton setImage:CDImage(@"reader/navi_bookmark1") forState:UIControlStateNormal];
 	self.rightButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -15.0f);
 	
-	self.titleLabel.text = _bookModel.name;
+	self.titleLabel.text = _bookModel.book_title;
 	
 	[UIHelper moveView:self.naviBarView toY:-_naviBarHeight];
 	
@@ -506,7 +506,7 @@
 	TextRenderContext* tctx = [TextRenderContext contextWithContext:_textContext];
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 		@autoreleasepool {
-			NSString* text = [NSString stringWithContentsOfFile:_bookModel.path usedEncoding:NULL error:NULL];
+			NSString* text = [NSString stringWithContentsOfFile:@"" usedEncoding:NULL error:NULL];
 			_layoutInfo = [[ReaderLayoutInfo alloc] initWithText:text inContext:tctx];
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[self.view dismiss];

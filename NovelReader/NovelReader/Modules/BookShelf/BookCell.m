@@ -10,17 +10,18 @@
 #import "UIHelper.h"
 #import "Theme.h"
 #import "BookManager.h"
+#import "CDRemoteImageView.h"
 
 
 
 @interface BookCell ()
 {
 	UILabel* _titleLabel;
-	UIImageView* _coverImage;
+	CDRemoteImageView* _coverImage;
 	UIImageView* _newIcon;
 	UIImageView* _previewIcon;
 	
-	BookModel* _model;
+	XLBookModel* _model;
 }
 
 @end
@@ -42,20 +43,20 @@
 		[v addSubview:iv];
 		[self addSubview:v];
 		
-		_coverImage = [[UIImageView alloc] initWithFrame:CGRectMake(2, 2, frame.size.width-4, frame.size.height-31-4)];
+		_coverImage = [[CDRemoteImageView alloc] initWithFrame:CGRectMake(2, 2, frame.size.width-4, frame.size.height-31-4)];
 		_coverImage.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		_coverImage.backgroundColor = CDColor(nil, @"c9c9c9");
-		_coverImage.contentMode = UIViewContentModeScaleAspectFill;
+		_coverImage.imageContentMode = UIViewContentModeScaleAspectFill;
 		_coverImage.clipsToBounds = YES;
 		[self addSubview:_coverImage];
 		
 		_newIcon = [[UIImageView alloc] initWithImage:CDImage(@"shelf/new_icon")];
-		[UIHelper moveView:_newIcon toX:frame.size.width-35.5 andY:-1];
+		[UIHelper moveView:_newIcon toX:frame.size.width-35 andY:-1];
 		_newIcon.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		[self addSubview:_newIcon];
 		
 		_previewIcon = [[UIImageView alloc] initWithImage:CDImage(@"shelf/preview_icon")];
-		[UIHelper moveView:_previewIcon toX:frame.size.width-35.5 andY:-1];
+		[UIHelper moveView:_previewIcon toX:frame.size.width-35 andY:-1];
 		_previewIcon.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		[self addSubview:_previewIcon];
 		
@@ -75,10 +76,13 @@
 {
 	_model = model;
 	
-	_coverImage.image = [UIImage imageWithContentsOfFile:_model.image];
-	_newIcon.hidden = !_model.isNew;
+	NSString* imgURL = _model.book_coverimg_big;
+	if (imgURL.length <= 0) imgURL = _model.book_coverimg_middle;
+	if (imgURL.length <= 0) imgURL = _model.book_coverimg_small;
+	_coverImage.imageURL = imgURL;
+	_newIcon.hidden = !_model.book_isnew;
 	_previewIcon.hidden = !_model.isPreview;
-	_titleLabel.text = _model.name;
+	_titleLabel.text = _model.book_title;
 }
 
 @end

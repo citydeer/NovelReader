@@ -51,13 +51,9 @@
 -(void) checkAppUpdateInfo:(BOOL)showAlert
 {
 	RestfulAPIGetter* getter = [[RestfulAPIGetter alloc] init];
-	getter.params = @{@"c" : @"site", @"a" : @"upgrade", @"os" : @"2", @"channel" : @""};
+	getter.params = @{@"c" : @"site", @"a" : @"upgrade", @"os" : @"2", @"appver" : [Properties appProperties].APPVersion, @"channel" : @""};
 	getter.tag = GetUpdateInfoTag;
 	getter.userData = (showAlert ? @"1" : @"0");
-	[_getterController enqueueGetter:getter];
-	
-	getter = [[RestfulAPIGetter alloc] init];
-	getter.params = @{@"c" : @"book", @"a" : @"getcontent", @"bookid" : @"10008109"};
 	[_getterController enqueueGetter:getter];
 }
 
@@ -73,11 +69,12 @@
 {
 	if (getter.tag == GetUpdateInfoTag)
 	{
-		if ([Model checkGetter:getter onView:getNaviController().view showMsg:nil])
+		BOOL showAlert = [@"1" isEqualToString:(NSString*)getter.userData];
+		if (getter.resultCode == KYResultCodeSuccess)
 		{
 			AppInfoModel* model = [[AppInfoModel alloc] initWithDictionary:((RestfulAPIGetter*)getter).result[@"data"]];
 			CDSetProp(PropAppCommentURL, model.commurl);
-			if ([@"1" isEqualToString:(NSString*)getter.userData])
+			if (showAlert)
 			{
 				if (model.isupdate)
 				{
@@ -91,6 +88,10 @@
 					[alert show];
 				}
 			}
+		}
+		else if (showAlert)
+		{
+			[Model checkGetter:getter onView:getNaviController().view showMsg:nil];
 		}
 	}
 	else if (getter.tag == GetRecommendBookTag)

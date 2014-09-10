@@ -61,11 +61,11 @@ Class getPropertyTypeClass(objc_property_t property);
 
 -(id) initWithContentsOfFile:(NSString*)path
 {
-	self = [super init];
-	if (self)
-	{
-		_dic = [[NSMutableDictionary alloc] initWithContentsOfFile:path];
-	}
+	NSDictionary* dictionary = [NSDictionary dictionaryWithContentsOfFile:path];
+	if (dictionary == nil)
+		return nil;
+	
+	self = [self initWithDictionary:dictionary];
 	return self;
 }
 
@@ -80,17 +80,7 @@ Class getPropertyTypeClass(objc_property_t property);
 	{
 		NSArray* array = [_dic objectForKey:arrayPropertyName];
 		if ([array isKindOfClass:[NSArray class]])
-		{
-			NSMutableArray* mArray = [NSMutableArray arrayWithCapacity:array.count];
-			for (int i = 0; i < array.count; ++i)
-			{
-				id item = [array objectAtIndex:i];
-				if (![item isKindOfClass:[NSDictionary class]])
-					return;
-				[mArray addObject:[[mappingObjectClass alloc] initWithDictionary:item]];
-			}
-			[_dic setObject:[NSArray arrayWithArray:mArray] forKey:arrayPropertyName];
-		}
+			[_dic setObject:[array convertItemsToPKMappingObject:mappingObjectClass] forKey:arrayPropertyName];
 	}
 }
 
@@ -288,6 +278,30 @@ void propertySetter_Float(PKMappingObject* _self, SEL _cmd, float value)
 void propertySetter_Double(PKMappingObject* _self, SEL _cmd, double value)
 {
 	[_self->_dic setObject:[NSNumber numberWithDouble:value] forKey:[_self keyFromSetterString:_cmd]];
+}
+
+@end
+
+
+
+
+@implementation NSArray (PKMappingExtension)
+
+-(NSArray*) convertItemsToPKMappingObject:(Class)PKMappingObjectClass
+{
+	if (![PKMappingObjectClass isSubclassOfClass:[PKMappingObject class]])
+	{
+		@throw [NSException exceptionWithName:@"Invalid Class" reason:[NSString stringWithFormat:@"%@ is not subclass of PKMappingObject", NSStringFromClass(PKMappingObjectClass)] userInfo:nil];
+	}
+	
+	NSMutableArray* mArray = [NSMutableArray arrayWithCapacity:self.count];
+	for (int i = 0; i < self.count; ++i)
+	{
+		id item = [self objectAtIndex:i];
+		if ([item isKindOfClass:[NSDictionary class]])
+			[mArray addObject:[[PKMappingObjectClass alloc] initWithDictionary:item]];
+	}
+	return [NSArray arrayWithArray:mArray];
 }
 
 @end

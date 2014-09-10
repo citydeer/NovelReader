@@ -27,6 +27,7 @@
 
 #define PropAppCommentURL @"app.comment.url"
 #define PropAppLaunchedFlag @"app.start.flag"
+#define PropAppPresetFlag @"app.app.preset"
 #define PropAppStartBooks @"app.start.books"
 #define PropAppDeviceToken @"app.device.token"
 
