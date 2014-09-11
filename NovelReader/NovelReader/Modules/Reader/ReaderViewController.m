@@ -56,7 +56,9 @@
 
 -(void) updateNightModeViews;
 -(void) updateFontViews;
+
 -(void) loadBook;
+-(void) setPageViewController;
 
 @end
 
@@ -86,6 +88,18 @@
 
 -(void) dealloc
 {
+	[_bookModel removeObserver:self forKeyPath:@"chapters"];
+	_bookModel.chapters = nil;
+}
+
+-(void) setBookModel:(XLBookModel *)bookModel
+{
+	if (_bookModel != bookModel)
+	{
+		[_bookModel removeObserver:self forKeyPath:@"chapters"];
+		_bookModel = bookModel;
+		[_bookModel addObserver:self forKeyPath:@"chapters" options:0 context:nil];
+	}
 }
 
 -(void) loadView
@@ -453,29 +467,67 @@
 
 -(UIViewController*) pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
-	NSUInteger index = ((ReaderPageViewController*)viewController).pageIndex;
-	if (index > 0)
+	ReaderPageViewController* vc = (ReaderPageViewController*)viewController;
+	if (!vc.isViewReady)
+		return nil;
+	
+	if (vc.layoutInfo != nil && vc.pageIndex > 0)
 	{
 		ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
-		pvc.layoutInfo = _layoutInfo;
-		pvc.pageIndex = index - 1;
+		pvc.bookModel = vc.bookModel;
+		pvc.chapterModel = vc.chapterModel;
+		pvc.layoutInfo = vc.layoutInfo;
+		pvc.pageIndex = vc.pageIndex - 1;
+		pvc.textContext = _textContext;
 		pvc.bgColor = _pageBGColor;
 		return pvc;
 	}
+	
+	NSUInteger cIndex = [_bookModel.chapters indexOfObject:vc.chapterModel];
+	if (cIndex != NSNotFound && cIndex > 0)
+	{
+		ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
+		pvc.bookModel = vc.bookModel;
+		pvc.chapterModel = _bookModel.chapters[cIndex-1];
+		pvc.textContext = _textContext;
+		pvc.bgColor = _pageBGColor;
+		return pvc;
+	}
+	
+	[self.view showPopMsg:@"已经是第一页了" timeout:2];
 	return nil;
 }
 
 -(UIViewController*) pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
-	NSUInteger index = ((ReaderPageViewController*)viewController).pageIndex;
-	if (index + 1 < _layoutInfo.pages.count)
+	ReaderPageViewController* vc = (ReaderPageViewController*)viewController;
+	if (!vc.isViewReady)
+		return nil;
+	
+	if (vc.layoutInfo != nil && vc.pageIndex + 1 < vc.layoutInfo.pages.count)
 	{
 		ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
-		pvc.layoutInfo = _layoutInfo;
-		pvc.pageIndex = index + 1;
+		pvc.bookModel = vc.bookModel;
+		pvc.chapterModel = vc.chapterModel;
+		pvc.layoutInfo = vc.layoutInfo;
+		pvc.pageIndex = vc.pageIndex + 1;
+		pvc.textContext = _textContext;
 		pvc.bgColor = _pageBGColor;
 		return pvc;
 	}
+	
+	NSUInteger cIndex = [_bookModel.chapters indexOfObject:vc.chapterModel];
+	if (cIndex != NSNotFound && cIndex + 1 < _bookModel.chapters.count)
+	{
+		ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
+		pvc.bookModel = vc.bookModel;
+		pvc.chapterModel = _bookModel.chapters[cIndex+1];
+		pvc.textContext = _textContext;
+		pvc.bgColor = _pageBGColor;
+		return pvc;
+	}
+	
+	[self.view showPopMsg:@"已经是最后一页了" timeout:2];
 	return nil;
 }
 
@@ -488,48 +540,42 @@
 
 -(void) loadBook
 {
-	if (_loadingBook)
-		return;
-	_loadingBook = YES;
-	
-	[self.view showColorIndicatorFreezeUI:NO];
-	
-	CFIndex currentLocation = 0;
-	NSUInteger currentIndex = self.currentPageController.pageIndex;
-	if (_layoutInfo.pages.count > 0 && currentIndex > 0)
+	if (_bookModel.chapters.count <= 0)
 	{
-		RenderLine* line = [[_layoutInfo.pages objectAtIndex:currentIndex] firstObject];
-		if (line)
-			currentLocation = line.range.location;
+		[_bookModel requestInfoAndChapters];
 	}
+	else
+	{
+		[self setPageViewController];
+	}
+}
+
+-(void) setPageViewController
+{
+	NSUInteger cIndex = [_bookModel.chapters indexOfObject:_chapterModel];
+	if (cIndex == NSNotFound && _bookModel.chapters.count > 0)
+		cIndex = 0;
+	if (cIndex == NSNotFound)
+		return;
 	
-	TextRenderContext* tctx = [TextRenderContext contextWithContext:_textContext];
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		@autoreleasepool {
-			NSString* text = [NSString stringWithContentsOfFile:@"" usedEncoding:NULL error:NULL];
-			_layoutInfo = [[ReaderLayoutInfo alloc] initWithText:text inContext:tctx];
-			dispatch_async(dispatch_get_main_queue(), ^{
-				[self.view dismiss];
-				if (_layoutInfo.pages.count > 0)
-				{
-					NSUInteger toIndex = 0;
-					if (currentLocation > 0)
-					{
-						NSInteger theIndex = [_layoutInfo findIndexForLocation:currentLocation inRange:NSMakeRange(0, _layoutInfo.pages.count)];
-						if (theIndex > 0)
-							toIndex = theIndex;
-					}
-					
-					ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
-					pvc.layoutInfo = _layoutInfo;
-					pvc.pageIndex = toIndex;
-					pvc.bgColor = _pageBGColor;
-					[_pageViewController setViewControllers:[NSArray arrayWithObject:pvc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:NULL];
-				}
-				_loadingBook = NO;
-			});
-		}
-	});
+	ReaderPageViewController* oldVC = self.currentPageController;
+	if (oldVC != nil && oldVC.chapterModel == _bookModel.chapters[cIndex])
+		return;
+	
+	ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
+	pvc.bookModel = _bookModel;
+	pvc.chapterModel = _bookModel.chapters[cIndex];
+	pvc.bgColor = _pageBGColor;
+	pvc.textContext = _textContext;
+	[_pageViewController setViewControllers:[NSArray arrayWithObject:pvc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:NULL];
+}
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	if (object == _bookModel)
+	{
+		[self setPageViewController];
+	}
 }
 
 @end

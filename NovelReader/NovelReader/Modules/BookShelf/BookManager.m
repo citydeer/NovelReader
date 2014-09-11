@@ -13,14 +13,123 @@
 
 
 
+@interface XLChapterModel () <GetterControllerOwner>
+{
+	GetterController* _getterController;
+}
+@end
+
+
+@implementation XLChapterModel
+
+@dynamic chapter_bookid, chapter_id, chapter_paytype, chapter_payvalue, chapter_readable, chapter_title, chapter_updatetime, chapter_wordnum;
+
+-(BOOL) isEqual:(id)object
+{
+	if ([object isKindOfClass:[XLChapterModel class]])
+		return [self.chapter_id isEqualToString:((XLChapterModel*)object).chapter_id];
+	return NO;
+}
+
+-(void) requestContent
+{
+	if (self.content.length <=0 && self.bookPath.length > 0)
+	{
+		NSString* txtPath = [self.bookPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.txt", self.chapter_id]];
+		NSString* txt = [NSString stringWithContentsOfFile:txtPath encoding:NSUTF8StringEncoding error:NULL];
+		if (txt.length > 0)
+		{
+			[self setValue:txt forKey:@"content"];
+			return;
+		}
+	}
+	
+	_getterController = [[GetterController alloc] initWithOwner:self];
+	RestfulAPIGetter* getter = [[RestfulAPIGetter alloc] init];
+	getter.params = @{@"c" : @"book", @"a" : @"getcontent", @"bookid" : self.chapter_bookid, @"chapterid" : self.chapter_id};
+	[_getterController enqueueGetter:getter];
+}
+
+-(void) handleGetter:(id<Getter>)getter
+{
+	if (getter.resultCode == KYResultCodeSuccess)
+	{
+		NSDictionary* data = ((RestfulAPIGetter*)getter).result[@"data"];
+		[self setValue:data[@"chapter_content"] forKey:@"content"];
+		if (self.bookPath.length > 0)
+		{
+			NSString* txtPath = [self.bookPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.txt", self.chapter_id]];
+			[self.content writeToFile:txtPath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+		}
+	}
+}
+
+@end
+
+
+
+
+@interface XLBookModel () <GetterControllerOwner>
+{
+	GetterController* _getterController;
+}
+@end
+
+
 @implementation XLBookModel
-@dynamic book_about, book_addtime, book_author, book_chapterinfoid, book_coverimg_big, book_coverimg_middle, book_coverimg_small, book_id, book_isbn, book_isnew, book_isread, book_newchapterid, book_paytype, book_restype, book_showpay, book_state, book_tag, book_title, book_typeid, book_uptime, book_wordnum, id, isDownload, isFavorate, isPreview, bookPath;
+
+@dynamic book_about, book_addtime, book_author, book_chapterinfoid, book_coverimg_big, book_coverimg_middle, book_coverimg_small, book_id, book_isbn, book_isnew, book_isread, book_newchapterid, book_paytype, book_restype, book_showpay, book_state, book_tag, book_title, book_typeid, book_uptime, book_wordnum, id, isDownload, isFavorate, isPreview;
 
 -(BOOL) isEqual:(id)object
 {
 	if ([object isKindOfClass:[XLBookModel class]])
 		return [self.book_id isEqualToString:((XLBookModel*)object).book_id];
 	return NO;
+}
+
+-(void) requestInfoAndChapters
+{
+	if (self.chapters.count <=0 && self.bookPath.length > 0)
+	{
+		NSArray* dir = [NSArray arrayWithContentsOfFile:[self.bookPath stringByAppendingPathComponent:@"directory.plist"]];
+		[self setValue:[dir arrayByConvertToPKMappingObject:[XLChapterModel class]] forKey:@"chapters"];
+	}
+	
+	_getterController = [[GetterController alloc] initWithOwner:self];
+	RestfulAPIGetter* getter = [[RestfulAPIGetter alloc] init];
+	getter.params = @{@"c" : @"book", @"a" : @"getinfochapters", @"bookid" : self.book_id};
+	[_getterController enqueueGetter:getter];
+}
+
+-(void) saveBook
+{
+	if (self.bookPath.length > 0)
+	{
+		[self writeToFile:[self.bookPath stringByAppendingPathComponent:@"bookinfo.plist"]];
+		[[self.chapters arrayByConvertToDictionary] writeToFile:[self.bookPath stringByAppendingPathComponent:@"directory.plist"] atomically:YES];
+	}
+}
+
+-(void) saveBookInfo
+{
+	if (self.bookPath.length > 0)
+	{
+		[self writeToFile:[self.bookPath stringByAppendingPathComponent:@"bookinfo.plist"]];
+	}
+}
+
+-(void) handleGetter:(id<Getter>)getter
+{
+	if (getter.resultCode == KYResultCodeSuccess)
+	{
+		NSDictionary* data = ((RestfulAPIGetter*)getter).result[@"data"];
+		[_dic addEntriesFromDictionary:data[@"info"]];
+		NSArray* chapters = [data[@"chapters"] arrayByConvertToPKMappingObject:[XLChapterModel class]];
+		for (XLChapterModel* chapter in chapters)
+			chapter.bookPath = self.bookPath;
+		[self setValue:chapters forKey:@"chapters"];
+		[self saveBook];
+	}
 }
 
 @end
@@ -155,7 +264,7 @@
 		changed = YES;
 		book.bookPath = [_bookHomePath stringByAppendingPathComponent:book.book_id];
 		[self createDirIfNotExists:book.bookPath];
-		[book writeToFile:[book.bookPath stringByAppendingPathComponent:@"bookinfo.plist"]];
+		[book saveBook];
 		[_books addObject:book];
 	}
 	[_lock unlock];
@@ -170,7 +279,7 @@
 {
 	if (getter.resultCode == KYResultCodeSuccess)
 	{
-		NSArray* books = [((RestfulAPIGetter*)getter).result[@"data"] convertItemsToPKMappingObject:[XLBookModel class]];
+		NSArray* books = [((RestfulAPIGetter*)getter).result[@"data"] arrayByConvertToPKMappingObject:[XLBookModel class]];
 		for (XLBookModel* b in books)
 		{
 			b.isPreview = YES;

@@ -9,11 +9,20 @@
 #import "ReaderLayoutInfo.h"
 
 
+@class XLChapterModel, XLBookModel;
+
 @interface ReaderPageViewController : UIViewController
 
+@property (readonly) BOOL isViewReady;
+
+@property (nonatomic, strong) XLBookModel* bookModel;
+@property (nonatomic, strong) XLChapterModel* chapterModel;
+
+@property (nonatomic, strong) TextRenderContext* textContext;
 @property (nonatomic, strong) ReaderLayoutInfo* layoutInfo;
 @property (nonatomic, assign) NSUInteger pageIndex;
 @property (nonatomic, strong) UIColor* bgColor;
 
 @end
+
 

@@ -13,6 +13,7 @@
 
 @interface PKMappingObject ()
 
+@property (readonly) NSMutableDictionary* rawDictionary;
 -(NSString*) keyFromSetterString:(SEL)selector;
 
 @end
@@ -37,6 +38,7 @@ Class getPropertyTypeClass(objc_property_t property);
 
 @implementation PKMappingObject
 
+@synthesize rawDictionary = _dic;
 
 -(id) init
 {
@@ -80,7 +82,7 @@ Class getPropertyTypeClass(objc_property_t property);
 	{
 		NSArray* array = [_dic objectForKey:arrayPropertyName];
 		if ([array isKindOfClass:[NSArray class]])
-			[_dic setObject:[array convertItemsToPKMappingObject:mappingObjectClass] forKey:arrayPropertyName];
+			[_dic setObject:[array arrayByConvertToPKMappingObject:mappingObjectClass] forKey:arrayPropertyName];
 	}
 }
 
@@ -287,7 +289,7 @@ void propertySetter_Double(PKMappingObject* _self, SEL _cmd, double value)
 
 @implementation NSArray (PKMappingExtension)
 
--(NSArray*) convertItemsToPKMappingObject:(Class)PKMappingObjectClass
+-(NSArray*) arrayByConvertToPKMappingObject:(Class)PKMappingObjectClass
 {
 	if (![PKMappingObjectClass isSubclassOfClass:[PKMappingObject class]])
 	{
@@ -300,6 +302,18 @@ void propertySetter_Double(PKMappingObject* _self, SEL _cmd, double value)
 		id item = [self objectAtIndex:i];
 		if ([item isKindOfClass:[NSDictionary class]])
 			[mArray addObject:[[PKMappingObjectClass alloc] initWithDictionary:item]];
+	}
+	return [NSArray arrayWithArray:mArray];
+}
+
+-(NSArray*) arrayByConvertToDictionary
+{
+	NSMutableArray* mArray = [NSMutableArray arrayWithCapacity:self.count];
+	for (int i = 0; i < self.count; ++i)
+	{
+		id item = [self objectAtIndex:i];
+		if ([item isKindOfClass:[PKMappingObject class]])
+			[mArray addObject:((PKMappingObject*)item).rawDictionary];
 	}
 	return [NSArray arrayWithArray:mArray];
 }

@@ -45,7 +45,8 @@
 
 @interface NSArray (PKMappingExtension)
 
--(NSArray*) convertItemsToPKMappingObject:(Class)PKMappingObjectClass;
+-(NSArray*) arrayByConvertToPKMappingObject:(Class)PKMappingObjectClass;
+-(NSArray*) arrayByConvertToDictionary;
 
 @end
 

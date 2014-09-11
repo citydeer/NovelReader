@@ -38,7 +38,34 @@
 @property (readwrite) BOOL isPreview;
 @property (readwrite) BOOL isFavorate;
 @property (readwrite) BOOL isDownload;
+
 @property (nonatomic, copy) NSString* bookPath;
+@property (nonatomic, copy) NSArray* chapters;
+
+-(void) saveBook;
+-(void) saveBookInfo;
+-(void) requestInfoAndChapters;
+
+@end
+
+
+
+
+@interface XLChapterModel : PKMappingObject
+
+@property (readwrite) NSString* chapter_id;
+@property (readwrite) NSString* chapter_title;
+@property (readwrite) NSString* chapter_bookid;
+@property (readwrite) NSString* chapter_wordnum;
+@property (readwrite) NSString* chapter_paytype;
+@property (readwrite) NSString* chapter_payvalue;
+@property (readwrite) NSString* chapter_updatetime;
+@property (readwrite) BOOL chapter_readable;
+
+@property (nonatomic, copy) NSString* bookPath;
+@property (nonatomic, copy) NSString* content;
+
+-(void) requestContent;
 
 @end
 

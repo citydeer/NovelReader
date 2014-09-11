@@ -9,6 +9,9 @@
 #import "ReaderPageViewController.h"
 #import "Theme.h"
 #import <CoreText/CoreText.h>
+#import "BookManager.h"
+#import "UIHelper.h"
+#import "KYTipsView.h"
 
 
 
@@ -73,9 +76,20 @@
 
 
 
+
 @interface ReaderPageViewController ()
+{
+	ReaderPageView* _renderView;
+	BOOL _isRendering;
+}
+
+@property (readonly) ReaderPageView* renderView;
+
+-(void) showBuyView;
+-(void) reloadContent;
 
 @end
+
 
 
 
@@ -90,12 +104,120 @@
 	return self;
 }
 
+-(void) dealloc
+{
+	[_chapterModel removeObserver:self forKeyPath:@"content"];
+}
+
+-(void) setChapterModel:(XLChapterModel *)chapterModel
+{
+	if (_chapterModel != chapterModel)
+	{
+		[_chapterModel removeObserver:self forKeyPath:@"content"];
+		_chapterModel = chapterModel;
+		[_chapterModel addObserver:self forKeyPath:@"content" options:0 context:nil];
+	}
+}
+
 -(void) loadView
 {
-	ReaderPageView* pv = [[ReaderPageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	pv.backgroundColor = _bgColor;
-	[pv applyInfo:_layoutInfo lines:[_layoutInfo.pages objectAtIndex:_pageIndex]];
-	self.view = pv;
+	self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	self.view.backgroundColor = _bgColor;
+}
+
+-(ReaderPageView*) renderView
+{
+	if (_renderView == nil)
+	{
+		_renderView = [[ReaderPageView alloc] initWithFrame:self.view.bounds];
+		_renderView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+		_renderView.backgroundColor = _bgColor;
+		[self.view addSubview:_renderView];
+	}
+	return _renderView;
+}
+
+-(void) viewDidLoad
+{
+	[super viewDidLoad];
+	
+	if (self.layoutInfo != nil)
+	{
+		[self.renderView applyInfo:_layoutInfo lines:[_layoutInfo.pages objectAtIndex:_pageIndex]];
+		_isViewReady = YES;
+	}
+	else if (_chapterModel != nil)
+	{
+		if (!_chapterModel.chapter_readable)
+			[self showBuyView];
+		else if (_chapterModel.content.length <= 0)
+		{
+			[self.view showColorIndicatorFreezeUI:NO];
+			[_chapterModel requestContent];
+		}
+		else
+			[self reloadContent];
+	}
+}
+
+-(void) showBuyView
+{
+	[UIHelper addLabel:self.view t:@"购买" tc:[UIColor blackColor] fs:20 b:YES al:NSTextAlignmentCenter frame:self.view.bounds];
+	
+	_isViewReady = YES;
+}
+
+-(void) reloadContent
+{
+	if (!_chapterModel.chapter_readable)
+		return;
+	
+	if (_isRendering)
+		return;
+	_isRendering = YES;
+	
+	[self.view showColorIndicatorFreezeUI:NO];
+	
+	CFIndex currentLocation = 0;
+	NSUInteger currentIndex = self.pageIndex;
+	if (_layoutInfo.pages.count > 0 && currentIndex > 0)
+	{
+		RenderLine* line = [[_layoutInfo.pages objectAtIndex:currentIndex] firstObject];
+		if (line)
+			currentLocation = line.range.location;
+	}
+	
+	TextRenderContext* tctx = [TextRenderContext contextWithContext:_textContext];
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		@autoreleasepool {
+			NSString* text = self.chapterModel.content;
+			_layoutInfo = [[ReaderLayoutInfo alloc] initWithText:text inContext:tctx];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[self.view dismiss];
+				if (_layoutInfo.pages.count > 0)
+				{
+					_pageIndex = 0;
+					if (currentLocation > 0)
+					{
+						NSInteger theIndex = [_layoutInfo findIndexForLocation:currentLocation inRange:NSMakeRange(0, _layoutInfo.pages.count)];
+						if (theIndex > 0)
+							_pageIndex = theIndex;
+					}
+					[self.renderView applyInfo:_layoutInfo lines:[_layoutInfo.pages objectAtIndex:_pageIndex]];
+				}
+				_isViewReady = YES;
+				_isRendering = NO;
+			});
+		}
+	});
+}
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	if (object == _chapterModel)
+	{
+		[self reloadContent];
+	}
 }
 
 @end
