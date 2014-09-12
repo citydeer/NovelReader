@@ -601,6 +601,7 @@
 	if ([keyPath isEqualToString:@"chapters"])
 	{
 		[self.view dismiss];
+		self.titleLabel.text = _bookModel.book_title;
 		[self setPageViewController];
 	}
 	else if ([keyPath isEqualToString:@"requestFailed"] && _bookModel.requestFailed)

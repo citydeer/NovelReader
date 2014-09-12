@@ -17,16 +17,24 @@
 
 
 
-@interface BookShelfViewController () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SelectViewDelegate>
+@interface BookShelfViewController () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SelectViewDelegate, UIAlertViewDelegate>
 {
 	UICollectionView* _gridView;
 	
 	NSArray* _books;
-	
 	BookManager* _bookManager;
 	
 	BOOL _onScreen;
+	BOOL _editing;
+	
+	UIButton* _doneButton;
+	UIButton* _deleteButton;
 }
+
+-(void) deleteAction:(id)sender;
+-(void) doneAction:(id)sender;
+-(void) updateView;
+-(void) updateDeleteButton;
 
 @end
 
@@ -58,6 +66,24 @@
 	
 	[self.rightButton setImage:CDImage(@"shelf/navi_menu1") forState:UIControlStateNormal];
 	
+	_deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(0, _statusBarHeight, 80.0f, _naviBarHeight - _statusBarHeight)];
+	_deleteButton.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin;
+	_deleteButton.showsTouchWhenHighlighted = YES;
+	_deleteButton.titleLabel.font = [UIFont systemFontOfSize:14];
+	[_deleteButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	[_deleteButton setTitleColor:CDColor(nil, @"4e4e4e") forState:UIControlStateDisabled];
+	[_deleteButton addTarget:self action:@selector(deleteAction:) forControlEvents:UIControlEventTouchUpInside];
+	[self.naviBarView addSubview:_deleteButton];
+	
+	_doneButton = [[UIButton alloc] initWithFrame:CGRectMake(self.naviBarView.bounds.size.width - 60.0f, _statusBarHeight, 60.0f, _naviBarHeight - _statusBarHeight)];
+	_doneButton.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin;
+	_doneButton.showsTouchWhenHighlighted = YES;
+	_doneButton.titleLabel.font = [UIFont systemFontOfSize:14];
+	[_doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	[_doneButton setTitle:@"完成" forState:UIControlStateNormal];
+	[_doneButton addTarget:self action:@selector(doneAction:) forControlEvents:UIControlEventTouchUpInside];
+	[self.naviBarView addSubview:_doneButton];
+	
 	CGRect rect = self.view.bounds;
 	
 	UICollectionViewFlowLayout* cvf = [[UICollectionViewFlowLayout alloc] init];
@@ -80,13 +106,39 @@
 	_onScreen = YES;
 	
 	_books = [_bookManager.books copy];
-	[_gridView reloadData];
+	_editing = NO;
+	[self updateView];
 }
 
 -(void) willDismissView:(NSTimeInterval)duration
 {
 	[super willDismissView:duration];
 	_onScreen = NO;
+}
+
+-(void) updateView
+{
+	self.rightButton.hidden = _editing;
+	_deleteButton.hidden = !_editing;
+	_doneButton.hidden = !_editing;
+	[self updateDeleteButton];
+	
+	for (XLBookModel* book in _books)
+	{
+		book.editing = _editing;
+		book.selected = NO;
+	}
+	[_gridView reloadData];
+}
+
+-(void) updateDeleteButton
+{
+	NSInteger count = 0;
+	for (XLBookModel* book in _books)
+		if (book.selected)
+			count++;
+	[_deleteButton setTitle:[NSString stringWithFormat:@"删除(%d)", count] forState:UIControlStateNormal];
+	_deleteButton.enabled = (count > 0);
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -97,7 +149,8 @@
 	if ([@"books" isEqualToString:keyPath])
 	{
 		_books = [_bookManager.books copy];
-		[_gridView reloadData];
+		_editing = NO;
+		[self updateView];
 	}
 }
 
@@ -105,8 +158,10 @@
 {
 	SelectorView* sv = [[SelectorView alloc] initWithFrame:CGRectMake(320-156-10, _naviBarHeight-13, 156, 150)];
 	sv.delegate = self;
-	sv.icons = @[CDImage(@"shelf/import_book"), CDImage(@"shelf/manage_book"), CDImage(@"shelf/clean_book")];
-	sv.items = @[@"导入本地书籍", @"管理书籍", @"清理无效书籍"];
+//	sv.icons = @[CDImage(@"shelf/import_book"), CDImage(@"shelf/manage_book"), CDImage(@"shelf/clean_book")];
+//	sv.items = @[@"导入本地书籍", @"管理书籍", @"清理无效书籍"];
+	sv.icons = @[CDImage(@"shelf/manage_book")];
+	sv.items = @[@"管理书籍"];
 	[UIHelper setView:sv toHeight:sv.totalHeight];
 	[sv showInView:self.view];
 }
@@ -114,6 +169,36 @@
 -(void) didSelect:(SelectorView *)selectorView index:(NSUInteger)index
 {
 	[selectorView dismiss];
+	
+	_editing = YES;
+	[self updateView];
+}
+
+-(void) deleteAction:(id)sender
+{
+	UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil message:@"您确定要删除这些书吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+	[alert show];
+}
+
+-(void) doneAction:(id)sender
+{
+	_editing = NO;
+	[self updateView];
+}
+
+-(void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+	if (buttonIndex == 1)
+	{
+		NSMutableArray* toBeDeleted = [NSMutableArray array];
+		for (XLBookModel* book in _books)
+			if (book.selected)
+				[toBeDeleted addObject:book];
+		
+		_editing = NO;
+		[self updateView];
+		[_bookManager deleteBooks:toBeDeleted];
+	}
 }
 
 -(NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -130,9 +215,19 @@
 
 -(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-	ReaderViewController* vc = [[ReaderViewController alloc] init];
-	vc.bookModel = [_books objectAtIndex:indexPath.row];
-	[_parent.cdNavigationController pushViewController:vc];
+	if (_editing)
+	{
+		XLBookModel* book = _books[indexPath.row];
+		book.selected = !book.selected;
+		[collectionView reloadItemsAtIndexPaths:@[indexPath]];
+		[self updateDeleteButton];
+	}
+	else
+	{
+		ReaderViewController* vc = [[ReaderViewController alloc] init];
+		vc.bookModel = [_books objectAtIndex:indexPath.row];
+		[_parent.cdNavigationController pushViewController:vc];
+	}
 }
 
 @end

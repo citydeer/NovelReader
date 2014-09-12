@@ -45,6 +45,9 @@
 @property (nonatomic, assign) BOOL requestFailed;
 @property (nonatomic, copy) NSString* errorMsg;
 
+@property (nonatomic, assign) BOOL editing;
+@property (nonatomic, assign) BOOL selected;
+
 -(void) saveBook;
 -(void) saveBookInfo;
 -(void) requestInfoAndChapters;
@@ -87,7 +90,14 @@
 
 +(BookManager*) instance;
 
--(void) addBook:(XLBookModel*)book;
+-(void) addBooks:(NSArray*)books;
+-(void) deleteBooks:(NSArray*)books;
+
+-(XLBookModel*) getBook:(NSString*)bookID;
+-(void) addFav:(NSString*)bookID;
+-(void) downloadBook:(NSString*)bookID;
+-(BOOL) isFav:(NSString*)bookID;
+-(BOOL) hasDownloaded:(NSString*)bookID;
 
 @end
 

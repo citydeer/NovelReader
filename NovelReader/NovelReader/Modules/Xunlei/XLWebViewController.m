@@ -15,6 +15,8 @@
 #import "Encodings.h"
 #import "Properties.h"
 #import <AdSupport/AdSupport.h>
+#import "BookManager.h"
+#import "ReaderViewController.h"
 
 
 
@@ -110,7 +112,10 @@
 	}
 	else if ([appclient isEqualToString:@"3"])
 	{
-		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@&fav=0&down=0", _pageURL]];
+		NSString* bookID = params[@"bookid"];
+		NSInteger fav = ([[BookManager instance] isFav:bookID] ? 1 : 0);
+		NSInteger down = ([[BookManager instance] hasDownloaded:bookID] ? 1 : 0);
+		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@&fav=%d&down=%d", _pageURL, fav, down]];
 	}
 	
 	_shouldReload = YES;
@@ -192,15 +197,35 @@
 		NSDictionary* params = [request.URL queryDictionary];
 		if ([path isEqualToString:@"/showreader"])
 		{
-			[self.view showPopMsg:[NSString stringWithFormat:@"阅读, bookid=%@, dirid=%@", params[@"bookid"], params[@"dirid"]] timeout:5];
+			NSString* bid = params[@"bookid"];
+			NSString* cid = params[@"dirid"];
+			if (bid.length > 0)
+			{
+				XLBookModel* book = [[BookManager instance] getBook:bid];
+				if (book == nil)
+				{
+					book = [[XLBookModel alloc] initWithDictionary:nil];
+					book.book_id = bid;
+				}
+				ReaderViewController* vc = [[ReaderViewController alloc] init];
+				vc.bookModel = book;
+				vc.chapterID = cid;
+				[self.cdNavigationController pushViewController:vc];
+			}
+			else
+			{
+				[self.view showPopMsg:[NSString stringWithFormat:@"无效图书!"] timeout:3];
+			}
 		}
 		else if ([path isEqualToString:@"/addfav"])
 		{
-			[self.view showPopMsg:[NSString stringWithFormat:@"收藏, bookid=%@", params[@"bookid"]] timeout:5];
+			[[BookManager instance] addFav:params[@"bookid"]];
+			[self.view showPopMsg:[NSString stringWithFormat:@"已收藏到书架!"] timeout:3];
 		}
 		else if ([path isEqualToString:@"/download"])
 		{
-			[self.view showPopMsg:[NSString stringWithFormat:@"下载, bookid=%@", params[@"bookid"]] timeout:5];
+			[[BookManager instance] downloadBook:params[@"bookid"]];
+			[self.view showPopMsg:[NSString stringWithFormat:@"下载完成!"] timeout:3];
 		}
 		return NO;
 	}

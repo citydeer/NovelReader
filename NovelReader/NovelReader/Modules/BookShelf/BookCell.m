@@ -21,6 +21,10 @@
 	UIImageView* _newIcon;
 	UIImageView* _previewIcon;
 	
+	UIView* _maskView;
+	UIImageView* _selectedIcon;
+	UIImageView* _deselectedIcon;
+	
 	XLBookModel* _model;
 }
 
@@ -63,6 +67,23 @@
 		_titleLabel = [UIHelper label:nil tc:CDColor(nil, @"282828") fs:12 b:NO al:NSTextAlignmentCenter frame:CGRectMake(0, frame.size.height-24, frame.size.width, 20)];
 		_titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
 		[self addSubview:_titleLabel];
+		
+		_maskView = [[UIView alloc] initWithFrame:v.frame];
+		_maskView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		_maskView.backgroundColor = CDColor(nil, @"90000000");
+		[self addSubview:_maskView];
+		
+		_selectedIcon = [[UIImageView alloc] initWithImage:CDImage(@"shelf/book_selected")];
+		[UIHelper moveView:_selectedIcon toX:frame.size.width-32 andY:frame.size.height-32-31];
+		_selectedIcon.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+		[self addSubview:_selectedIcon];
+		
+		_deselectedIcon = [[UIImageView alloc] initWithImage:CDImage(@"shelf/book_deselected")];
+		[UIHelper moveView:_deselectedIcon toX:frame.size.width-32 andY:frame.size.height-32-31];
+		_deselectedIcon.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+		[self addSubview:_deselectedIcon];
+		
+		self.selectedBackgroundView = nil;
 	}
 	return self;
 }
@@ -83,6 +104,10 @@
 	_newIcon.hidden = !_model.book_isnew;
 	_previewIcon.hidden = !_model.isPreview;
 	_titleLabel.text = _model.book_title;
+	
+	_maskView.hidden = !_model.editing || _model.selected;
+	_deselectedIcon.hidden = !_model.editing || _model.selected;
+	_selectedIcon.hidden = !_model.editing || !_model.selected;
 }
 
 @end

@@ -304,17 +304,20 @@
 	[_getterController enqueueGetter:getter];
 }
 
--(void) addBook:(XLBookModel*)book
+-(void) addBooks:(NSArray*)books
 {
 	BOOL changed = NO;
 	[_lock lock];
-	if (book.book_id.length > 0 && [_books indexOfObject:book] == NSNotFound)
+	for (XLBookModel* book in books)
 	{
-		changed = YES;
-		book.bookPath = [_bookHomePath stringByAppendingPathComponent:book.book_id];
-		[self createDirIfNotExists:book.bookPath];
-		[book saveBook];
-		[_books addObject:book];
+		if (book.book_id.length > 0 && [_books indexOfObject:book] == NSNotFound)
+		{
+			changed = YES;
+			book.bookPath = [_bookHomePath stringByAppendingPathComponent:book.book_id];
+			[self createDirIfNotExists:book.bookPath];
+			[book saveBook];
+			[_books addObject:book];
+		}
 	}
 	[_lock unlock];
 	if (changed)
@@ -330,12 +333,84 @@
 	{
 		NSArray* books = [((RestfulAPIGetter*)getter).result[@"data"] arrayByConvertToPKMappingObject:[XLBookModel class]];
 		for (XLBookModel* b in books)
-		{
 			b.isPreview = YES;
-			[self addBook:b];
-		}
+		[self addBooks:books];
 		CDSetProp(PropAppPresetFlag, @"1");
 	}
+}
+
+-(void) deleteBooks:(NSArray*)books
+{
+	for (XLBookModel* b in books)
+	{
+		[_books removeObject:b];
+		if (b.bookPath.length > 0)
+		{
+			[[NSFileManager defaultManager] removeItemAtPath:b.bookPath error:NULL];
+		}
+	}
+	[self willChangeValueForKey:@"books"];
+	[self didChangeValueForKey:@"books"];
+}
+
+-(XLBookModel*) getBook:(NSString*)bookID
+{
+	for (XLBookModel* book in _books)
+		if ([book.book_id isEqualToString:bookID])
+			return book;
+	return nil;
+}
+
+-(void) addFav:(NSString*)bookID
+{
+	if (bookID.length <= 0)
+		return;
+	
+	XLBookModel* book = [self getBook:bookID];
+	if (book == nil)
+	{
+		book = [[XLBookModel alloc] initWithDictionary:nil];
+		book.book_id = bookID;
+		book.isFavorate = YES;
+		[self addBooks:@[book]];
+		[book requestInfoAndChapters];
+	}
+	else
+	{
+		book.isFavorate = YES;
+		[book saveBookInfo];
+	}
+}
+
+-(void) downloadBook:(NSString*)bookID
+{
+	if (bookID.length <= 0)
+		return;
+	
+	XLBookModel* book = [self getBook:bookID];
+	if (book == nil)
+	{
+		book = [[XLBookModel alloc] initWithDictionary:nil];
+		book.book_id = bookID;
+		book.isDownload = YES;
+		[self addBooks:@[book]];
+		[book requestInfoAndChapters];
+	}
+	else
+	{
+		book.isDownload = YES;
+		[book saveBookInfo];
+	}
+}
+
+-(BOOL) isFav:(NSString*)bookID
+{
+	return [self getBook:bookID].isFavorate;
+}
+
+-(BOOL) hasDownloaded:(NSString*)bookID
+{
+	return [self getBook:bookID].isDownload;
 }
 
 @end
