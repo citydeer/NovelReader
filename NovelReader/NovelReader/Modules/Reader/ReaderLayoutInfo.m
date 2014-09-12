@@ -230,6 +230,11 @@
 				currentLength += length;
 			}
 		}
+		if (lines.count > 0)
+		{
+			[pages addObject:[NSArray arrayWithArray:lines]];
+			[lines removeAllObjects];
+		}
 		
 		self.typesetter = typesetter;
 		CFRelease(typesetter);

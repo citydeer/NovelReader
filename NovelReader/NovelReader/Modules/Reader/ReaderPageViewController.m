@@ -80,13 +80,11 @@
 @interface ReaderPageViewController ()
 {
 	ReaderPageView* _renderView;
-	BOOL _isRendering;
 }
 
 @property (readonly) ReaderPageView* renderView;
 
 -(void) showBuyView;
--(void) reloadContent;
 
 @end
 
@@ -120,6 +118,15 @@
 		[_chapterModel addObserver:self forKeyPath:@"requestFailed" options:0 context:nil];
 		[_chapterModel addObserver:self forKeyPath:@"content" options:0 context:nil];
 	}
+}
+
+-(void) setBgColor:(UIColor *)bgColor
+{
+	_bgColor = bgColor;
+	if ([self isViewLoaded])
+		self.view.backgroundColor = _bgColor;
+	if (_renderView != nil)
+		_renderView.backgroundColor = _bgColor;
 }
 
 -(void) loadView
@@ -229,6 +236,7 @@
 	}
 	else if ([keyPath isEqualToString:@"requestFailed"] && _chapterModel.requestFailed)
 	{
+		[self.view dismiss];
 		if (_bookModel.chapters.count <= 0 && _bookModel.errorMsg.length > 0)
 			[self.view showPopMsg:_chapterModel.errorMsg timeout:5];
 	}

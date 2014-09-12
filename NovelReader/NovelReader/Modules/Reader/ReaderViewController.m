@@ -18,7 +18,7 @@
 @interface ReaderViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 {
 	double _duration;
-	BOOL _loadingBook;
+//	BOOL _loadingBook;
 	
 	UIPageViewController* _pageViewController;
 	UIView* _containerView;
@@ -196,6 +196,7 @@
 	}
 	[self adjustButton:_nightModeButton];
 	_containerView.backgroundColor = _pageBGColor;
+	self.currentPageController.bgColor = _pageBGColor;
 }
 
 -(void) updateFontViews
@@ -373,10 +374,16 @@
 
 -(void) progressAction:(UIButton*)sender
 {
-	NSUInteger currentIndex = self.currentPageController.pageIndex;
-	NSUInteger allPage = _layoutInfo.pages.count;
-	_progressLabel.text = [NSString stringWithFormat:@"%d/%d", currentIndex+1, allPage];
-	_progressSlider.value = (allPage <= 1 ? 1.0f : ((float)currentIndex / (float)(allPage - 1)));
+	if (_bookModel.chapters.count <= 0)
+		return;
+	
+	NSUInteger cIndex = [_bookModel.chapters indexOfObject:self.currentPageController.chapterModel];
+	if (cIndex == NSNotFound)
+		return;
+	
+	NSUInteger allPage = _bookModel.chapters.count;
+	_progressLabel.text = [NSString stringWithFormat:@"%d/%d", cIndex+1, allPage];
+	_progressSlider.value = (allPage <= 1 ? 1.0f : ((float)cIndex / (float)(allPage - 1)));
 	CGRect rect = self.view.bounds;
 	[UIView animateWithDuration:_duration animations:^
 	 {
@@ -387,21 +394,25 @@
 
 -(void) onProgressChanged:(UISlider*)sender
 {
-	NSUInteger allPage = _layoutInfo.pages.count;
+	NSUInteger allPage = _bookModel.chapters.count;
 	if (allPage <= 1)
 		return;
 	
-	NSUInteger currentIndex = self.currentPageController.pageIndex;
+	NSUInteger cIndex = [_bookModel.chapters indexOfObject:self.currentPageController.chapterModel];
+	if (cIndex == NSNotFound)
+		return;
+	
 	NSUInteger newIndex = roundf((allPage - 1) * sender.value);
-	if (currentIndex == newIndex)
+	if (cIndex == newIndex)
 		return;
 	
 	_progressLabel.text = [NSString stringWithFormat:@"%d/%d", newIndex+1, allPage];
 	
-	UIPageViewControllerNavigationDirection d = currentIndex < newIndex ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
+	UIPageViewControllerNavigationDirection d = cIndex < newIndex ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
 	ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
-	pvc.layoutInfo = _layoutInfo;
-	pvc.pageIndex = newIndex;
+	pvc.bookModel = _bookModel;
+	pvc.chapterModel = _bookModel.chapters[newIndex];
+	pvc.textContext = _textContext;
 	pvc.bgColor = _pageBGColor;
 	[_pageViewController setViewControllers:[NSArray arrayWithObject:pvc] direction:d animated:YES completion:NULL];
 }
@@ -422,6 +433,10 @@
 
 -(void) fontChanged:(UIButton*)sender
 {
+	ReaderPageViewController* vc = self.currentPageController;
+	if (vc.isRendering || !vc.isViewReady)
+		return;
+	
 	float fz = CDProp(PropReaderFontSize).floatValue;
 	if (sender == _fontIncrease)
 		fz += (fz == 14.0f ? 1.0f : 2.0f);
@@ -431,7 +446,7 @@
 	NSString* fzStr = [NSString stringWithFormat:@"%f", fz];
 	CDSetProp(PropReaderFontSize, fzStr);
 	[self updateFontViews];
-	[self loadBook];
+	[vc reloadContent];
 }
 
 -(void) brightnessAction:(UIButton*)sender
@@ -459,13 +474,14 @@
 
 -(void) nightModeAction:(UIButton*)sender
 {
-	if (_loadingBook)
+	ReaderPageViewController* vc = self.currentPageController;
+	if (vc.isRendering || !vc.isViewReady)
 		return;
 	
 	BOOL isNight = CDProp(PropReaderNightMode).boolValue;
 	CDSetProp(PropReaderNightMode, (isNight ? @"0" : @"1"));
 	[self updateNightModeViews];
-	[self loadBook];
+	[vc reloadContent];
 }
 
 -(UIViewController*) pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
@@ -546,6 +562,7 @@
 {
 	if (_bookModel.chapters.count <= 0)
 	{
+		[self.view showColorIndicatorFreezeUI:NO];
 		[_bookModel requestInfoAndChapters];
 	}
 	else
@@ -583,10 +600,12 @@
 	
 	if ([keyPath isEqualToString:@"chapters"])
 	{
+		[self.view dismiss];
 		[self setPageViewController];
 	}
 	else if ([keyPath isEqualToString:@"requestFailed"] && _bookModel.requestFailed)
 	{
+		[self.view dismiss];
 		if (_bookModel.chapters.count <= 0 && _bookModel.errorMsg.length > 0)
 			[self.view showPopMsg:_bookModel.errorMsg timeout:5];
 	}

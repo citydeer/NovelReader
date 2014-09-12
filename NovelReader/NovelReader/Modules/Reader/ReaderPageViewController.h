@@ -14,6 +14,7 @@
 @interface ReaderPageViewController : UIViewController
 
 @property (readonly) BOOL isViewReady;
+@property (readonly) BOOL isRendering;
 
 @property (nonatomic, strong) XLBookModel* bookModel;
 @property (nonatomic, strong) XLChapterModel* chapterModel;
@@ -23,6 +24,8 @@
 @property (nonatomic, assign) NSUInteger pageIndex;
 @property (nonatomic, strong) UIColor* bgColor;
 @property (nonatomic, assign) BOOL defaultLastIndex;
+
+-(void) reloadContent;
 
 @end
 

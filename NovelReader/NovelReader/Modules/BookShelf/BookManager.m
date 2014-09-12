@@ -54,13 +54,13 @@
 {
 	if (getter.resultCode == KYResultCodeSuccess)
 	{
-		NSDictionary* data = ((RestfulAPIGetter*)getter).result[@"data"];
+		NSString* txt = ((RestfulAPIGetter*)getter).result[@"data"][@"chapter_content"];
 		if (self.bookPath.length > 0)
 		{
 			NSString* txtPath = [self.bookPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.txt", self.chapter_id]];
-			[self.content writeToFile:txtPath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
+			[txt writeToFile:txtPath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 		}
-		[self setValue:data[@"chapter_content"] forKey:@"content"];
+		[self setValue:txt forKey:@"content"];
 	}
 	self.errorMsg = [getter resultMessage];
 	[self setValue:[NSNumber numberWithBool:(getter.resultCode != KYResultCodeSuccess)] forKey:@"requestFailed"];
