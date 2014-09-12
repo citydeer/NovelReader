@@ -8,12 +8,12 @@
 
 #import "CDViewController.h"
 
-@class XLBookModel, XLChapterModel;
+@class XLBookModel;
 
 @interface ReaderViewController : CDViewController
 
 @property (nonatomic, strong) XLBookModel* bookModel;
-@property (nonatomic, strong) XLChapterModel* chapterModel;
+@property (nonatomic, strong) NSString* chapterID;
 
 @end
 

@@ -106,6 +106,7 @@
 
 -(void) dealloc
 {
+	[_chapterModel removeObserver:self forKeyPath:@"requestFailed"];
 	[_chapterModel removeObserver:self forKeyPath:@"content"];
 }
 
@@ -113,8 +114,10 @@
 {
 	if (_chapterModel != chapterModel)
 	{
+		[_chapterModel removeObserver:self forKeyPath:@"requestFailed"];
 		[_chapterModel removeObserver:self forKeyPath:@"content"];
 		_chapterModel = chapterModel;
+		[_chapterModel addObserver:self forKeyPath:@"requestFailed" options:0 context:nil];
 		[_chapterModel addObserver:self forKeyPath:@"content" options:0 context:nil];
 	}
 }
@@ -178,6 +181,7 @@
 	
 	[self.view showColorIndicatorFreezeUI:NO];
 	
+	BOOL firstRender = (_layoutInfo == nil);
 	CFIndex currentLocation = 0;
 	NSUInteger currentIndex = self.pageIndex;
 	if (_layoutInfo.pages.count > 0 && currentIndex > 0)
@@ -197,6 +201,8 @@
 				if (_layoutInfo.pages.count > 0)
 				{
 					_pageIndex = 0;
+					if (firstRender && _defaultLastIndex)
+						_pageIndex = _layoutInfo.pages.count - 1;
 					if (currentLocation > 0)
 					{
 						NSInteger theIndex = [_layoutInfo findIndexForLocation:currentLocation inRange:NSMakeRange(0, _layoutInfo.pages.count)];
@@ -214,9 +220,17 @@
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-	if (object == _chapterModel)
+	if (object != _chapterModel)
+		return;
+	
+	if ([keyPath isEqualToString:@"content"])
 	{
 		[self reloadContent];
+	}
+	else if ([keyPath isEqualToString:@"requestFailed"] && _chapterModel.requestFailed)
+	{
+		if (_bookModel.chapters.count <= 0 && _bookModel.errorMsg.length > 0)
+			[self.view showPopMsg:_chapterModel.errorMsg timeout:5];
 	}
 }
 

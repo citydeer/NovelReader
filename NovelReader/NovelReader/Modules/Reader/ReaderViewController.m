@@ -88,16 +88,19 @@
 
 -(void) dealloc
 {
+	[_bookModel removeObserver:self forKeyPath:@"requestFailed"];
 	[_bookModel removeObserver:self forKeyPath:@"chapters"];
-	_bookModel.chapters = nil;
+	[_bookModel clearChapters];
 }
 
 -(void) setBookModel:(XLBookModel *)bookModel
 {
 	if (_bookModel != bookModel)
 	{
+		[_bookModel removeObserver:self forKeyPath:@"requestFailed"];
 		[_bookModel removeObserver:self forKeyPath:@"chapters"];
 		_bookModel = bookModel;
+		[_bookModel addObserver:self forKeyPath:@"requestFailed" options:0 context:nil];
 		[_bookModel addObserver:self forKeyPath:@"chapters" options:0 context:nil];
 	}
 }
@@ -491,6 +494,7 @@
 		pvc.chapterModel = _bookModel.chapters[cIndex-1];
 		pvc.textContext = _textContext;
 		pvc.bgColor = _pageBGColor;
+		pvc.defaultLastIndex = YES;
 		return pvc;
 	}
 	
@@ -552,7 +556,9 @@
 
 -(void) setPageViewController
 {
-	NSUInteger cIndex = [_bookModel.chapters indexOfObject:_chapterModel];
+	XLChapterModel* xlcm = [[XLChapterModel alloc] init];
+	xlcm.chapter_id = self.chapterID;
+	NSUInteger cIndex = [_bookModel.chapters indexOfObject:xlcm];
 	if (cIndex == NSNotFound && _bookModel.chapters.count > 0)
 		cIndex = 0;
 	if (cIndex == NSNotFound)
@@ -572,9 +578,17 @@
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-	if (object == _bookModel)
+	if (object != _bookModel)
+		return;
+	
+	if ([keyPath isEqualToString:@"chapters"])
 	{
 		[self setPageViewController];
+	}
+	else if ([keyPath isEqualToString:@"requestFailed"] && _bookModel.requestFailed)
+	{
+		if (_bookModel.chapters.count <= 0 && _bookModel.errorMsg.length > 0)
+			[self.view showPopMsg:_bookModel.errorMsg timeout:5];
 	}
 }
 

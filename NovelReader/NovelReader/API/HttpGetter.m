@@ -147,6 +147,23 @@ static NSInteger _networkConnectionCount = 0;
 	{
 		_fetching = NO;
 		_resultCode = _tempResultCode;
+		if (self.resultMessage == nil)
+		{
+			switch (_resultCode)
+			{
+				case KYResultCodeNetworkError:
+					_resultMessage = @"网络错误，请检查您的网络";
+					break;
+				case KYResultCodeParseError:
+					_resultMessage = @"服务器繁忙，请稍后重试";
+					break;
+				case KYResultCodeTimeout:
+					_resultMessage = @"请求超时，请重试";
+					break;
+				default:
+					break;
+			}
+		}
 		[self.delegate didFinishFetch:self];
 	}
 }

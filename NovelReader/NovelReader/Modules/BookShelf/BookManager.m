@@ -55,13 +55,15 @@
 	if (getter.resultCode == KYResultCodeSuccess)
 	{
 		NSDictionary* data = ((RestfulAPIGetter*)getter).result[@"data"];
-		[self setValue:data[@"chapter_content"] forKey:@"content"];
 		if (self.bookPath.length > 0)
 		{
 			NSString* txtPath = [self.bookPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.txt", self.chapter_id]];
 			[self.content writeToFile:txtPath atomically:YES encoding:NSUTF8StringEncoding error:NULL];
 		}
+		[self setValue:data[@"chapter_content"] forKey:@"content"];
 	}
+	self.errorMsg = [getter resultMessage];
+	[self setValue:[NSNumber numberWithBool:(getter.resultCode != KYResultCodeSuccess)] forKey:@"requestFailed"];
 }
 
 @end
@@ -72,6 +74,7 @@
 @interface XLBookModel () <GetterControllerOwner>
 {
 	GetterController* _getterController;
+	NSMutableArray* _chapters;
 }
 @end
 
@@ -80,6 +83,16 @@
 
 @dynamic book_about, book_addtime, book_author, book_chapterinfoid, book_coverimg_big, book_coverimg_middle, book_coverimg_small, book_id, book_isbn, book_isnew, book_isread, book_newchapterid, book_paytype, book_restype, book_showpay, book_state, book_tag, book_title, book_typeid, book_uptime, book_wordnum, id, isDownload, isFavorate, isPreview;
 
+-(id) initWithDictionary:(NSDictionary *)dictionary
+{
+	self = [super initWithDictionary:dictionary];
+	if (self)
+	{
+		_chapters = [NSMutableArray array];
+	}
+	return self;
+}
+
 -(BOOL) isEqual:(id)object
 {
 	if ([object isKindOfClass:[XLBookModel class]])
@@ -87,12 +100,23 @@
 	return NO;
 }
 
+-(NSArray*) chapters
+{
+	return _chapters;
+}
+
 -(void) requestInfoAndChapters
 {
-	if (self.chapters.count <=0 && self.bookPath.length > 0)
+	if (self.chapters.count <= 0 && self.bookPath.length > 0)
 	{
 		NSArray* dir = [NSArray arrayWithContentsOfFile:[self.bookPath stringByAppendingPathComponent:@"directory.plist"]];
-		[self setValue:[dir arrayByConvertToPKMappingObject:[XLChapterModel class]] forKey:@"chapters"];
+		NSArray* chapters = [dir arrayByConvertToPKMappingObject:[XLChapterModel class]];
+		for (XLChapterModel* c in chapters)
+			c.bookPath = self.bookPath;
+		[self willChangeValueForKey:@"chapters"];
+		[_chapters removeAllObjects];
+		[_chapters addObjectsFromArray:chapters];
+		[self didChangeValueForKey:@"chapters"];
 	}
 	
 	_getterController = [[GetterController alloc] initWithOwner:self];
@@ -106,7 +130,7 @@
 	if (self.bookPath.length > 0)
 	{
 		[self writeToFile:[self.bookPath stringByAppendingPathComponent:@"bookinfo.plist"]];
-		[[self.chapters arrayByConvertToDictionary] writeToFile:[self.bookPath stringByAppendingPathComponent:@"directory.plist"] atomically:YES];
+		[[_chapters arrayByConvertToDictionary] writeToFile:[self.bookPath stringByAppendingPathComponent:@"directory.plist"] atomically:YES];
 	}
 }
 
@@ -118,6 +142,11 @@
 	}
 }
 
+-(void) clearChapters
+{
+	[_chapters removeAllObjects];
+}
+
 -(void) handleGetter:(id<Getter>)getter
 {
 	if (getter.resultCode == KYResultCodeSuccess)
@@ -125,11 +154,31 @@
 		NSDictionary* data = ((RestfulAPIGetter*)getter).result[@"data"];
 		[_dic addEntriesFromDictionary:data[@"info"]];
 		NSArray* chapters = [data[@"chapters"] arrayByConvertToPKMappingObject:[XLChapterModel class]];
-		for (XLChapterModel* chapter in chapters)
-			chapter.bookPath = self.bookPath;
-		[self setValue:chapters forKey:@"chapters"];
-		[self saveBook];
+		for (XLChapterModel* c in chapters)
+			c.bookPath = self.bookPath;
+		
+		BOOL changed = NO;
+		NSUInteger lastIndex = [chapters indexOfObject:_chapters.lastObject];
+		if (lastIndex == NSNotFound)
+		{
+			[_chapters removeAllObjects];
+			[_chapters addObjectsFromArray:chapters];
+			changed = YES;
+		}
+		else if (lastIndex < chapters.count - 1)
+		{
+			[_chapters addObjectsFromArray:[chapters subarrayWithRange:NSMakeRange(lastIndex+1, chapters.count-lastIndex-1)]];
+			changed = YES;
+		}
+		if (changed)
+		{
+			[self saveBook];
+			[self willChangeValueForKey:@"chapters"];
+			[self didChangeValueForKey:@"chapters"];
+		}
 	}
+	self.errorMsg = [getter resultMessage];
+	[self setValue:[NSNumber numberWithBool:(getter.resultCode != KYResultCodeSuccess)] forKey:@"requestFailed"];
 }
 
 @end

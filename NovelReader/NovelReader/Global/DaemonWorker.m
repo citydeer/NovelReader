@@ -51,7 +51,7 @@
 -(void) checkAppUpdateInfo:(BOOL)showAlert
 {
 	RestfulAPIGetter* getter = [[RestfulAPIGetter alloc] init];
-	getter.params = @{@"c" : @"site", @"a" : @"upgrade", @"os" : @"2", @"appver" : [Properties appProperties].APPVersion, @"channel" : @""};
+	getter.params = @{@"c" : @"site", @"a" : @"upgrade", @"os" : @"2", @"appver" : [Properties appProperties].APPVersion, @"channel" : @"appstore"};
 	getter.tag = GetUpdateInfoTag;
 	getter.userData = (showAlert ? @"1" : @"0");
 	[_getterController enqueueGetter:getter];

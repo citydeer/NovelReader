@@ -79,7 +79,7 @@
 	[super willPresentView:duration];
 	_onScreen = YES;
 	
-	_books = _bookManager.books;
+	_books = [_bookManager.books copy];
 	[_gridView reloadData];
 }
 
@@ -96,7 +96,7 @@
 	
 	if ([@"books" isEqualToString:keyPath])
 	{
-		_books = _bookManager.books;
+		_books = [_bookManager.books copy];
 		[_gridView reloadData];
 	}
 }

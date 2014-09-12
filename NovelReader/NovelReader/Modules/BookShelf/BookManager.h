@@ -40,11 +40,15 @@
 @property (readwrite) BOOL isDownload;
 
 @property (nonatomic, copy) NSString* bookPath;
-@property (nonatomic, copy) NSArray* chapters;
+@property (readonly) NSArray* chapters;
+
+@property (nonatomic, assign) BOOL requestFailed;
+@property (nonatomic, copy) NSString* errorMsg;
 
 -(void) saveBook;
 -(void) saveBookInfo;
 -(void) requestInfoAndChapters;
+-(void) clearChapters;
 
 @end
 
@@ -64,6 +68,9 @@
 
 @property (nonatomic, copy) NSString* bookPath;
 @property (nonatomic, copy) NSString* content;
+
+@property (nonatomic, assign) BOOL requestFailed;
+@property (nonatomic, copy) NSString* errorMsg;
 
 -(void) requestContent;
 
