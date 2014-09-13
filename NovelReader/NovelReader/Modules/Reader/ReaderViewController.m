@@ -18,7 +18,6 @@
 @interface ReaderViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 {
 	double _duration;
-//	BOOL _loadingBook;
 	
 	UIPageViewController* _pageViewController;
 	UIView* _containerView;
@@ -26,7 +25,6 @@
 	UIView* _tabbarView;
 	UIButton* _nightModeButton;
 	
-	ReaderLayoutInfo* _layoutInfo;
 	TextRenderContext* _textContext;
 	
 	UIView* _brightnessToolbar;
@@ -59,6 +57,7 @@
 
 -(void) loadBook;
 -(void) setPageViewController;
+-(void) checkBookmarkStatus;
 
 @end
 
@@ -362,10 +361,44 @@
 			[UIHelper moveView:_progressToolbar toY:rect.size.height];
 		}
 	}];
+	if (showToolbar)
+		[self checkBookmarkStatus];
+}
+
+-(void) leftButtonAction:(id)sender
+{
+	ReaderPageViewController* vc = self.currentPageController;
+	if (vc != nil)
+	{
+		_bookModel.lastReadChapterID = vc.chapterModel.chapter_id;
+		_bookModel.lastReadLocation = vc.currentLocation;
+		_bookModel.lastReadTime = [NSDate timeIntervalSinceReferenceDate];
+		[_bookModel saveBookInfo];
+	}
+	[super leftButtonAction:sender];
 }
 
 -(void) rightButtonAction:(id)sender
 {
+	ReaderPageViewController* vc = self.currentPageController;
+	if (self.rightButton.tag == 1)
+	{
+		self.rightButton.tag = 0;
+		[self.rightButton setImage:CDImage(@"reader/navi_bookmark1") forState:UIControlStateNormal];
+		[_bookModel.bookmarkTable removeObjectForKey:vc.chapterModel.chapter_id];
+		[_bookModel saveBookInfo];
+		[self.view showPopMsg:@"书签已取消!" timeout:3];
+	}
+	else
+	{
+		self.rightButton.tag = 1;
+		[self.rightButton setImage:CDImage(@"reader/navi_bookmark2") forState:UIControlStateNormal];
+		if (_bookModel.bookmarkTable == nil)
+			_bookModel.bookmarkTable = [NSMutableDictionary dictionary];
+		[_bookModel.bookmarkTable setObject:[NSNumber numberWithInt:vc.currentLocation] forKey:vc.chapterModel.chapter_id];
+		[_bookModel saveBookInfo];
+		[self.view showPopMsg:@"书签添加成功!" timeout:3];
+	}
 }
 
 -(void) directoryAction:(UIButton*)sender
@@ -551,6 +584,30 @@
 	return nil;
 }
 
+-(void) checkBookmarkStatus
+{
+	ReaderPageViewController* vc = self.currentPageController;
+	if (vc == nil || vc.layoutInfo == nil)
+	{
+		self.rightButton.hidden = YES;
+		return;
+	}
+	
+	self.rightButton.hidden = NO;
+	self.rightButton.tag = 0;
+	NSNumber* location = _bookModel.bookmarkTable[vc.chapterModel.chapter_id];
+	if (location != nil)
+	{
+		NSInteger theIndex = [vc.layoutInfo findIndexForLocation:location.intValue inRange:NSMakeRange(0, vc.layoutInfo.pages.count)];
+		if (theIndex == vc.pageIndex)
+			self.rightButton.tag = 1;
+	}
+	if (self.rightButton.tag == 0)
+		[self.rightButton setImage:CDImage(@"reader/navi_bookmark1") forState:UIControlStateNormal];
+	else
+		[self.rightButton setImage:CDImage(@"reader/navi_bookmark2") forState:UIControlStateNormal];
+}
+
 -(ReaderPageViewController*) currentPageController
 {
 	if (_pageViewController.viewControllers.count > 0)
@@ -574,12 +631,14 @@
 -(void) setPageViewController
 {
 	XLChapterModel* xlcm = [[XLChapterModel alloc] init];
-	xlcm.chapter_id = self.chapterID;
+	xlcm.chapter_id = (self.chapterID.length > 0 ? self.chapterID : _bookModel.lastReadChapterID);
 	NSUInteger cIndex = [_bookModel.chapters indexOfObject:xlcm];
 	if (cIndex == NSNotFound && _bookModel.chapters.count > 0)
 		cIndex = 0;
 	if (cIndex == NSNotFound)
 		return;
+	
+	NSInteger location = (self.chapterID.length > 0 ? 0 : _bookModel.lastReadLocation);
 	
 	ReaderPageViewController* oldVC = self.currentPageController;
 	if (oldVC != nil && oldVC.chapterModel == _bookModel.chapters[cIndex])
@@ -590,6 +649,7 @@
 	pvc.chapterModel = _bookModel.chapters[cIndex];
 	pvc.bgColor = _pageBGColor;
 	pvc.textContext = _textContext;
+	pvc.preferedLocation = location;
 	[_pageViewController setViewControllers:[NSArray arrayWithObject:pvc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:NULL];
 }
 

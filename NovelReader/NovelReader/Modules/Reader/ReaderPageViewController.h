@@ -23,7 +23,10 @@
 @property (nonatomic, strong) ReaderLayoutInfo* layoutInfo;
 @property (nonatomic, assign) NSUInteger pageIndex;
 @property (nonatomic, strong) UIColor* bgColor;
+
 @property (nonatomic, assign) BOOL defaultLastIndex;
+@property (nonatomic, assign) NSInteger preferedLocation;
+@property (readonly) NSInteger currentLocation;
 
 -(void) reloadContent;
 

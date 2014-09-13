@@ -81,7 +81,7 @@
 
 @implementation XLBookModel
 
-@dynamic book_about, book_addtime, book_author, book_chapterinfoid, book_coverimg_big, book_coverimg_middle, book_coverimg_small, book_id, book_isbn, book_isnew, book_isread, book_newchapterid, book_paytype, book_restype, book_showpay, book_state, book_tag, book_title, book_typeid, book_uptime, book_wordnum, id, isDownload, isFavorate, isPreview, lastReadTime;
+@dynamic book_about, book_addtime, book_author, book_chapterinfoid, book_coverimg_big, book_coverimg_middle, book_coverimg_small, book_id, book_isbn, book_isnew, book_isread, book_newchapterid, book_paytype, book_restype, book_showpay, book_state, book_tag, book_title, book_typeid, book_uptime, book_wordnum, id, isDownload, isFavorate, isPreview, lastReadTime, lastReadChapterID, lastReadLocation, bookmarkTable;
 
 -(id) initWithDictionary:(NSDictionary *)dictionary
 {
@@ -89,6 +89,7 @@
 	if (self)
 	{
 		_chapters = [NSMutableArray array];
+		self.bookmarkTable = [self.bookmarkTable mutableCopy];
 	}
 	return self;
 }
@@ -170,16 +171,11 @@
 			[_chapters addObjectsFromArray:[chapters subarrayWithRange:NSMakeRange(lastIndex+1, chapters.count-lastIndex-1)]];
 			changed = YES;
 		}
-		self.lastReadTime = [NSDate timeIntervalSinceReferenceDate];
 		if (changed)
 		{
 			[self saveBook];
 			[self willChangeValueForKey:@"chapters"];
 			[self didChangeValueForKey:@"chapters"];
-		}
-		else
-		{
-			[self saveBookInfo];
 		}
 	}
 	self.errorMsg = [getter resultMessage];

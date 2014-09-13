@@ -177,6 +177,18 @@
 	_isViewReady = YES;
 }
 
+-(NSInteger) currentLocation
+{
+	NSUInteger currentIndex = self.pageIndex;
+	if (_layoutInfo.pages.count > 0 && currentIndex > 0)
+	{
+		RenderLine* line = [[_layoutInfo.pages objectAtIndex:currentIndex] firstObject];
+		if (line)
+			return line.range.location;
+	}
+	return 0;
+}
+
 -(void) reloadContent
 {
 	if (!_chapterModel.chapter_readable)
@@ -189,14 +201,7 @@
 	[self.view showColorIndicatorFreezeUI:NO];
 	
 	BOOL firstRender = (_layoutInfo == nil);
-	CFIndex currentLocation = 0;
-	NSUInteger currentIndex = self.pageIndex;
-	if (_layoutInfo.pages.count > 0 && currentIndex > 0)
-	{
-		RenderLine* line = [[_layoutInfo.pages objectAtIndex:currentIndex] firstObject];
-		if (line)
-			currentLocation = line.range.location;
-	}
+	CFIndex nextLocation = (firstRender ? self.preferedLocation : self.currentLocation);
 	
 	TextRenderContext* tctx = [TextRenderContext contextWithContext:_textContext];
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -210,9 +215,9 @@
 					_pageIndex = 0;
 					if (firstRender && _defaultLastIndex)
 						_pageIndex = _layoutInfo.pages.count - 1;
-					if (currentLocation > 0)
+					else if (nextLocation > 0)
 					{
-						NSInteger theIndex = [_layoutInfo findIndexForLocation:currentLocation inRange:NSMakeRange(0, _layoutInfo.pages.count)];
+						NSInteger theIndex = [_layoutInfo findIndexForLocation:nextLocation inRange:NSMakeRange(0, _layoutInfo.pages.count)];
 						if (theIndex > 0)
 							_pageIndex = theIndex;
 					}

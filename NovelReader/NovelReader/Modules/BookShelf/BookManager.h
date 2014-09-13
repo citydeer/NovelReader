@@ -39,6 +39,9 @@
 @property (readwrite) BOOL isFavorate;
 @property (readwrite) BOOL isDownload;
 @property (readwrite) double lastReadTime;
+@property (readwrite) NSString* lastReadChapterID;
+@property (readwrite) NSInteger lastReadLocation;
+@property (readwrite) NSMutableDictionary* bookmarkTable;
 
 @property (nonatomic, copy) NSString* bookPath;
 @property (readonly) NSArray* chapters;

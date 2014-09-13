@@ -22,6 +22,7 @@
 		F2A45C2F198D49BD00A110F7 /* Books in Resources */ = {isa = PBXBuildFile; fileRef = F2A45C2E198D49BD00A110F7 /* Books */; };
 		F2A45C32198E518000A110F7 /* ReaderPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A45C31198E518000A110F7 /* ReaderPageViewController.m */; };
 		F2A45C35198E80FD00A110F7 /* ReaderLayoutInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A45C34198E80FD00A110F7 /* ReaderLayoutInfo.m */; };
+		F2A6D2AD19C4CAA400300301 /* DirectoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A6D2AC19C4CAA400300301 /* DirectoryViewController.m */; };
 		F2A8CC5119AFAA7B00A2D981 /* CDCustomViews.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A8CC5019AFAA7B00A2D981 /* CDCustomViews.m */; };
 		F2A8CC5719AFC12500A2D981 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A8CC5619AFC12500A2D981 /* libstdc++.dylib */; };
 		F2A8CC5919AFC13D00A2D981 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F2A8CC5819AFC13D00A2D981 /* libc++.dylib */; };
@@ -105,6 +106,8 @@
 		F2A45C31198E518000A110F7 /* ReaderPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReaderPageViewController.m; sourceTree = "<group>"; };
 		F2A45C33198E80FD00A110F7 /* ReaderLayoutInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReaderLayoutInfo.h; sourceTree = "<group>"; };
 		F2A45C34198E80FD00A110F7 /* ReaderLayoutInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReaderLayoutInfo.m; sourceTree = "<group>"; };
+		F2A6D2AB19C4CAA400300301 /* DirectoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectoryViewController.h; sourceTree = "<group>"; };
+		F2A6D2AC19C4CAA400300301 /* DirectoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DirectoryViewController.m; sourceTree = "<group>"; };
 		F2A8CC4F19AFAA7B00A2D981 /* CDCustomViews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDCustomViews.h; sourceTree = "<group>"; };
 		F2A8CC5019AFAA7B00A2D981 /* CDCustomViews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDCustomViews.m; sourceTree = "<group>"; };
 		F2A8CC5619AFC12500A2D981 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
@@ -277,6 +280,8 @@
 				F2A45C31198E518000A110F7 /* ReaderPageViewController.m */,
 				F2A45C33198E80FD00A110F7 /* ReaderLayoutInfo.h */,
 				F2A45C34198E80FD00A110F7 /* ReaderLayoutInfo.m */,
+				F2A6D2AB19C4CAA400300301 /* DirectoryViewController.h */,
+				F2A6D2AC19C4CAA400300301 /* DirectoryViewController.m */,
 			);
 			path = Reader;
 			sourceTree = "<group>";
@@ -595,6 +600,7 @@
 				54C24FCC19AF3AAC00A3A103 /* XLRechargeViewController.m in Sources */,
 				54C24FCF19AF3AE100A3A103 /* XLJoinVIPViewController.m in Sources */,
 				F216AA5C19B2EFA400301C8E /* XLWebViewController.m in Sources */,
+				F2A6D2AD19C4CAA400300301 /* DirectoryViewController.m in Sources */,
 				5400224F19BED518003FAF21 /* BookManager.m in Sources */,
 				F2D5383C1976BAC100A0FDDA /* CDNavigationController.m in Sources */,
 				F2D538421976BAC100A0FDDA /* KYPageControl.m in Sources */,
