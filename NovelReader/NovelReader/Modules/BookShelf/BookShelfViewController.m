@@ -33,6 +33,7 @@
 
 -(void) deleteAction:(id)sender;
 -(void) doneAction:(id)sender;
+-(void) longPressAction:(UILongPressGestureRecognizer*)lpgr;
 -(void) updateView;
 -(void) updateDeleteButton;
 
@@ -97,6 +98,7 @@
 	_gridView.dataSource = self;
 	_gridView.delegate = self;
 	[_gridView registerClass:[BookCell class] forCellWithReuseIdentifier:@"BookCell"];
+	[_gridView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction:)]];
 	[self.view addSubview:_gridView];
 }
 
@@ -105,7 +107,7 @@
 	[super willPresentView:duration];
 	_onScreen = YES;
 	
-	_books = [_bookManager.books copy];
+	_books = [_bookManager sortedBooks];
 	_editing = NO;
 	[self updateView];
 }
@@ -148,7 +150,7 @@
 	
 	if ([@"books" isEqualToString:keyPath])
 	{
-		_books = [_bookManager.books copy];
+		_books = [_bookManager sortedBooks];
 		_editing = NO;
 		[self updateView];
 	}
@@ -172,6 +174,19 @@
 	
 	_editing = YES;
 	[self updateView];
+}
+
+-(void) longPressAction:(UILongPressGestureRecognizer*)lpgr
+{
+	if (!_editing)
+	{
+		NSIndexPath* indexPath = [_gridView indexPathForItemAtPoint:[lpgr locationInView:_gridView]];
+		if (indexPath != nil)
+		{
+			_editing = YES;
+			[self performSelectorOnMainThread:@selector(updateView) withObject:nil waitUntilDone:NO];
+		}
+	}
 }
 
 -(void) deleteAction:(id)sender

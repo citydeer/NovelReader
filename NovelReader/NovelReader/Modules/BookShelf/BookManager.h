@@ -38,6 +38,7 @@
 @property (readwrite) BOOL isPreview;
 @property (readwrite) BOOL isFavorate;
 @property (readwrite) BOOL isDownload;
+@property (readwrite) double lastReadTime;
 
 @property (nonatomic, copy) NSString* bookPath;
 @property (readonly) NSArray* chapters;
@@ -89,6 +90,8 @@
 @property (readonly) NSArray* books;
 
 +(BookManager*) instance;
+
+-(NSArray*) sortedBooks;
 
 -(void) addBooks:(NSArray*)books;
 -(void) deleteBooks:(NSArray*)books;

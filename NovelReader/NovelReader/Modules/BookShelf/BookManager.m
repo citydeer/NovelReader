@@ -81,7 +81,7 @@
 
 @implementation XLBookModel
 
-@dynamic book_about, book_addtime, book_author, book_chapterinfoid, book_coverimg_big, book_coverimg_middle, book_coverimg_small, book_id, book_isbn, book_isnew, book_isread, book_newchapterid, book_paytype, book_restype, book_showpay, book_state, book_tag, book_title, book_typeid, book_uptime, book_wordnum, id, isDownload, isFavorate, isPreview;
+@dynamic book_about, book_addtime, book_author, book_chapterinfoid, book_coverimg_big, book_coverimg_middle, book_coverimg_small, book_id, book_isbn, book_isnew, book_isread, book_newchapterid, book_paytype, book_restype, book_showpay, book_state, book_tag, book_title, book_typeid, book_uptime, book_wordnum, id, isDownload, isFavorate, isPreview, lastReadTime;
 
 -(id) initWithDictionary:(NSDictionary *)dictionary
 {
@@ -170,11 +170,16 @@
 			[_chapters addObjectsFromArray:[chapters subarrayWithRange:NSMakeRange(lastIndex+1, chapters.count-lastIndex-1)]];
 			changed = YES;
 		}
+		self.lastReadTime = [NSDate timeIntervalSinceReferenceDate];
 		if (changed)
 		{
 			[self saveBook];
 			[self willChangeValueForKey:@"chapters"];
 			[self didChangeValueForKey:@"chapters"];
+		}
+		else
+		{
+			[self saveBookInfo];
 		}
 	}
 	self.errorMsg = [getter resultMessage];
@@ -302,6 +307,22 @@
 	RestfulAPIGetter* getter = [[RestfulAPIGetter alloc] init];
 	getter.params = @{@"c" : @"site", @"a" : @"bookcaserecomm"};
 	[_getterController enqueueGetter:getter];
+}
+
+-(NSArray*) sortedBooks
+{
+	return [_books copy];
+//	return [_books sortedArrayUsingComparator:^NSComparisonResult(XLBookModel* obj1, XLBookModel* obj2) {
+//		if (obj1.lastReadTime == obj2.lastReadTime)
+//			return NSOrderedSame;
+//		if (obj1.lastReadTime == 0.0)
+//			return NSOrderedAscending;
+//		if (obj2.lastReadTime == 0.0)
+//			return NSOrderedDescending;
+//		if (obj1.lastReadTime < obj2.lastReadTime)
+//			return NSOrderedDescending;
+//		return NSOrderedAscending;
+//	}];
 }
 
 -(void) addBooks:(NSArray*)books

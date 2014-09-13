@@ -378,7 +378,7 @@
 		NSString* msg = @"该账号已在其他终端登录，请重新登录";
 		if (type == XLLOGOUT_SESSION_TIMEOUT)
 			msg = @"您已太长时间没有登录，请重新登录";
-		UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil message:msg delegate:nil cancelButtonTitle:nil otherButtonTitles:nil];
+		UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
 		[alert show];
 	}
 	

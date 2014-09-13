@@ -44,7 +44,7 @@ void uncaughtExceptionHandler(NSException *exception)
 	[self loadProperties];
 	[self createControllers];
 	
-	[application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+//	[application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 	
 	return YES;
 }
