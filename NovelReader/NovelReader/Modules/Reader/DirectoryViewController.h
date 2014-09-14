@@ -6,8 +6,15 @@
 //  Copyright (c) 2014年 citydeer. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "CDViewController.h"
 
-@interface DirectoryViewController : NSObject
+
+@class XLBookModel, ReaderViewController;
+
+@interface DirectoryViewController : CDViewController
+
+@property (nonatomic, weak) ReaderViewController* parent;
+@property (nonatomic, strong) XLBookModel* bookModel;
 
 @end
+

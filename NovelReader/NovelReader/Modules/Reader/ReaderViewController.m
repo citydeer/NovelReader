@@ -12,6 +12,7 @@
 #import "ReaderPageViewController.h"
 #import "KYTipsView.h"
 #import "BookManager.h"
+#import "DirectoryViewController.h"
 
 
 
@@ -395,7 +396,16 @@
 		[self.rightButton setImage:CDImage(@"reader/navi_bookmark2") forState:UIControlStateNormal];
 		if (_bookModel.bookmarkTable == nil)
 			_bookModel.bookmarkTable = [NSMutableDictionary dictionary];
-		[_bookModel.bookmarkTable setObject:[NSNumber numberWithInt:vc.currentLocation] forKey:vc.chapterModel.chapter_id];
+		
+		NSInteger location = vc.currentLocation;
+		NSString* allString = vc.layoutInfo.attributedContent.string;
+		NSInteger length = allString.length - location;
+		if (length > 50) length = 50;
+		NSString* summary = [allString substringWithRange:NSMakeRange(location, length)];
+		if (summary == nil) summary = @"";
+		summary = [summary stringByAppendingString:@"..."];
+		NSDictionary* mark = @{@"loc" : [NSNumber numberWithInt:location], @"date" : [NSDate date], @"summary" : summary};
+		[_bookModel.bookmarkTable setObject:mark forKey:vc.chapterModel.chapter_id];
 		[_bookModel saveBookInfo];
 		[self.view showPopMsg:@"书签添加成功!" timeout:3];
 	}
@@ -403,6 +413,15 @@
 
 -(void) directoryAction:(UIButton*)sender
 {
+	if (_bookModel.chapters.count <= 0)
+		return;
+	
+	[self toolbarAction:nil];
+	
+	DirectoryViewController* vc = [[DirectoryViewController alloc] init];
+	vc.bookModel = _bookModel;
+	vc.parent = self;
+	[self.cdNavigationController pushViewController:vc];
 }
 
 -(void) progressAction:(UIButton*)sender
@@ -595,10 +614,10 @@
 	
 	self.rightButton.hidden = NO;
 	self.rightButton.tag = 0;
-	NSNumber* location = _bookModel.bookmarkTable[vc.chapterModel.chapter_id];
-	if (location != nil)
+	NSDictionary* mark = _bookModel.bookmarkTable[vc.chapterModel.chapter_id];
+	if (mark != nil)
 	{
-		NSInteger theIndex = [vc.layoutInfo findIndexForLocation:location.intValue inRange:NSMakeRange(0, vc.layoutInfo.pages.count)];
+		NSInteger theIndex = [vc.layoutInfo findIndexForLocation:[mark[@"loc"] intValue] inRange:NSMakeRange(0, vc.layoutInfo.pages.count)];
 		if (theIndex == vc.pageIndex)
 			self.rightButton.tag = 1;
 	}
@@ -630,18 +649,20 @@
 
 -(void) setPageViewController
 {
+	NSInteger location = (self.chapterID.length > 0 ? self.chapterLocation : _bookModel.lastReadLocation);
 	XLChapterModel* xlcm = [[XLChapterModel alloc] init];
 	xlcm.chapter_id = (self.chapterID.length > 0 ? self.chapterID : _bookModel.lastReadChapterID);
 	NSUInteger cIndex = [_bookModel.chapters indexOfObject:xlcm];
 	if (cIndex == NSNotFound && _bookModel.chapters.count > 0)
+	{
 		cIndex = 0;
+		location = 0;
+	}
 	if (cIndex == NSNotFound)
 		return;
 	
-	NSInteger location = (self.chapterID.length > 0 ? 0 : _bookModel.lastReadLocation);
-	
 	ReaderPageViewController* oldVC = self.currentPageController;
-	if (oldVC != nil && oldVC.chapterModel == _bookModel.chapters[cIndex])
+	if (oldVC != nil && oldVC.chapterModel == _bookModel.chapters[cIndex] && oldVC.currentLocation == location)
 		return;
 	
 	ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
@@ -651,6 +672,11 @@
 	pvc.textContext = _textContext;
 	pvc.preferedLocation = location;
 	[_pageViewController setViewControllers:[NSArray arrayWithObject:pvc] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:NULL];
+}
+
+-(void) reloadContents
+{
+	[self setPageViewController];
 }
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

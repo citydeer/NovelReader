@@ -14,6 +14,9 @@
 
 @property (nonatomic, strong) XLBookModel* bookModel;
 @property (nonatomic, strong) NSString* chapterID;
+@property (nonatomic, assign) NSInteger chapterLocation;
+
+-(void) reloadContents;
 
 @end
 
