@@ -748,7 +748,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "330c7fe5-49a6-4f8a-896f-4b67f0553df7";
+				PROVISIONING_PROFILE = "e5d07714-d466-42cd-a4d9-2b3b8e43dd79";
 				USER_HEADER_SEARCH_PATHS = ../../XunleiSDK/include;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
@@ -774,7 +774,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "330c7fe5-49a6-4f8a-896f-4b67f0553df7";
+				PROVISIONING_PROFILE = "e5d07714-d466-42cd-a4d9-2b3b8e43dd79";
 				USER_HEADER_SEARCH_PATHS = ../../XunleiSDK/include;
 				VALID_ARCHS = "armv7 armv7s";
 				WRAPPER_EXTENSION = app;
