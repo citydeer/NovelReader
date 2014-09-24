@@ -23,11 +23,13 @@
 id propertyGetter_Id(PKMappingObject* _self, SEL _cmd);
 char propertyGetter_Char(PKMappingObject* _self, SEL _cmd);
 int propertyGetter_Int(PKMappingObject* _self, SEL _cmd);
+long propertyGetter_Long(PKMappingObject* _self, SEL _cmd);
 float propertyGetter_Float(PKMappingObject* _self, SEL _cmd);
 double propertyGetter_Double(PKMappingObject* _self, SEL _cmd);
 void propertySetter_Id(PKMappingObject* _self, SEL _cmd, id value);
 void propertySetter_Char(PKMappingObject* _self, SEL _cmd, char value);
 void propertySetter_Int(PKMappingObject* _self, SEL _cmd, int value);
+void propertySetter_Long(PKMappingObject* _self, SEL _cmd, long value);
 void propertySetter_Float(PKMappingObject* _self, SEL _cmd, float value);
 void propertySetter_Double(PKMappingObject* _self, SEL _cmd, double value);
 
@@ -133,6 +135,9 @@ Class getPropertyTypeClass(objc_property_t property);
 				case _C_INT:
 					class_addMethod([self class], sel, (IMP)propertySetter_Int, "v@:i");
 					return YES;
+				case _C_LNG:
+					class_addMethod([self class], sel, (IMP)propertySetter_Long, "v@:l");
+					return YES;
 				case _C_FLT:
 					class_addMethod([self class], sel, (IMP)propertySetter_Float, "v@:f");
 					return YES;
@@ -158,6 +163,9 @@ Class getPropertyTypeClass(objc_property_t property);
 				return YES;
 			case _C_INT:
 				class_addMethod([self class], sel, (IMP)propertyGetter_Int, "i@:");
+				return YES;
+			case _C_LNG:
+				class_addMethod([self class], sel, (IMP)propertyGetter_Long, "l@:");
 				return YES;
 			case _C_FLT:
 				class_addMethod([self class], sel, (IMP)propertyGetter_Float, "f@:");
@@ -242,6 +250,12 @@ int propertyGetter_Int(PKMappingObject* _self, SEL _cmd)
 	return value == [NSNull null] ? 0 : [value intValue];
 }
 
+long propertyGetter_Long(PKMappingObject* _self, SEL _cmd)
+{
+	id value = [_self->_dic objectForKey:NSStringFromSelector(_cmd)];
+	return value == [NSNull null] ? 0 : [value longValue];
+}
+
 float propertyGetter_Float(PKMappingObject* _self, SEL _cmd)
 {
 	id value = [_self->_dic objectForKey:NSStringFromSelector(_cmd)];
@@ -270,6 +284,11 @@ void propertySetter_Char(PKMappingObject* _self, SEL _cmd, char value)
 void propertySetter_Int(PKMappingObject* _self, SEL _cmd, int value)
 {
 	[_self->_dic setObject:[NSNumber numberWithInt:value] forKey:[_self keyFromSetterString:_cmd]];
+}
+
+void propertySetter_Long(PKMappingObject* _self, SEL _cmd, long value)
+{
+	[_self->_dic setObject:[NSNumber numberWithLong:value] forKey:[_self keyFromSetterString:_cmd]];
 }
 
 void propertySetter_Float(PKMappingObject* _self, SEL _cmd, float value)

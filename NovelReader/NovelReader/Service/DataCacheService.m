@@ -79,7 +79,7 @@
 
 -(NSString*) fullPathForKey:(NSString*)key
 {
-	NSString* dir = [_cacheFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"__%lu__", ([key hash] % DIRECTORY_NUMBER)]];
+	NSString* dir = [_cacheFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"__%lu__", (long)([key hash] % DIRECTORY_NUMBER)]];
 	return [dir stringByAppendingPathComponent:[key md5]];
 }
 

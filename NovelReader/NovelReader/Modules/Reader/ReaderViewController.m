@@ -434,7 +434,7 @@
 		return;
 	
 	NSUInteger allPage = _bookModel.chapters.count;
-	_progressLabel.text = [NSString stringWithFormat:@"%lu/%d", cIndex+1, allPage];
+	_progressLabel.text = [NSString stringWithFormat:@"%lu/%lu", (long)cIndex+1, (unsigned long)allPage];
 	_progressSlider.value = (allPage <= 1 ? 1.0f : ((float)cIndex / (float)(allPage - 1)));
 	CGRect rect = self.view.bounds;
 	[UIView animateWithDuration:_duration animations:^
@@ -458,7 +458,7 @@
 	if (cIndex == newIndex)
 		return;
 	
-	_progressLabel.text = [NSString stringWithFormat:@"%d/%d", newIndex+1, allPage];
+	_progressLabel.text = [NSString stringWithFormat:@"%ld/%lu", (long)newIndex+1, (unsigned long)allPage];
 	
 	UIPageViewControllerNavigationDirection d = cIndex < newIndex ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
 	ReaderPageViewController* pvc = [[ReaderPageViewController alloc] init];
