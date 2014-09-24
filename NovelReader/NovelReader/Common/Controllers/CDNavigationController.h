@@ -26,6 +26,9 @@ typedef NS_OPTIONS(NSInteger, AnimationOptions)
 	ASFadeOut,
 	ASFallBehind,
 	ASLiftForward,
+	
+	ASNatureIn,
+	ASNatureOut,
 
 	ASResultNone		= 0 << 8,
 	ASResultDelete		= 1 << 8
@@ -66,6 +69,7 @@ typedef NS_OPTIONS(NSInteger, AnimationOptions)
 @interface UIViewController (CDNavigationController)
 
 @property (readonly) CDNavigationController* cdNavigationController;
+@property (readonly) BOOL shouldPopoutOnSwipe;
 
 -(void) willPresentView:(NSTimeInterval)duration;
 -(void) willDismissView:(NSTimeInterval)duration;

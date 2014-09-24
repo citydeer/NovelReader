@@ -52,6 +52,8 @@ CDNavigationController* getNaviController(void)
 				   isToAbove:(BOOL)isToAbove
 					duration:(NSTimeInterval)duration;
 
+-(void) screenEdgePanAction:(UIScreenEdgePanGestureRecognizer*)segtr;
+
 @end
 
 
@@ -61,6 +63,7 @@ CDNavigationController* getNaviController(void)
 	NSMutableArray* _controllerStack;
 	BOOL _hasWillAppeared;
 	BOOL _hasDidAppeared;
+	UIViewController* _panningController;
 }
 
 
@@ -123,6 +126,10 @@ CDNavigationController* getNaviController(void)
 	
 	if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)])
 		[self setNeedsStatusBarAppearanceUpdate];
+	
+	UIScreenEdgePanGestureRecognizer* sgtr = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self action:@selector(screenEdgePanAction:)];
+	sgtr.edges = UIRectEdgeLeft;
+	[self.view addGestureRecognizer:sgtr];
 }
 
 -(void) viewWillAppear:(BOOL)animated
@@ -177,6 +184,93 @@ CDNavigationController* getNaviController(void)
 
 
 #pragma Manage controllers
+
+#define CDNaturalStyleRate 0.3
+
+-(void) screenEdgePanAction:(UIScreenEdgePanGestureRecognizer*)segtr
+{
+	if (segtr.state == UIGestureRecognizerStateBegan && _panningController == nil && _controllerStack.count >= 2 && self.currentController.shouldPopoutOnSwipe)
+	{
+		_panningController = _controllerStack[_controllerStack.count-2];
+		CGRect oldFrame = self.view.bounds;
+		if (!_panningController.wantsFullScreenLayout)
+		{
+			CGFloat barHeight = iOS7 ? 0 : [UIApplication sharedApplication].statusBarFrame.size.height;
+			oldFrame.origin.y += barHeight;
+			oldFrame.size.height -= barHeight;
+		}
+		_panningController.view.frame = oldFrame;
+		[self.view insertSubview:_panningController.view atIndex:0];
+		
+		_panningController.view.userInteractionEnabled = NO;
+		UIViewController* currentVC = _controllerStack.lastObject;
+		currentVC.view.userInteractionEnabled = NO;
+		currentVC.view.layer.shadowOffset = CGSizeMake(-6, 0);
+		currentVC.view.layer.shadowRadius = 6;
+		currentVC.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:currentVC.view.bounds].CGPath;
+	}
+	
+	if (_panningController == nil)
+		return;
+	
+	UIViewController* currentVC = _controllerStack.lastObject;
+	CGRect rect = self.view.bounds;
+	CGRect currentVCFrame = currentVC.view.frame;
+	CGRect previousVCFrame = _panningController.view.frame;
+	CGPoint translation = [segtr translationInView:self.view];
+	CGPoint velocity = [segtr velocityInView:self.view];
+	double progress = translation.x / rect.size.width;
+	if (progress > 1.0) progress = 1.0;
+	if (progress < 0.0) progress = 0.0;
+	currentVCFrame.origin.x = rect.size.width * progress;
+	previousVCFrame.origin.x = -rect.size.width*CDNaturalStyleRate*(1.0-progress);
+	currentVC.view.frame = currentVCFrame;
+	_panningController.view.frame = previousVCFrame;
+	currentVC.view.layer.shadowOpacity = 0.3*(1.0-progress);
+	
+	if (segtr.state == UIGestureRecognizerStateEnded || segtr.state == UIGestureRecognizerStateCancelled)
+	{
+		double speed = (progress - 0.5) * 640 + velocity.x;
+		double duration = 0.18;
+		if (speed > 0.0)
+		{
+			[_controllerStack removeLastObject];
+			[_panningController willPresentView:duration];
+			[currentVC willDismissView:duration];
+			[UIView animateWithDuration:duration animations:^
+			{
+				currentVC.view.frame = CGRectMake(rect.size.width, currentVCFrame.origin.y, currentVCFrame.size.width, currentVCFrame.size.height);
+				currentVC.view.layer.shadowOpacity = 0;
+				_panningController.view.frame = CGRectMake(0, previousVCFrame.origin.y, previousVCFrame.size.width, previousVCFrame.size.height);
+			}
+			completion:^(BOOL finished)
+			{
+				[currentVC didDismissView];
+				[_panningController didPresentView];
+				currentVC.view.layer.shadowOpacity = 0;
+				[currentVC.view removeFromSuperview];
+				_panningController.view.userInteractionEnabled = YES;
+				_panningController = nil;
+			}];
+		}
+		else
+		{
+			[UIView animateWithDuration:duration animations:^
+			{
+				currentVC.view.frame = CGRectMake(0, currentVCFrame.origin.y, currentVCFrame.size.width, currentVCFrame.size.height);
+				currentVC.view.layer.shadowOpacity = 0.3;
+				_panningController.view.frame = CGRectMake(-rect.size.width*CDNaturalStyleRate, previousVCFrame.origin.y, previousVCFrame.size.width, previousVCFrame.size.height);
+			}
+			completion:^(BOOL finished)
+			{
+				currentVC.view.userInteractionEnabled = YES;
+				currentVC.view.layer.shadowOpacity = 0;
+				[_panningController.view removeFromSuperview];
+				_panningController = nil;
+			}];
+		}
+	}
+}
 
 -(UIViewController*) currentController
 {
@@ -271,6 +365,18 @@ CDNavigationController* getNaviController(void)
 			toView.alpha = 1.0f;
 			break;
 		}
+		case ASNatureIn:
+		{
+			toView.frame = CGRectMake(rect.size.width, toRect.origin.y, toRect.size.width, toRect.size.height);
+			toView.alpha = 1.0f;
+			break;
+		}
+		case ASNatureOut:
+		{
+			toView.frame = CGRectMake(-rect.size.width*CDNaturalStyleRate, toRect.origin.y, toRect.size.width, toRect.size.height);
+			toView.alpha = 1.0f;
+			break;
+		}
 	}
 	
 	if (toView != nil)
@@ -334,6 +440,16 @@ CDNavigationController* getNaviController(void)
 			{
 				break;
 			}
+			case ASNatureIn:
+			{
+				fromView.frame = CGRectMake(-fromRect.size.width*CDNaturalStyleRate, fromRect.origin.y, fromRect.size.width, fromRect.size.height);;
+				break;
+			}
+			case ASNatureOut:
+			{
+				fromView.frame = CGRectMake(rect.size.width, fromRect.origin.y, fromRect.size.width, fromRect.size.height);
+				break;
+			}
 		}
 		
 		CGRect newRect = toRect;
@@ -383,6 +499,16 @@ CDNavigationController* getNaviController(void)
 			{
 				break;
 			}
+			case ASNatureIn:
+			{
+				toView.frame = newRect;
+				break;
+			}
+			case ASNatureOut:
+			{
+				toView.frame = newRect;
+				break;
+			}
 		}
 	}
 	completion:^(BOOL finished)
@@ -399,7 +525,7 @@ CDNavigationController* getNaviController(void)
 
 -(void) pushViewController:(UIViewController*)controller
 {
-	[self pushViewController:controller inStyle:ASTranslationToLeft outStyle:ASTranslationToLeft duration:DefaultAnimationDuration];
+	[self pushViewController:controller inStyle:ASNatureIn outStyle:ASNatureIn duration:DefaultAnimationDuration];
 }
 
 -(void) pushViewController:(UIViewController*)controller inStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle
@@ -426,7 +552,7 @@ CDNavigationController* getNaviController(void)
 
 -(void) popViewController
 {
-	[self popViewControllerWithInStyle:ASTranslationToRight outStyle:ASTranslationToRight duration:DefaultAnimationDuration];
+	[self popViewControllerWithInStyle:ASNatureOut outStyle:ASNatureOut duration:DefaultAnimationDuration];
 }
 
 -(void) popViewControllerWithInStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle
@@ -451,12 +577,12 @@ CDNavigationController* getNaviController(void)
 
 -(void) popToRootViewController
 {
-	[self popToViewController:_controllerStack.firstObject inStyle:ASTranslationToRight outStyle:ASTranslationToRight duration:DefaultAnimationDuration];
+	[self popToViewController:_controllerStack.firstObject inStyle:ASNatureOut outStyle:ASNatureOut duration:DefaultAnimationDuration];
 }
 
 -(void) popToViewController:(UIViewController *)controller
 {
-	[self popToViewController:controller inStyle:ASTranslationToRight outStyle:ASTranslationToRight duration:DefaultAnimationDuration];
+	[self popToViewController:controller inStyle:ASNatureOut outStyle:ASNatureOut duration:DefaultAnimationDuration];
 }
 
 -(void) popToViewController:(UIViewController *)controller inStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle
@@ -500,7 +626,7 @@ CDNavigationController* getNaviController(void)
 
 -(void) setRootViewController:(UIViewController*)controller
 {
-	[self setRootViewController:controller inStyle:ASTranslationToLeft outStyle:ASTranslationToLeft duration:DefaultAnimationDuration];
+	[self setRootViewController:controller inStyle:ASNatureIn outStyle:ASNatureIn duration:DefaultAnimationDuration];
 }
 
 -(void) setRootViewController:(UIViewController*)controller inStyle:(AnimationOptions)inStyle outStyle:(AnimationOptions)outStyle
@@ -545,7 +671,7 @@ CDNavigationController* getNaviController(void)
 	UIViewController* oldVC = [_controllerStack lastObject];
 	[_controllerStack removeLastObject];
 	[_controllerStack addObject:controller];
-	[self switchFromController:oldVC fromStyle:ASTranslationToLeft toController:controller toStyle:ASTranslationToLeft isToAbove:YES duration:DefaultAnimationDuration];
+	[self switchFromController:oldVC fromStyle:ASNatureIn toController:controller toStyle:ASNatureIn isToAbove:YES duration:DefaultAnimationDuration];
 }
 
 @end
@@ -589,6 +715,11 @@ static char kCDNavigationControllerKey;
 
 -(void) doingDismissView
 {
+}
+
+-(BOOL) shouldPopoutOnSwipe
+{
+	return YES;
 }
 
 @end

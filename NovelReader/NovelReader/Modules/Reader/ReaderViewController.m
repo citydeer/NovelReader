@@ -164,6 +164,11 @@
 	[self loadBook];
 }
 
+-(BOOL) shouldPopoutOnSwipe
+{
+	return NO;
+}
+
 -(void) adjustButton:(UIButton*)button
 {
 	[button setTitleColor:CDColor(nil, @"5e5e5e") forState:UIControlStateNormal];
