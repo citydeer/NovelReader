@@ -1044,7 +1044,7 @@
 		_shouldRun = NO;
 }
 
-- (void)setTextAlignment:(UITextAlignment)textAlignment
+- (void)setTextAlignment:(NSTextAlignment)textAlignment
 {
 	_textAlignment = textAlignment;
 	_label.textAlignment = _textAlignment;

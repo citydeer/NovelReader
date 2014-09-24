@@ -65,9 +65,9 @@
 -(void) leftButtonAction:(id)sender
 {
 	NSInteger channel = (CDProp(PropStoreChannel).intValue == 1 ? 0 : 1);
-	CDSetProp(PropStoreChannel, ([NSString stringWithFormat:@"%d", channel]));
+	CDSetProp(PropStoreChannel, ([NSString stringWithFormat:@"%ld", (long)channel]));
 	[self.leftButton setTitle:(channel == 1 ? @"女频" : @"男频") forState:UIControlStateNormal];
-	self.pageURL = [NSString stringWithFormat:@"%@?gender=%d", [Properties appProperties].XLWebHost, channel];
+	self.pageURL = [NSString stringWithFormat:@"%@?gender=%ld", [Properties appProperties].XLWebHost, (long)channel];
 	[self reloadPage];
 }
 

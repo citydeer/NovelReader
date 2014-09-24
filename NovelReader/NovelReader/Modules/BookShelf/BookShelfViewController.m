@@ -139,7 +139,7 @@
 	for (XLBookModel* book in _books)
 		if (book.selected)
 			count++;
-	[_deleteButton setTitle:[NSString stringWithFormat:@"删除(%d)", count] forState:UIControlStateNormal];
+	[_deleteButton setTitle:[NSString stringWithFormat:@"删除(%ld)", (long)count] forState:UIControlStateNormal];
 	_deleteButton.enabled = (count > 0);
 }
 

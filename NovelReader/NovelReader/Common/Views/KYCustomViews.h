@@ -247,7 +247,7 @@ typedef enum {
 @property (nonatomic, assign) NSTimeInterval minTime;
 @property (nonatomic, assign) NSTimeInterval finishDelayTime;
 @property (nonatomic, assign) NSTimeInterval repeatTime;
-@property (nonatomic, assign) UITextAlignment  textAlignment;
+@property (nonatomic, assign) NSTextAlignment  textAlignment;
 @property (nonatomic, copy) NSString* text;
 @property (nonatomic, retain) UIFont* font;
 @property (nonatomic, retain) UIColor* textColor;

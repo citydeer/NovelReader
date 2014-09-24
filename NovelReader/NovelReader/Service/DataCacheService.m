@@ -62,7 +62,7 @@
 	
 	for (NSInteger i = 0; i < DIRECTORY_NUMBER; ++i)
 	{
-		NSString* subPath = [_cacheFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"__%d__", i]];
+		NSString* subPath = [_cacheFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"__%ld__", (long)i]];
 		isDirectory = YES;
 		exists = [fm fileExistsAtPath:subPath isDirectory:&isDirectory];
 		if (exists && !isDirectory)
@@ -79,7 +79,7 @@
 
 -(NSString*) fullPathForKey:(NSString*)key
 {
-	NSString* dir = [_cacheFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"__%d__", ([key hash] % DIRECTORY_NUMBER)]];
+	NSString* dir = [_cacheFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"__%lu__", ([key hash] % DIRECTORY_NUMBER)]];
 	return [dir stringByAppendingPathComponent:[key md5]];
 }
 

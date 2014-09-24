@@ -26,7 +26,7 @@
 							@"%27", @"%28", @"%29", /*@"%2A", @"%2D",*/ @"%7E",
 							 nil];
 	
-	int len = [escapeChars count];
+	NSInteger len = [escapeChars count];
 	
 	NSString *tempStr = [self stringByAddingPercentEscapesUsingEncoding:stringEncoding];
 	
@@ -54,7 +54,7 @@
 {
 	const char *cStr = [self UTF8String];
 	unsigned char result[CC_MD5_DIGEST_LENGTH];
-	CC_MD5( cStr, strlen(cStr), result );
+	CC_MD5( cStr, (CC_LONG)strlen(cStr), result );
 	return [[NSString stringWithFormat:
 			 @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
 			 result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7],
@@ -66,7 +66,7 @@
 {
 	const char* str = [self UTF8String];
 	unsigned char result[CC_SHA1_DIGEST_LENGTH];
-	CC_SHA1(str, strlen(str), result);
+	CC_SHA1(str, (CC_LONG)strlen(str), result);
 	return [[NSString stringWithFormat:
 			 @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
 			 result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7],
@@ -87,10 +87,10 @@
 	NSString* encryptKey = [[NSString stringWithFormat:@"%d", rand] md5];
 	
 	const char* pRandomKey = [encryptKey UTF8String];
-	int rKeyLength = strlen(pRandomKey);
+	size_t rKeyLength = strlen(pRandomKey);
 	
 	const char* pStr = [self UTF8String];
-	int dataLength = strlen(pStr);
+	size_t dataLength = strlen(pStr);
 	
 	//NSMutableData* buf = [[NSMutableData alloc] initWithCapacity:2*dataLength];
 	
@@ -112,11 +112,11 @@
 //	[buf release];
 	
 	const char* pEncryptKey = [[key md5] UTF8String];
-	int eKeyLength = strlen(pEncryptKey);
+	size_t eKeyLength = strlen(pEncryptKey);
 	
 //	const char* pText = [text UTF8String];
 //	int textLength = strlen(pText);
-	int textLength = 2*dataLength;
+	size_t textLength = 2*dataLength;
 	
 //	buf = [[NSMutableData alloc] initWithCapacity:textLength];
 	for (int i=0; i<textLength; ++i)
@@ -149,7 +149,7 @@
 			unsigned unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit |  NSDayCalendarUnit;
 			NSDate* date = [NSDate date];
 			NSDateComponents* comps = [gregorian components:unitFlags fromDate:date];
-			int year = [comps year];
+			NSInteger year = [comps year];
 			if (([comps month] < month) || ([comps month] == month && [comps day] < day))
 				year--;
 			
@@ -265,17 +265,17 @@
 		interval = 0 - interval;
 		
 		if (interval >= ONEYEAR)
-			ret = [NSString stringWithFormat:@"%d年前", ((NSInteger)(interval/ONEYEAR))];
+			ret = [NSString stringWithFormat:@"%ld年前", ((long)(interval/ONEYEAR))];
 		else if (interval >= ONEMONTH)
-			ret = [NSString stringWithFormat:@"%d个月前", ((NSInteger)(interval/ONEMONTH))];
+			ret = [NSString stringWithFormat:@"%ld个月前", ((long)(interval/ONEMONTH))];
 		else if (interval >= ONEDAY)
-			ret = [NSString stringWithFormat:@"%d天前", ((NSInteger)(interval/ONEDAY))];
+			ret = [NSString stringWithFormat:@"%ld天前", ((long)(interval/ONEDAY))];
 		else if (interval >= ONEHOUR)
-			ret = [NSString stringWithFormat:@"%d小时前", ((NSInteger)(interval/ONEHOUR))];
+			ret = [NSString stringWithFormat:@"%ld小时前", ((long)(interval/ONEHOUR))];
 		else if (interval >= ONEMINUTE)
-			ret = [NSString stringWithFormat:@"%d分钟前", ((NSInteger)(interval/ONEMINUTE))];
+			ret = [NSString stringWithFormat:@"%ld分钟前", ((long)(interval/ONEMINUTE))];
 		else
-			ret = [NSString stringWithFormat:@"%d秒前", ((NSInteger)interval)];
+			ret = [NSString stringWithFormat:@"%ld秒前", ((long)interval)];
 	}
 	else
 	{
@@ -355,7 +355,7 @@
 	
 	const void* pData = [self bytes];
 	unsigned char result[CC_MD5_DIGEST_LENGTH];
-	CC_MD5( pData, length, result );
+	CC_MD5( pData, (CC_LONG)length, result );
 	return [[NSString stringWithFormat:
 			 @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
 			 result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7],
@@ -369,7 +369,7 @@
 	static char* encodingTable = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	
 	char* pStr = (char*)[self bytes];
-	int l = [self length];
+	int l = (int)[self length];
 	
 //	NSMutableData* buf;
 	

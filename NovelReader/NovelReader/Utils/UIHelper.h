@@ -18,7 +18,7 @@
 					  action:(SEL)action
 					   frame:(CGRect)frame;
 
-+(UILabel*) labelWithText:(NSString*)text titleColor:(UIColor*)titleColor font:(UIFont*)font alignment:(UITextAlignment)alignment frame:(CGRect)frame;
++(UILabel*) labelWithText:(NSString*)text titleColor:(UIColor*)titleColor font:(UIFont*)font alignment:(NSTextAlignment)alignment frame:(CGRect)frame;
 +(UILabel*) label:(NSString*)text tc:(UIColor*)titleColor fs:(CGFloat)fontSize b:(BOOL)bold al:(NSTextAlignment)alignment frame:(CGRect)frame;
 
 +(CGFloat) labelRealWidth:(UILabel*)label;

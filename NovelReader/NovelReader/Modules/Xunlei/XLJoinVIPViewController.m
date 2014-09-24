@@ -185,7 +185,7 @@
 	if (_model.price_list.count > 0 && _model.price_list.count > _listIndex)
 	{
 		PriceItemModel* pi = _model.price_list[_listIndex];
-		_amountLabel.text = [NSString stringWithFormat:@"%d个月", pi.amount];
+		_amountLabel.text = [NSString stringWithFormat:@"%ld个月", (long)pi.amount];
 		_totalPriceLabel.text = [NSString stringWithFormat:@"%.0f元", pi.price];
 	}
 	else
@@ -214,7 +214,7 @@
 	sv.delegate = self;
 	NSMutableArray* strs = [NSMutableArray array];
 	for (PriceItemModel* pi in _model.price_list)
-		[strs addObject:[NSString stringWithFormat:@"%d个月", pi.amount]];
+		[strs addObject:[NSString stringWithFormat:@"%ld个月", (long)pi.amount]];
 	sv.selectedIndex = _listIndex;
 	sv.items = strs;
 	CGFloat totalHeight = sv.totalHeight;

@@ -404,7 +404,7 @@
 		NSString* summary = [allString substringWithRange:NSMakeRange(location, length)];
 		if (summary == nil) summary = @"";
 		summary = [summary stringByAppendingString:@"..."];
-		NSDictionary* mark = @{@"loc" : [NSNumber numberWithInt:location], @"date" : [NSDate date], @"summary" : summary};
+		NSDictionary* mark = @{@"loc" : [NSNumber numberWithInteger:location], @"date" : [NSDate date], @"summary" : summary};
 		[_bookModel.bookmarkTable setObject:mark forKey:vc.chapterModel.chapter_id];
 		[_bookModel saveBookInfo];
 		[self.view showPopMsg:@"书签添加成功!" timeout:3];
@@ -434,7 +434,7 @@
 		return;
 	
 	NSUInteger allPage = _bookModel.chapters.count;
-	_progressLabel.text = [NSString stringWithFormat:@"%d/%d", cIndex+1, allPage];
+	_progressLabel.text = [NSString stringWithFormat:@"%lu/%d", cIndex+1, allPage];
 	_progressSlider.value = (allPage <= 1 ? 1.0f : ((float)cIndex / (float)(allPage - 1)));
 	CGRect rect = self.view.bounds;
 	[UIView animateWithDuration:_duration animations:^

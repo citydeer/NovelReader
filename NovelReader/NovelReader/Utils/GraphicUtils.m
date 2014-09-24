@@ -405,7 +405,7 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
 	CGFloat blue = 0.0f;
 	CGFloat alpha = 0.0f;
 	CGColorRef colorRef = [color CGColor];
-    int numComponents = CGColorGetNumberOfComponents(colorRef);
+    size_t numComponents = CGColorGetNumberOfComponents(colorRef);
     
     if (numComponents >= 3)
     {
@@ -431,7 +431,7 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
 	CGFloat blue = 0.0f;
 	CGFloat alpha = 0.0f;
 	CGColorRef colorRef = [color CGColor];
-    int numComponents = CGColorGetNumberOfComponents(colorRef);
+    size_t numComponents = CGColorGetNumberOfComponents(colorRef);
     
     if (numComponents >= 3)
     {

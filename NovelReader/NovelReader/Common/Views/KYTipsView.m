@@ -15,7 +15,6 @@
 #define KYTipsShortDuration 0.2
 
 
-static CGFloat const KYTipsViewTitleBottomSpace = 6;
 static CGFloat const KYTipsViewSpace = 6;
 static NSString* const KYTipsViewShowString = @"__show__";
 static NSString* const KYTipsViewDismissString = @"__dismiss__";

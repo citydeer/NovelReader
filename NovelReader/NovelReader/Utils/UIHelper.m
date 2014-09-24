@@ -34,7 +34,7 @@
 	return button;
 }
 
-+(UILabel*) labelWithText:(NSString*)text titleColor:(UIColor*)titleColor font:(UIFont*)font alignment:(UITextAlignment)alignment frame:(CGRect)frame
++(UILabel*) labelWithText:(NSString*)text titleColor:(UIColor*)titleColor font:(UIFont*)font alignment:(NSTextAlignment)alignment frame:(CGRect)frame
 {
 	UILabel* label = [[UILabel alloc] initWithFrame:frame];
 	label.backgroundColor = [UIColor clearColor];

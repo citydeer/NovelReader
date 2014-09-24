@@ -189,7 +189,7 @@
 
 -(void) updateView
 {
-	_firstLabel.text = [NSString stringWithFormat:@"%d 阅读点", _userBalance];
+	_firstLabel.text = [NSString stringWithFormat:@"%ld 阅读点", (long)_userBalance];
 	if (_model.prize > 0.0)
 		_priceLabel.text = [NSString stringWithFormat:@"1元=%.0f阅读点", 1.0/_model.prize];
 	else
@@ -198,7 +198,7 @@
 	if (_model.amount_list.count > 0 && _model.amount_list.count > _listIndex)
 	{
 		NSInteger amount = [[_model.amount_list objectAtIndex:_listIndex] intValue];
-		_amountLabel.text = [NSString stringWithFormat:@"%d个", amount];
+		_amountLabel.text = [NSString stringWithFormat:@"%ld个", (long)amount];
 		_totalPriceLabel.text = [NSString stringWithFormat:@"%.0f元", _model.prize*amount];
 	}
 	else

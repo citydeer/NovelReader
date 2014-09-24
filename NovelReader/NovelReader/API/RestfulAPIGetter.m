@@ -209,7 +209,7 @@ static NSString* _user_id = @"";
 	[body appendData:boundary];
 	
 	[body appendData:[@"Content-Disposition: form-data; name=\"image\"; filename=\"record.wav\"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-	[body appendData:[[NSString stringWithFormat:@"Content-Length: %d\r\n", self.data.length] dataUsingEncoding:NSUTF8StringEncoding]];
+	[body appendData:[[NSString stringWithFormat:@"Content-Length: %lu\r\n", (unsigned long)self.data.length] dataUsingEncoding:NSUTF8StringEncoding]];
 	[body appendData:[@"Content-Type: audio/wav\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
 	[body appendData:self.data];
 	[body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", kBoundary] dataUsingEncoding:NSUTF8StringEncoding]];

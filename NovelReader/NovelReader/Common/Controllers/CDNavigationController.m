@@ -487,7 +487,7 @@ CDNavigationController* getNaviController(void)
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:CDNavigationWillPopNotification object:nil];
 	
-	for (int i = _controllerStack.count - 2; i > index; i--) {
+	for (NSInteger i = _controllerStack.count - 2; i > index; i--) {
 		UIViewController* tmp = [_controllerStack objectAtIndex:i];
 		[_controllerStack removeObject:tmp];
 	}

@@ -107,7 +107,7 @@
 				_sortIndex = 0;
 			[self updateSortButton];
 			SortTypeModel* sm = [[SortTypeModel alloc] initWithDictionary:_sortTypeNames[_sortIndex]];
-			url = [NSURL URLWithString:[NSString stringWithFormat:@"%@&sortid=%d", _pageURL, sm.sortid]];
+			url = [NSURL URLWithString:[NSString stringWithFormat:@"%@&sortid=%ld", _pageURL, (long)sm.sortid]];
 		}
 	}
 	else if ([appclient isEqualToString:@"3"])
@@ -115,7 +115,7 @@
 		NSString* bookID = params[@"bookid"];
 		NSInteger fav = ([[BookManager instance] isFav:bookID] ? 1 : 0);
 		NSInteger down = ([[BookManager instance] hasDownloaded:bookID] ? 1 : 0);
-		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@&fav=%d&down=%d", _pageURL, fav, down]];
+		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@&fav=%d&down=%ld", _pageURL, fav, (long)down]];
 	}
 	
 	_shouldReload = YES;
